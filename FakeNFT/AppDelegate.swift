@@ -2,15 +2,22 @@ import UIKit
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
-    func application(
-        _: UIApplication,
-        didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?
-    ) -> Bool {
-        return true
-    }
-
+    
+    var window: UIWindow?
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+            
+            window = UIWindow(frame: UIScreen.main.bounds)
+            
+            let mainTabBarController = MainTabBarController()
+            window?.rootViewController = mainTabBarController
+            window?.makeKeyAndVisible()
+            
+            return true
+        }
+    
     // MARK: UISceneSession Lifecycle
-
+    
     func application(
         _: UIApplication,
         configurationForConnecting connectingSceneSession: UISceneSession,
