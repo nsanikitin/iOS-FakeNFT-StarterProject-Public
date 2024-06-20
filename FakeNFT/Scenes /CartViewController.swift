@@ -18,8 +18,15 @@ final class CartViewController: UIViewController, UITableViewDelegate, UITableVi
         return items.reduce(0) { $0 + $1.price }
     }
     
+    private lazy var sortButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.sortImage, style: .plain, target: self, action: #selector(sortItems))
+        button.tintColor = .ypBlack
+        return button
+    }()
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -62,11 +69,16 @@ final class CartViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        setupNavigationBar()
         setupBottomView()
         setupTableView()
         setupConstraints()
         updateTotalPrice()
     }
+    
+    private func setupNavigationBar() {
+            navigationItem.rightBarButtonItem = sortButton
+        }
     
     private func setupTableView() {
         tableView.delegate = self
@@ -112,6 +124,17 @@ final class CartViewController: UIViewController, UITableViewDelegate, UITableVi
         totalPriceLabel.text = "\(totalPrice) ETH"
     }
     
+    private func deleteItem(at indexPath: IndexPath) {
+            items.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            updateTotalPrice()
+        }
+    
+    @objc private func sortItems() {
+            items.sort { $0.name < $1.name }
+            tableView.reloadData()
+        }
+    
     // MARK: - UITableViewDataSource Methods
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -119,11 +142,14 @@ final class CartViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CartCell", for: indexPath) as! CartCell
-        let item = items[indexPath.row]
-        cell.configure(with: item)
-        return cell
-    }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CartCell", for: indexPath) as! CartCell
+            let item = items[indexPath.row]
+            cell.configure(with: item) { [weak self] in
+                self?.deleteItem(at: indexPath)
+            }
+            return cell
+        }
+        
     
     // MARK: - UITableViewDelegate Methods
     

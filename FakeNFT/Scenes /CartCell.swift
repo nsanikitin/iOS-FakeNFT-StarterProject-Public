@@ -4,6 +4,7 @@
 //
 //  Created by Рамиль Аглямов on 20.06.2024.
 //
+
 import UIKit
 
 class CartCell: UITableViewCell {
@@ -12,6 +13,7 @@ class CartCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 12
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -28,7 +30,7 @@ class CartCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .ypYellowUniversal
+        label.textColor = .systemYellow
         return label
     }()
     
@@ -49,29 +51,34 @@ class CartCell: UITableViewCell {
     }()
     
     let trashButton: UIButton = {
-            let button = UIButton()
-            button.translatesAutoresizingMaskIntoConstraints = false
-            if let image = UIImage(named: "cartDelete")?.withRenderingMode(.alwaysTemplate) {
-                button.setImage(image, for: .normal)
-            }
-            
-            button.backgroundColor = .systemBackground
-            button.tintColor = UIColor { traitCollection in
-                return traitCollection.userInterfaceStyle == .dark ? .white : .black
-            }
-            return button
-        }()
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        if let image = UIImage(named: "cartDelete")?.withRenderingMode(.alwaysTemplate) {
+            button.setImage(image, for: .normal)
+        }
+        
+        button.backgroundColor = .systemBackground
+        button.tintColor = UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ? .white : .black
+        }
+        return button
+    }()
+    
+    var deleteAction: (() -> Void)?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupViews() {
+    private func setupViews() {
+        selectionStyle = .none
         contentView.addSubview(itemImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(ratingLabel)
@@ -102,16 +109,29 @@ class CartCell: UITableViewCell {
             trashButton.widthAnchor.constraint(equalToConstant: 40),
             trashButton.heightAnchor.constraint(equalToConstant: 40)
         ])
-        
-        
     }
     
-    func configure(with item: NFTItem) {
+    private func setupActions() {
+        trashButton.addTarget(self, action: #selector(trashButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func trashButtonTapped() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.trashButton.alpha = 0.5
+        }) { _ in
+            UIView.animate(withDuration: 0.1) {
+                self.trashButton.alpha = 1.0
+            }
+        }
+        deleteAction?()
+    }
+    
+    func configure(with item: NFTItem, deleteAction: @escaping () -> Void) {
         itemImageView.image = UIImage(named: item.imageName)
         nameLabel.text = item.name
         ratingLabel.text = String(repeating: "★", count: item.rating) + String(repeating: "☆", count: 5 - item.rating)
         priceNameLabel.text = "Цена"
         priceLabel.text = "\(item.price) ETH"
+        self.deleteAction = deleteAction
     }
 }
-
