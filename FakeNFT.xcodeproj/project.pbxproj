@@ -290,16 +290,14 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				7562E6922C24D4B400970667 /* Cart */,
 				E1A1B9D82AA01C9700C3AFBC /* TabBarController */,
 				0CF2C2D92A783C1600FDC837 /* Common */,
 				0CFCB7472A7808870009A829 /* Catalog */,
 				0C79EE642A76DDCF00EE90EA /* NftDetails */,
 				3F6806C829CBBC8100B4F915 /* ProductDetails */,
 				951B59632C24442D0050BC72 /* ProfileViewController.swift */,
-				7562E6902C24CABA00970667 /* CartPresenter.swift */,
 				951B59652C2444D50050BC72 /* CatalogViewController.swift */,
-				951B59672C24450B0050BC72 /* CartViewController.swift */,
-				7562E68B2C24905D00970667 /* CartCell.swift */,
 				951B59692C24456E0050BC72 /* StatisticsViewController.swift */,
 			);
 			path = "Scenes ";
@@ -364,6 +362,16 @@
 				0C79EE622A76DD1900EE90EA /* RequestConstants.swift */,
 			);
 			path = Requests;
+			sourceTree = "<group>";
+		};
+		7562E6922C24D4B400970667 /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				7562E6902C24CABA00970667 /* CartPresenter.swift */,
+				951B59672C24450B0050BC72 /* CartViewController.swift */,
+				7562E68B2C24905D00970667 /* CartCell.swift */,
+			);
+			path = Cart;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {

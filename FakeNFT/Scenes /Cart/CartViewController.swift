@@ -33,14 +33,14 @@ final class CartViewController: UIViewController, CartView {
 
     private let totalCountLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        label.font = .caption1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private let totalPriceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         label.textColor = .systemGreen
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -50,7 +50,7 @@ final class CartViewController: UIViewController, CartView {
         let button = UIButton(type: .system)
         button.setTitle("К оплате", for: .normal)
         button.backgroundColor = .black
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        button.titleLabel?.font = .bodyBold
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false

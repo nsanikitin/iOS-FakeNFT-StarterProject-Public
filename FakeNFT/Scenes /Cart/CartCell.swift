@@ -21,7 +21,7 @@ class CartCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         return label
     }()
     
@@ -29,7 +29,7 @@ class CartCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.font = .caption2
         label.textColor = .systemYellow
         return label
     }()
@@ -38,7 +38,7 @@ class CartCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        label.font = .caption2
         return label
     }()
     
@@ -46,7 +46,7 @@ class CartCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         return label
     }()
     
