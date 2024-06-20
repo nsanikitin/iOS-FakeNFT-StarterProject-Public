@@ -126,8 +126,10 @@ class CartCell: UITableViewCell {
         deleteAction?()
     }
     
-    func configure(with item: NFTItem, deleteAction: @escaping () -> Void) {
-        itemImageView.image = UIImage(named: item.imageName)
+    func configure(with item: NFTModel, deleteAction: @escaping () -> Void) {
+        if let imageName = item.images.first {
+            itemImageView.image = UIImage(named: imageName)
+        }
         nameLabel.text = item.name
         ratingLabel.text = String(repeating: "★", count: item.rating) + String(repeating: "☆", count: 5 - item.rating)
         priceNameLabel.text = "Цена"
