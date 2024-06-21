@@ -63,6 +63,8 @@ final class ProfileViewController: UIViewController {
     
     private let sections = ["Мои NFT (112)", "Избранные NFT (11)", "О разработчике"]
     
+    var profile: ProfileModel?
+    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
