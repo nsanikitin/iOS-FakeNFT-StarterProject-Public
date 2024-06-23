@@ -47,6 +47,7 @@ final class CartViewController: UIViewController, CartView {
         button.titleLabel?.font = .bodyBold
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(showPaymentOptions), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -148,6 +149,13 @@ final class CartViewController: UIViewController, CartView {
         alertController.addAction(cancelAction)
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc private func showPaymentOptions() {
+        let paymentOptionsVC = PaymentOptionsViewController()
+        let navController = UINavigationController(rootViewController: paymentOptionsVC)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true, completion: nil)
     }
     
     func updateTotalPrice(totalCount: Int, totalPrice: Float) {
