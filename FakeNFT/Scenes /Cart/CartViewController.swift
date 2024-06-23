@@ -3,6 +3,7 @@ import ProgressHUD
 
 final class CartViewController: UIViewController, CartView {
     private var presenter: CartPresenter!
+    private var isLoading = false
     
     private lazy var sortButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.sortImage, style: .plain, target: self, action: #selector(sortItems))
@@ -74,6 +75,20 @@ final class CartViewController: UIViewController, CartView {
         setupEmptyCartLabel()
         setupConstraints()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            if isLoading {
+                ProgressHUD.show("Loading...")
+            }
+        }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+            super.viewWillDisappear(animated)
+            if isLoading {
+                ProgressHUD.dismiss()
+            }
+        }
     
     private func setupNavigationBar() {
         navigationItem.rightBarButtonItem = sortButton
@@ -172,12 +187,14 @@ final class CartViewController: UIViewController, CartView {
     }
     
     func showLoading() {
-        ProgressHUD.show("Loading...")
-    }
-    
-    func hideLoading() {
-        ProgressHUD.dismiss()
-    }
+            isLoading = true
+            ProgressHUD.show("Loading...")
+        }
+        
+        func hideLoading() {
+            isLoading = false
+            ProgressHUD.dismiss()
+        }
     
     private func showDeleteConfirmation(for item: NFTModel, at index: Int) {
         let deleteVC = DeleteConfirmationViewController()
