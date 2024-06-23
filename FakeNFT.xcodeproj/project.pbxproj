@@ -292,6 +292,7 @@
 				951B59652C2444D50050BC72 /* CatalogViewController.swift */,
 				951B59672C24450B0050BC72 /* CartViewController.swift */,
 				951B59692C24456E0050BC72 /* StatisticsViewController.swift */,
+				4FDB15B82C28173600104F2E /* Statisctic */,
 			);
 			path = "Scenes ";
 			sourceTree = "<group>";
@@ -355,6 +356,13 @@
 				0C79EE622A76DD1900EE90EA /* RequestConstants.swift */,
 			);
 			path = Requests;
+			sourceTree = "<group>";
+		};
+		4FDB15B82C28173600104F2E /* Statisctic */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Statisctic;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
