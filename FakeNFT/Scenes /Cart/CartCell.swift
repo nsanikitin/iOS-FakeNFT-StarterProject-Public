@@ -117,13 +117,6 @@ class CartCell: UITableViewCell {
     }
     
     @objc private func trashButtonTapped() {
-        UIView.animate(withDuration: 0.1, animations: {
-            self.trashButton.alpha = 0.5
-        }) { _ in
-            UIView.animate(withDuration: 0.1) {
-                self.trashButton.alpha = 1.0
-            }
-        }
         deleteAction?()
     }
     

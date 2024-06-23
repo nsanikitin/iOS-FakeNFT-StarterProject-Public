@@ -51,6 +51,7 @@
 		75DE52BA2C282865006C54C8 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE52B92C282865006C54C8 /* MockURLSession.swift */; };
 		75DE52BC2C2833BE006C54C8 /* configureProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE52BB2C2833BE006C54C8 /* configureProgressHUD.swift */; };
 		75DE52BE2C283E7B006C54C8 /* PaymentOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE52BD2C283E7B006C54C8 /* PaymentOptionsViewController.swift */; };
+		75DE52C02C28458C006C54C8 /* DeleteConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE52BF2C28458C006C54C8 /* DeleteConfirmationViewController.swift */; };
 		951B59642C24442D0050BC72 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59632C24442D0050BC72 /* ProfileViewController.swift */; };
 		951B59662C2444D50050BC72 /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59652C2444D50050BC72 /* CatalogViewController.swift */; };
 		951B59682C24450B0050BC72 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59672C24450B0050BC72 /* CartViewController.swift */; };
@@ -129,6 +130,7 @@
 		75DE52B92C282865006C54C8 /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
 		75DE52BB2C2833BE006C54C8 /* configureProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = configureProgressHUD.swift; sourceTree = "<group>"; };
 		75DE52BD2C283E7B006C54C8 /* PaymentOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentOptionsViewController.swift; sourceTree = "<group>"; };
+		75DE52BF2C28458C006C54C8 /* DeleteConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteConfirmationViewController.swift; sourceTree = "<group>"; };
 		951B59632C24442D0050BC72 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		951B59652C2444D50050BC72 /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		951B59672C24450B0050BC72 /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				75DE52BD2C283E7B006C54C8 /* PaymentOptionsViewController.swift */,
 				951B59672C24450B0050BC72 /* CartViewController.swift */,
 				7562E68B2C24905D00970667 /* CartCell.swift */,
+				75DE52BF2C28458C006C54C8 /* DeleteConfirmationViewController.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
 				95C812CB2C21A9F500FE7B1B /* CollectionsModel.swift in Sources */,
 				E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */,
+				75DE52C02C28458C006C54C8 /* DeleteConfirmationViewController.swift in Sources */,
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
 				7562E68E2C24CA1A00970667 /* CartView.swift in Sources */,
 				951B59642C24442D0050BC72 /* ProfileViewController.swift in Sources */,

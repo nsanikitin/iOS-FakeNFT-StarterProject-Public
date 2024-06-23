@@ -178,6 +178,17 @@ final class CartViewController: UIViewController, CartView {
     func hideLoading() {
         ProgressHUD.dismiss()
     }
+    
+    private func showDeleteConfirmation(for item: NFTModel, at index: Int) {
+        let deleteVC = DeleteConfirmationViewController()
+        deleteVC.modalPresentationStyle = .overFullScreen
+        deleteVC.modalTransitionStyle = .crossDissolve
+        deleteVC.configure(with: UIImage(named: item.name)) // Assuming the image name is same as the item name
+        deleteVC.confirmHandler = { [weak self] in
+            self?.presenter.deleteItem(at: index)
+        }
+        present(deleteVC, animated: true, completion: nil)
+    }
 }
 
 extension CartViewController: UITableViewDelegate, UITableViewDataSource {
@@ -188,9 +199,12 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CartCell", for: indexPath) as! CartCell
         let item = presenter.getItem(at: indexPath.row)
+//        cell.configure(with: item) { [weak self] in
+//            self?.presenter.deleteItem(at: indexPath.row)
+//        }
         cell.configure(with: item) { [weak self] in
-            self?.presenter.deleteItem(at: indexPath.row)
-        }
+                    self?.showDeleteConfirmation(for: item, at: indexPath.row)
+                }
         return cell
     }
     
