@@ -10,4 +10,6 @@ import Foundation
 protocol CartView: AnyObject {
     func updateTotalPrice(totalCount: Int, totalPrice: Float)
     func reloadData()
+    func showLoading()
+    func hideLoading()
 }

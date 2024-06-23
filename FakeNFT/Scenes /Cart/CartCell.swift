@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class CartCell: UITableViewCell {
     
@@ -127,13 +128,16 @@ class CartCell: UITableViewCell {
     }
     
     func configure(with item: NFTModel, deleteAction: @escaping () -> Void) {
-        if let imageName = item.images.first {
-            itemImageView.image = UIImage(named: imageName)
-        }
+        
+        if let firstImageURL = item.images.first, let url = URL(string: firstImageURL) {
+                    itemImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
+                }
+        
         nameLabel.text = item.name
         ratingLabel.text = String(repeating: "★", count: item.rating) + String(repeating: "☆", count: 5 - item.rating)
         priceNameLabel.text = "Цена"
         priceLabel.text = "\(item.price) ETH"
+        
         self.deleteAction = deleteAction
     }
 }

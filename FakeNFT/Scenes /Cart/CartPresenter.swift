@@ -1,18 +1,13 @@
-//
-//  CartPresenter.swift
-//  FakeNFT
-//
-//  Created by Рамиль Аглямов on 20.06.2024.
-//
-
 import Foundation
 
 class CartPresenter {
     weak var view: CartView?
     private var items: [NFTModel] = []
-
-    init(view: CartView) {
+    private let nftServiceCart: NFTServiceCart
+    
+    init(view: CartView, nftServiceCart: NFTServiceCart) {
         self.view = view
+        self.nftServiceCart = nftServiceCart
         loadItems()
     }
 
@@ -21,13 +16,20 @@ class CartPresenter {
     }
 
     func loadItems() {
-        items = [
-            NFTModel(createdAt: Date(), name: "April", images: ["CartImage0"], rating: 1, description: nil, price: 1.78, author: "Author1", id: "1"),
-            NFTModel(createdAt: Date(), name: "Greena", images: ["CartImage1"], rating: 3, description: nil, price: 1.78, author: "Author2", id: "2"),
-            NFTModel(createdAt: Date(), name: "Spring", images: ["CartImage2"], rating: 5, description: nil, price: 1.78, author: "Author3", id: "3")
-        ]
-        view?.updateTotalPrice(totalCount: items.count, totalPrice: totalPrice)
-        view?.reloadData()
+        view?.showLoading()
+        nftServiceCart.loadNFTs { [weak self] result in
+            DispatchQueue.main.async {
+                self?.view?.hideLoading()  
+                switch result {
+                case .success(let nftList):
+                    self?.items = Array(nftList.prefix(3))
+                    self?.view?.updateTotalPrice(totalCount: self?.items.count ?? 0, totalPrice: self?.totalPrice ?? 0)
+                    self?.view?.reloadData()
+                case .failure(let error):
+                    print("Ошибка загрузки списка NFT: \(error.localizedDescription)")
+                }
+            }
+        }
     }
 
     func getItem(at index: Int) -> NFTModel {
