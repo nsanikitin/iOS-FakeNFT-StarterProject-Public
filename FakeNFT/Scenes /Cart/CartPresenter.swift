@@ -1,6 +1,13 @@
 import Foundation
 
 class CartPresenter {
+    
+    enum SortOption {
+            case price
+            case rating
+            case name
+        }
+    
     weak var view: CartView?
     private var items: [NFTModel] = []
     private let nftServiceCart: NFTServiceCart
@@ -46,8 +53,15 @@ class CartPresenter {
         view?.reloadData()
     }
 
-    func sortItems() {
-        items.sort { $0.name < $1.name }
-        view?.reloadData()
-    }
+    func sortItems(by option: SortOption) {
+            switch option {
+            case .price:
+                items.sort { $0.price < $1.price }
+            case .rating:
+                items.sort { $0.rating > $1.rating }
+            case .name:
+                items.sort { $0.name < $1.name }
+            }
+            view?.reloadData()
+        }
 }

@@ -5,7 +5,7 @@ final class CartViewController: UIViewController, CartView {
     private var presenter: CartPresenter!
     
     private lazy var sortButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(named: "sortIcon"), style: .plain, target: self, action: #selector(sortItems))
+        let button = UIBarButtonItem(image: UIImage.sortImage, style: .plain, target: self, action: #selector(sortItems))
         button.tintColor = .black
         return button
     }()
@@ -52,14 +52,14 @@ final class CartViewController: UIViewController, CartView {
     }()
     
     private let emptyCartLabel: UILabel = {
-            let label = UILabel()
-            label.text = "Корзина пуста"
-            label.textAlignment = .center
-            label.font = .bodyBold
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.isHidden = true
-            return label
-        }()
+        let label = UILabel()
+        label.text = "Корзина пуста"
+        label.textAlignment = .center
+        label.font = .bodyBold
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +93,7 @@ final class CartViewController: UIViewController, CartView {
     }
     
     private func setupEmptyCartLabel() {
-            view.addSubview(emptyCartLabel)
+        view.addSubview(emptyCartLabel)
     }
     
     private func setupConstraints() {
@@ -121,12 +121,33 @@ final class CartViewController: UIViewController, CartView {
             
             emptyCartLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyCartLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-             
+            
         ])
     }
     
     @objc private func sortItems() {
-        presenter.sortItems()
+        let alertController = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        
+        let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { [weak self] _ in
+            self?.presenter.sortItems(by: .price)
+        }
+        
+        let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
+            self?.presenter.sortItems(by: .rating)
+        }
+        
+        let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { [weak self] _ in
+            self?.presenter.sortItems(by: .name)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Закрыть", style: .cancel)
+        
+        alertController.addAction(sortByPriceAction)
+        alertController.addAction(sortByRatingAction)
+        alertController.addAction(sortByNameAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     func updateTotalPrice(totalCount: Int, totalPrice: Float) {
