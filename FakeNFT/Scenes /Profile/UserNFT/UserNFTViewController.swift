@@ -13,7 +13,7 @@ final class UserNFTViewController: UIViewController {
     
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.isScrollEnabled = false
+        tableView.isScrollEnabled = true
         tableView.separatorStyle = .none
         tableView.register(
         UserNFTTableViewCell.self,
@@ -38,6 +38,7 @@ final class UserNFTViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupNavigationItem()
+        updateUI()
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -50,6 +51,17 @@ final class UserNFTViewController: UIViewController {
     
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    private func updateUI() {
+        if nfts.isEmpty {
+            placeHolderLabel.isHidden = false
+            tableView.isHidden = true
+        } else {
+            placeHolderLabel.isHidden = true
+            tableView.isHidden = false
+            tableView.reloadData()
+        }
     }
     
     private func setupUI() {

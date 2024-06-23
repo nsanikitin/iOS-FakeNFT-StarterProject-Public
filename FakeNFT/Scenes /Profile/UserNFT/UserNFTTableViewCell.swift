@@ -35,7 +35,6 @@ final class UserNFTTableViewCell: UITableViewCell {
     
     private let ratingImageView: UIImageView = {
         let imageView = UIImageView()
-//        let imageView = UIImageView(image: UIImage.stars3)
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -50,7 +49,6 @@ final class UserNFTTableViewCell: UITableViewCell {
     
     private let authorLabel: UILabel = {
         let label = UILabel()
-        label.text = "John Doe"
         label.font = UIFont.caption2
         label.textColor = .ypBlack
         return label

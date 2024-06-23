@@ -38,6 +38,69 @@ struct MockData {
             price: 1.78,
             author: "John Doe",
             id: "3"
+        )
+    ]
+    
+    static let nftsCollection: [NFTModel] = [
+        NFTModel(
+            createdAt: Date(),
+            name: "Lilo",
+            images: ["nft1_placeholderCollection"],
+            rating: 3,
+            description: "",
+            price: 1.78,
+            author: "John Doe",
+            id: "1"
+        ),
+        NFTModel(
+            createdAt: Date(),
+            name: "Spring",
+            images: ["nft2_placeholderCollection"],
+            rating: 3,
+            description: "",
+            price: 1.78,
+            author: "John Doe",
+            id: "2"
+        ),
+        NFTModel(
+            createdAt: Date(),
+            name: "April",
+            images: ["nft3_placeholderCollection"],
+            rating: 3,
+            description: "",
+            price: 1.78,
+            author: "John Doe",
+            id: "3"
+        ),
+        NFTModel(
+            createdAt: Date(),
+            name: "Archie",
+            images: ["nft4_placeholder"],
+            rating: 1,
+            description: "",
+            price: 1.78,
+            author: "John Doe",
+            id: "4"
+        ),
+        NFTModel(
+            createdAt: Date(),
+            name: "Melissa",
+            images: ["nft5_placeholder"],
+            rating: 5,
+            description: "",
+            price: 1.78,
+            author: "John Doe",
+            id: "5"
+        ),
+        NFTModel(
+            createdAt: Date(),
+            name: "Daisy",
+            images: ["nft6_placeholder"],
+            rating: 1,
+            description: "",
+            price: 1.78,
+            author: "John Doe",
+            id: "6"
         ),
     ]
     
