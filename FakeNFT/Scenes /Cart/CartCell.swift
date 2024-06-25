@@ -26,24 +26,22 @@ class CartCell: UITableViewCell {
         return label
     }()
     
-    let ratingLabel: UILabel = {
+    private let ratingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private let priceNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
         label.font = .caption2
-        label.textColor = .systemYellow
         return label
     }()
     
-    let priceNameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .left
-        label.font = .caption2
-        return label
-    }()
-    
-    let priceLabel: UILabel = {
+    private let priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
@@ -51,7 +49,7 @@ class CartCell: UITableViewCell {
         return label
     }()
     
-    let trashButton: UIButton = {
+    private let trashButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -82,7 +80,7 @@ class CartCell: UITableViewCell {
         selectionStyle = .none
         contentView.addSubview(itemImageView)
         contentView.addSubview(nameLabel)
-        contentView.addSubview(ratingLabel)
+        contentView.addSubview(ratingImageView)
         contentView.addSubview(priceNameLabel)
         contentView.addSubview(priceLabel)
         contentView.addSubview(trashButton)
@@ -96,10 +94,12 @@ class CartCell: UITableViewCell {
             nameLabel.topAnchor.constraint(equalTo: itemImageView.topAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: itemImageView.trailingAnchor, constant: 20),
             
-            ratingLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-            ratingLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            ratingImageView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            ratingImageView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            ratingImageView.heightAnchor.constraint(equalToConstant: 12),
+            ratingImageView.widthAnchor.constraint(equalToConstant: 68),
             
-            priceNameLabel.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 12),
+            priceNameLabel.topAnchor.constraint(equalTo: ratingImageView.bottomAnchor, constant: 12),
             priceNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             
             priceLabel.topAnchor.constraint(equalTo: priceNameLabel.bottomAnchor, constant: 2),
@@ -121,16 +121,32 @@ class CartCell: UITableViewCell {
     }
     
     func configure(with item: NFTModel, deleteAction: @escaping () -> Void) {
-        
         if let firstImageURL = item.images.first, let url = URL(string: firstImageURL) {
-                    itemImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
-                }
+            itemImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
+        }
         
         nameLabel.text = item.name
-        ratingLabel.text = String(repeating: "★", count: item.rating) + String(repeating: "☆", count: 5 - item.rating)
+        ratingImageView.image = getRatingImage(for: item.rating)
         priceNameLabel.text = "Цена"
         priceLabel.text = "\(item.price) ETH"
         
         self.deleteAction = deleteAction
+    }
+    
+    private func getRatingImage(for rating: Int) -> UIImage {
+        switch rating {
+        case 1:
+            return UIImage(named: "stars1") ?? UIImage()
+        case 2:
+            return UIImage(named: "stars2") ?? UIImage()
+        case 3:
+            return UIImage(named: "stars3") ?? UIImage()
+        case 4:
+            return UIImage(named: "stars4") ?? UIImage()
+        case 5:
+            return UIImage(named: "stars5") ?? UIImage()
+        default:
+            return UIImage(named: "stars0") ?? UIImage()
+        }
     }
 }
