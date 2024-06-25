@@ -4,16 +4,16 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var presenter: StatisticPresenterProtocol?
+    
     private lazy var usersTableView = {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
         
         tableView.backgroundColor = .clear
-        tableView.rowHeight = 80
-        
-        tableView.layer.masksToBounds = true
-        tableView.layer.cornerRadius = 12
+        tableView.rowHeight = 88
+        tableView.separatorStyle = .none
         
         return tableView
     }()
@@ -63,7 +63,7 @@ final class StatisticsViewController: UIViewController {
     
     @objc
     private func sortButtonDidTap() {
-        
+        // TODO: - Показ алерта со способом сортировки
     }
 }
 
@@ -72,15 +72,13 @@ final class StatisticsViewController: UIViewController {
 extension StatisticsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = StatisticTableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
-        
-        return UITableViewCell()
+        return cell
     }
 }
 
