@@ -1,10 +1,11 @@
 import UIKit
+import ProgressHUD
 
 final class StatisticsViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var presenter: StatisticPresenterProtocol?
+    private var presenter = StatisticsPresenter()
     
     private lazy var usersTableView = {
         let tableView = UITableView()
@@ -24,17 +25,53 @@ final class StatisticsViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .viewBackgroundColor
+        getStatisticsData()
+        showErrorAlert()
         setupUI()
     }
     
     // MARK: - Methods
     
-    // MARK: - View Configuration
-    
     private func setupUI() {
         setupNavBar()
         setupUsersTableView()
     }
+    
+    private func showLoadingIndicator() {
+        ProgressHUD.show()
+    }
+    
+    private func hideLoadingIndicator() {
+        ProgressHUD.dismiss()
+    }
+    
+    private func showErrorAlert() {
+        let alert = UIAlertController(
+            title: "Не удалось получить данные",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .default)
+        let action = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.getStatisticsData()
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(action)
+        alert.preferredAction = action
+        
+        present(alert, animated: true)
+    }
+    
+    private func getStatisticsData() {
+        showLoadingIndicator()
+        presenter.getUsersList()
+        hideLoadingIndicator()
+    }
+    
+    // MARK: - View Configuration
     
     private func setupNavBar() {
         let sortButton = UIBarButtonItem(
@@ -72,11 +109,13 @@ final class StatisticsViewController: UIViewController {
 extension StatisticsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return presenter.users.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = StatisticTableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        let cell = StatisticsTableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        let user = presenter.users[indexPath.row]
+        cell.configure(numberOfCell: indexPath.row + 1, for: user)
         
         return cell
     }
@@ -86,8 +125,7 @@ extension StatisticsViewController: UITableViewDataSource {
 
 extension StatisticsViewController: UITableViewDelegate {
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // TODO: - Переход на экран профиля пользователя
+    }
 }
-
-
-

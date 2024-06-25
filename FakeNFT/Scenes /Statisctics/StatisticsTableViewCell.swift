@@ -1,10 +1,8 @@
 import UIKit
 
-final class StatisticTableViewCell: UITableViewCell {
+final class StatisticsTableViewCell: UITableViewCell {
     
     // MARK: - Properties
-    
-    private var numberOfCell: UInt = 1
     
     private lazy var colorPartImageView = {
         let imageView = UIImageView()
@@ -22,7 +20,6 @@ final class StatisticTableViewCell: UITableViewCell {
     private lazy var rankLabel = {
         let label = UILabel()
         
-        label.text = "\(numberOfCell)"
         label.font = UIFont.caption1
         label.textColor = .ypBlackUniversal
         
@@ -35,7 +32,6 @@ final class StatisticTableViewCell: UITableViewCell {
     private lazy var avatarImageView = {
         let imageView = UIImageView()
         
-        imageView.image = UIImage.userPlaceholderImage
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 14
         
@@ -76,7 +72,6 @@ final class StatisticTableViewCell: UITableViewCell {
         
         backgroundColor = .clear
         selectionStyle = .none
-        separatorInset = UIEdgeInsets(top: 26, left: 16, bottom: 26, right: 16)
         
         layer.masksToBounds = true
         layer.cornerRadius = 12
@@ -89,6 +84,15 @@ final class StatisticTableViewCell: UITableViewCell {
     }
     
     // MARK: - Methods
+    
+    func configure(numberOfCell: Int, for user: ProfileModel) {
+        rankLabel.text = "\(numberOfCell)"
+        avatarImageView.image = UIImage(named: user.avatar ?? "person")
+        nftQuantityLabel.text = "\(user.nfts.count)"
+        nameLabel.text = user.name
+    }
+    
+    // MARK: - View Configuration
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -117,9 +121,5 @@ final class StatisticTableViewCell: UITableViewCell {
             nameLabel.topAnchor.constraint(equalTo: colorPartImageView.topAnchor, constant: 26),
             nameLabel.bottomAnchor.constraint(equalTo: colorPartImageView.bottomAnchor, constant: -26)
         ])
-    }
-    
-    func configure() {
-        
     }
 }
