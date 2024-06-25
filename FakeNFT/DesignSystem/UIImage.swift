@@ -46,6 +46,8 @@ extension UIImage {
     static let cartEmptyImage: UIImage = UIImage(named: "cartEmpty") ?? UIImage()
     static let cartDeleteImage: UIImage = UIImage(named: "cartDelete") ?? UIImage()
     static let backwardImage: UIImage = UIImage(named: "backward") ?? UIImage()
+    static let squarePencilFigma: UIImage = UIImage(named: "squarePencilFigma") ?? UIImage()
+    static let crossImage: UIImage = UIImage(named: "cross") ?? UIImage()
     
     // Stars
     static let stars0: UIImage = UIImage(named: "stars0") ?? UIImage()

@@ -105,10 +105,12 @@ struct MockData {
     ]
     
     static let profile = ProfileModel(
-        name: "John Doe",
+        name: "Joaquin Phoenix",
         avatar: "avatarMockProfile",
-        description: "NFT enthusiast and digital artist.",
-        website: "https://johndoe.com",
+        description: """
+                Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям.
+                """,
+        website: "JoaquinPhoenix.com",
         nfts: ["1", "2"],
         likes: ["2", "3"],
         id: "user123"

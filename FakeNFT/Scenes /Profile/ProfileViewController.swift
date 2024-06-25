@@ -7,13 +7,19 @@
 
 import UIKit
 
+protocol ProfileViewControllerDelegate: AnyObject {
+    func didUpdateProfile(_ profile: ProfileModel)
+}
+
 final class ProfileViewController: UIViewController {
-    
+
     // MARK: - Private Properties
+    
+    private var profile: ProfileModel?
+    private let sections = ["Мои NFT (112)", "Избранные NFT (11)", "О разработчике"]
     
     private let avatarImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "avatarMockProfile")
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 35
@@ -24,7 +30,6 @@ final class ProfileViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.headline3
         label.textColor = .ypBlack
-        label.text = "Joaquin Phoenix"
         return label
     }()
     
@@ -35,9 +40,6 @@ final class ProfileViewController: UIViewController {
         textView.backgroundColor = .ypWhite
         textView.isEditable = false
         textView.isScrollEnabled = false
-        textView.text = """
-                Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям.
-                """
         return textView
     }()
     
@@ -45,7 +47,6 @@ final class ProfileViewController: UIViewController {
         let button = UIButton(type: .custom)
         button.titleLabel?.font = .caption1
         button.titleLabel?.textAlignment = .left
-        button.setTitle("JoaquinPhoenix.com", for: .normal)
         button.setTitleColor(.ypBlueUniversal, for: .normal)
         return button
     }()
@@ -61,24 +62,39 @@ final class ProfileViewController: UIViewController {
         return tableView
     }()
     
-    private let sections = ["Мои NFT (112)", "Избранные NFT (11)", "О разработчике"]
-    
-    var profile: ProfileModel?
-    
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        profile = MockData.profile
+        setupProfile()
         setupUI()
         setupNavigationItem()
         tableView.dataSource = self
         tableView.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupProfile()
+    }
+    
     // MARK: - Private Functions
+    private func setupProfile() {
+        guard let profile = profile else { return }
+        avatarImage.image = UIImage(named: profile.avatar ?? "avatarMockProfile")
+        nameLabel.text = profile.name
+        bioTextView.text = profile.description
+        urlButton.setTitle(profile.website, for: .normal)
+    }
     
     @objc func editProfileTapped() {
-        // TODO: Реализация функции редактирования профиля
+        guard let profile = profile else { return }
+        let editProfileViewController = EditProfileViewController()
+        editProfileViewController.delegate = self
+        editProfileViewController.configure(profile: profile)
+        let navigationController = UINavigationController(rootViewController: editProfileViewController)
+        present(navigationController, animated: true)
     }
     
     private func setupUI() {
@@ -116,7 +132,7 @@ final class ProfileViewController: UIViewController {
     
     private func setupNavigationItem() {
         let editButton = UIBarButtonItem(
-            image: UIImage.squareAndPencil,
+            image: UIImage.squarePencilFigma,
             style: .plain,
             target: self,
             action: #selector(editProfileTapped)
@@ -164,5 +180,12 @@ extension ProfileViewController: UITableViewDelegate {
         default:
             break
         }
+    }
+}
+
+extension ProfileViewController: ProfileViewControllerDelegate {
+    func didUpdateProfile(_ profile: ProfileModel) {
+        self.profile = profile
+        setupProfile()
     }
 }
