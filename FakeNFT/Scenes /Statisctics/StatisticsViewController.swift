@@ -5,8 +5,9 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var presenter = StatisticsPresenter()
+    private var statisticsServiceObserver: NSObjectProtocol?
     
+    private lazy var presenter = StatisticsPresenter()
     private lazy var usersTableView = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -25,27 +26,24 @@ final class StatisticsViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .viewBackgroundColor
-        getStatisticsData()
-        showErrorAlert()
         setupUI()
+        
+        presenter.view = self
+        presenter.viewDidLoad()
+        addObserver()
     }
     
     // MARK: - Methods
     
-    private func setupUI() {
-        setupNavBar()
-        setupUsersTableView()
-    }
-    
-    private func showLoadingIndicator() {
+    func showLoadingIndicator() {
         ProgressHUD.show()
     }
     
-    private func hideLoadingIndicator() {
+    func hideLoadingIndicator() {
         ProgressHUD.dismiss()
     }
     
-    private func showErrorAlert() {
+    func showErrorAlert() {
         let alert = UIAlertController(
             title: "Не удалось получить данные",
             message: nil,
@@ -55,7 +53,7 @@ final class StatisticsViewController: UIViewController {
         let cancelAction = UIAlertAction(title: "Отмена", style: .default)
         let action = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
             guard let self = self else { return }
-            self.getStatisticsData()
+            self.presenter.viewDidLoad()
         }
         
         alert.addAction(cancelAction)
@@ -65,10 +63,22 @@ final class StatisticsViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    private func getStatisticsData() {
-        showLoadingIndicator()
-        presenter.getUsersList()
-        hideLoadingIndicator()
+    private func addObserver() {
+        statisticsServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: StatisticsService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] notification in
+                guard let self = self else { return }
+                self.presenter.updateUsers()
+                self.usersTableView.reloadData()
+            }
+    }
+    
+    private func setupUI() {
+        setupNavBar()
+        setupUsersTableView()
     }
     
     // MARK: - View Configuration

@@ -1,3 +1,4 @@
+import Kingfisher
 import UIKit
 
 final class StatisticsTableViewCell: UITableViewCell {
@@ -85,11 +86,11 @@ final class StatisticsTableViewCell: UITableViewCell {
     
     // MARK: - Methods
     
-    func configure(numberOfCell: Int, for user: ProfileModel) {
+    func configure(numberOfCell: Int, for user: UsersModel) {
         rankLabel.text = "\(numberOfCell)"
-        avatarImageView.image = UIImage(named: user.avatar ?? "person")
         nftQuantityLabel.text = "\(user.nfts.count)"
         nameLabel.text = user.name
+        avatarImageView.kf.setImage(with: URL(string: user.avatar), placeholder: UIImage(named: "person"))
     }
     
     // MARK: - View Configuration
