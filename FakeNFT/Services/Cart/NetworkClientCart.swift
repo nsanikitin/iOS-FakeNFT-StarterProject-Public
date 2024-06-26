@@ -9,11 +9,11 @@ import Foundation
 
 class NetworkClientCart {
     private let session: URLSession
-
+    
     init(session: URLSession = .shared) {
         self.session = session
     }
-
+    
     func send<T: Decodable>(request: URLRequest, type: T.Type, completion: @escaping (Result<T, Error>) -> Void) {
         let task = session.dataTask(with: request) { data, response, error in
             if let error = error {

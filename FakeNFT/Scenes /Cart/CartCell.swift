@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class CartCell: UITableViewCell {
+final class CartCell: UITableViewCell {
     
     private let itemImageView: UIImageView = {
         let imageView = UIImageView()

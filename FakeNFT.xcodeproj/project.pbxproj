@@ -294,11 +294,10 @@
 		3F6806C629CBBC4E00B4F915 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				75DE52C12C2CB0EA006C54C8 /* Cart */,
 				3FC8C38F29D245250081F015 /* Requests */,
 				0C79EE6B2A76DE2E00EE90EA /* ServicesAssemly.swift */,
 				0CFCB73F2A78002A0009A829 /* NftService.swift */,
-				75DE52B52C282357006C54C8 /* NetworkClientCart.swift */,
-				75DE52B72C2823A9006C54C8 /* NFTServiceCart.swift */,
 				75DE52BB2C2833BE006C54C8 /* configureProgressHUD.swift */,
 			);
 			path = Services;
@@ -391,6 +390,15 @@
 				951B59672C24450B0050BC72 /* CartViewController.swift */,
 				7562E68B2C24905D00970667 /* CartCell.swift */,
 				75DE52BF2C28458C006C54C8 /* DeleteConfirmationViewController.swift */,
+			);
+			path = Cart;
+			sourceTree = "<group>";
+		};
+		75DE52C12C2CB0EA006C54C8 /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				75DE52B52C282357006C54C8 /* NetworkClientCart.swift */,
+				75DE52B72C2823A9006C54C8 /* NFTServiceCart.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";

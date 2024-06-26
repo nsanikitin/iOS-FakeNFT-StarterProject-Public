@@ -78,18 +78,18 @@ final class CartViewController: UIViewController, CartView {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            if isLoading {
-                ProgressHUD.show("Loading...")
-            }
+        super.viewWillAppear(animated)
+        if isLoading {
+            ProgressHUD.show("Loading...")
         }
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
-            super.viewWillDisappear(animated)
-            if isLoading {
-                ProgressHUD.dismiss()
-            }
+        super.viewWillDisappear(animated)
+        if isLoading {
+            ProgressHUD.dismiss()
         }
+    }
     
     private func setupNavigationBar() {
         navigationItem.rightBarButtonItem = sortButton
@@ -188,14 +188,14 @@ final class CartViewController: UIViewController, CartView {
     }
     
     func showLoading() {
-            isLoading = true
-            ProgressHUD.show("Loading...")
-        }
-        
-        func hideLoading() {
-            isLoading = false
-            ProgressHUD.dismiss()
-        }
+        isLoading = true
+        ProgressHUD.show("Loading...")
+    }
+    
+    func hideLoading() {
+        isLoading = false
+        ProgressHUD.dismiss()
+    }
     
     private func showDeleteConfirmation(for item: NFTModel, at index: Int) {
         let deleteVC = DeleteConfirmationViewController()
@@ -217,12 +217,9 @@ extension CartViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CartCell", for: indexPath) as! CartCell
         let item = presenter.getItem(at: indexPath.row)
-//        cell.configure(with: item) { [weak self] in
-//            self?.presenter.deleteItem(at: indexPath.row)
-//        }
         cell.configure(with: item) { [weak self] in
-                    self?.showDeleteConfirmation(for: item, at: indexPath.row)
-                }
+            self?.showDeleteConfirmation(for: item, at: indexPath.row)
+        }
         return cell
     }
     
