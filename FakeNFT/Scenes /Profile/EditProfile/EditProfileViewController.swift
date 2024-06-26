@@ -13,8 +13,27 @@ final class EditProfileViewController: UIViewController {
     
     private var likes: [String]?
     private var profile: ProfileModel?
+    private var didClearNameTextField = false
     weak var delegate: ProfileViewControllerDelegate?
-
+    
+    private let nameErrorLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Имя не может быть пустым"
+        label.textColor = .red
+        label.font = UIFont.caption3
+        label.isHidden = true
+        return label
+    }()
+    
+    private let urlErrorLabel: UILabel = {
+        let label = UILabel()
+        label.text = "URL не должен содержать пробелов"
+        label.textColor = .red
+        label.font = UIFont.caption3
+        label.isHidden = true
+        return label
+    }()
+    
     private let avatarImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -130,6 +149,9 @@ final class EditProfileViewController: UIViewController {
         setupTextField(nameTextField)
         setupTextField(urlTextField)
         setupDescriptionClearButton()
+        
+        nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        urlTextField.addTarget(self, action: #selector(urlTextFieldDidChange(_:)), for: .editingChanged)
     }
     
     // MARK: - Private Functions
@@ -178,16 +200,6 @@ final class EditProfileViewController: UIViewController {
         
     }
     
-    @objc private func clearText(_ sender: UIButton) {
-        if let textField = sender.superview as? UITextField {
-            textField.text = ""
-        }
-    }
-    
-    @objc private func clearTextView(_ sender: UIButton) {
-        descriptionTextView.text = ""
-    }
-    
     private func updateAvatarURL(_ newURL: String) {
         // TODO: логика изменения ссылки для изображения
     }
@@ -210,7 +222,7 @@ final class EditProfileViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .ypWhite
         
-        [avatarImage, shadowView, changeAvatarButton, nameLabel, nameTextField, descriptionLabel, descriptionTextView, urlLabel, urlTextField].forEach {
+        [avatarImage, nameErrorLabel, shadowView, changeAvatarButton, nameLabel, nameTextField, descriptionLabel, descriptionTextView, urlLabel, urlTextField, urlErrorLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -220,6 +232,9 @@ final class EditProfileViewController: UIViewController {
             avatarImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 22),
             avatarImage.heightAnchor.constraint(equalToConstant: 70),
             avatarImage.widthAnchor.constraint(equalToConstant: 70),
+            
+            nameErrorLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 4),
+            nameErrorLabel.leadingAnchor.constraint(equalTo: nameTextField.leadingAnchor, constant: 16),
             
             shadowView.leadingAnchor.constraint(equalTo: avatarImage.leadingAnchor),
             shadowView.trailingAnchor.constraint(equalTo: avatarImage.trailingAnchor),
@@ -253,7 +268,10 @@ final class EditProfileViewController: UIViewController {
             urlTextField.topAnchor.constraint(equalTo: urlLabel.bottomAnchor, constant: 8),
             urlTextField.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             urlTextField.trailingAnchor.constraint(equalTo: nameTextField.trailingAnchor),
-            urlTextField.heightAnchor.constraint(equalToConstant: 44)
+            urlTextField.heightAnchor.constraint(equalToConstant: 44),
+            
+            urlErrorLabel.topAnchor.constraint(equalTo: urlTextField.bottomAnchor, constant: 8),
+            urlErrorLabel.leadingAnchor.constraint(equalTo: urlTextField.leadingAnchor, constant: 16)
         ])
     }
 }
@@ -279,6 +297,46 @@ extension EditProfileViewController {
             containerView.widthAnchor.constraint(equalToConstant: 30),
             containerView.heightAnchor.constraint(equalToConstant: 30)
         ])
+    }
+    
+    @objc private func clearText(_ sender: UIButton) {
+        if let textField = sender.superview as? UITextField {
+            textField.text = ""
+            if textField == nameTextField {
+                didClearNameTextField = true
+                nameErrorLabel.isHidden = false
+                nameTextField.layer.borderColor = UIColor.red.cgColor
+                nameTextField.layer.borderWidth = 1.0
+            }
+        }
+    }
+    
+    @objc private func clearTextView(_ sender: UIButton) {
+        descriptionTextView.text = ""
+    }
+    
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        if textField == nameTextField {
+            if let text = textField.text, !text.isEmpty {
+                nameErrorLabel.isHidden = true
+                nameTextField.layer.borderColor = UIColor.clear.cgColor
+                nameTextField.layer.borderWidth = 0.0
+            }
+        }
+    }
+    
+    @objc private func urlTextFieldDidChange(_ textField: UITextField) {
+        if textField == urlTextField {
+            if let text = textField.text, text.contains(" ") {
+                urlErrorLabel.isHidden = false
+                urlTextField.layer.borderColor = UIColor.red.cgColor
+                urlTextField.layer.borderWidth = 1.0
+            } else {
+                urlErrorLabel.isHidden = true
+                urlTextField.layer.borderColor = UIColor.clear.cgColor
+                urlTextField.layer.borderWidth = 0.0
+            }
+        }
     }
 }
 
