@@ -19,7 +19,8 @@ final class CartPresenter {
     }
     
     var totalPrice: Float {
-        return items.reduce(0) { $0 + $1.price }
+        let total = items.reduce(0) { $0 + $1.price }
+        return total.rounded(toPlaces: 2)
     }
     
     func loadItems() {
@@ -63,5 +64,12 @@ final class CartPresenter {
             items.sort { $0.name < $1.name }
         }
         view?.reloadData()
+    }
+}
+
+extension Float {
+    func rounded(toPlaces places: Int) -> Float {
+        let multiplier = pow(10, Float(places))
+        return (self * multiplier).rounded() / multiplier
     }
 }

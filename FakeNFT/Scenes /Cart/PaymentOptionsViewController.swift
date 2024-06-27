@@ -24,6 +24,47 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
         return collectionView
     }()
     
+    private let bottomView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .ypLightGrey
+        view.layer.cornerRadius = 12
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let labelAgreemant: UILabel = {
+        let label = UILabel()
+        label.text = "Совершая покупку, вы соглашаетесь с условиями"
+        label.font = .caption2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let hyperlinkLabel: UILabel = {
+        let label = UILabel()
+        let attributedString = NSMutableAttributedString(string: "Пользовательского соглашения")
+        attributedString.addAttribute(.underlineStyle, value: [], range: NSRange(location: 0, length: attributedString.length))
+        label.attributedText = attributedString
+        label.textColor = .ypBlueUniversal
+        label.font = .caption2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = true
+        return label
+    }()
+    
+    private let payButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Оплатить", for: .normal)
+        button.backgroundColor = UIColor(named: "ypBlack")
+        button.titleLabel?.font = .bodyBold
+        button.setTitleColor(UIColor(named: "ypWhite"), for: .normal)
+        button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(Pay), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -33,10 +74,25 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
         
         presenter = PaymentOptionsPresenter(view: self)
         presenter.loadPaymentOptions()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapHyperlinkLabel))
+                hyperlinkLabel.addGestureRecognizer(tapGesture)
     }
     
     @objc private func dismissController() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func didTapHyperlinkLabel() {
+        let webViewController = WebViewAgreementController(urlString: "https://yandex.ru/legal/practicum_termsofuse/")
+        present(webViewController, animated: true, completion: nil)
+    }
+    
+    @objc private func Pay() {
+//        let paymentOptionsVC = PaymentOptionsViewController()
+//        let navController = UINavigationController(rootViewController: paymentOptionsVC)
+//        navController.modalPresentationStyle = .fullScreen
+//        present(navController, animated: true, completion: nil)
     }
     
     private func setupNavigationBar() {
@@ -47,7 +103,7 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
             target: self,
             action: #selector(dismissController)
         )
-        backButton.tintColor = .black
+        backButton.tintColor = UIColor(named: "ypBlack")
         navigationItem.leftBarButtonItem = backButton
     }
     
@@ -56,6 +112,10 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
         collectionView.delegate = self
         collectionView.register(PaymentOptionCell.self, forCellWithReuseIdentifier: PaymentOptionCell.identifier)
         view.addSubview(collectionView)
+        view.addSubview(bottomView)
+        bottomView.addSubview(labelAgreemant)
+        bottomView.addSubview(hyperlinkLabel)
+        bottomView.addSubview(payButton)
     }
     
     private func setupConstraints() {
@@ -63,7 +123,23 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            bottomView.heightAnchor.constraint(equalToConstant: 186),
+            bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            labelAgreemant.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 16),
+            labelAgreemant.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 16),
+            
+            hyperlinkLabel.leadingAnchor.constraint(equalTo: labelAgreemant.leadingAnchor),
+            hyperlinkLabel.topAnchor.constraint(equalTo: labelAgreemant.bottomAnchor, constant: 4),
+            
+            payButton.leadingAnchor.constraint(equalTo: bottomView.leadingAnchor, constant: 20),
+            payButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -12),
+            payButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            payButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     

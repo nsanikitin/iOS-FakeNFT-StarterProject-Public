@@ -45,9 +45,9 @@ final class CartViewController: UIViewController, CartView {
     private let payButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("К оплате", for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = UIColor(named: "ypBlack")
         button.titleLabel?.font = .bodyBold
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(UIColor(named: "ypWhite"), for: .normal)
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(showPaymentOptions), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
