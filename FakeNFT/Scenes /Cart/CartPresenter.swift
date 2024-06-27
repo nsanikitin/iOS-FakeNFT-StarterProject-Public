@@ -10,9 +10,9 @@ final class CartPresenter {
     
     weak var view: CartView?
     private var items: [NFTModel] = []
-    private let nftServiceCart: NFTServiceCart
+    private let nftServiceCart: ServiceCart
     
-    init(view: CartView, nftServiceCart: NFTServiceCart) {
+    init(view: CartView, nftServiceCart: ServiceCart) {
         self.view = view
         self.nftServiceCart = nftServiceCart
         loadItems()
@@ -23,7 +23,7 @@ final class CartPresenter {
         return total.rounded(toPlaces: 2)
     }
     
-    func loadItems() {
+    private func loadItems() {
         view?.showLoading()
         nftServiceCart.loadNFTs { [weak self] result in
             DispatchQueue.main.async {
@@ -33,6 +33,7 @@ final class CartPresenter {
                     self?.items = Array(nftList.prefix(3))
                     self?.view?.updateTotalPrice(totalCount: self?.items.count ?? 0, totalPrice: self?.totalPrice ?? 0)
                     self?.view?.reloadData()
+                    self?.view?.setPayButtonEnabled(true)
                 case .failure(let error):
                     print("Ошибка загрузки списка NFT: \(error.localizedDescription)")
                 }

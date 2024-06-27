@@ -1,34 +1,62 @@
-//
-//  PaymentOptionsPresenter.swift
-//  FakeNFT
-//
-//  Created by Рамиль Аглямов on 27.06.2024.
-//
-
 import UIKit
 
 protocol PaymentOptionsView: AnyObject {
-    func showPaymentOptions(_ options: [PaymentOption])
+    func showPaymentOptions(_ options: [CurrencyModel])
+    func showLoading()
+    func hideLoading()
+    func updateItemImage(at index: Int, with image: UIImage)
 }
 
 final class PaymentOptionsPresenter {
     private weak var view: PaymentOptionsView?
-    private var paymentOptions: [PaymentOption] = []
+    private var paymentOptions: [CurrencyModel] = []
+    private let currentServiceCart: ServiceCart
     
-    init(view: PaymentOptionsView) {
+    init(view: PaymentOptionsView, currentServiceCart: ServiceCart) {
         self.view = view
+        self.currentServiceCart = currentServiceCart
     }
     
     func loadPaymentOptions() {
-        // Simulate loading data from a network or database
-        paymentOptions = [
-            PaymentOption(name: "Bitcoin", code: "BTC", icon: UIImage(named: "criptoBTC")!),
-            PaymentOption(name: "Dogecoin", code: "DOGE", icon: UIImage(named: "criptoDOGE")!),
-            PaymentOption(name: "Dogecoin", code: "DOGE", icon: UIImage(named: "criptoDOGE")!),
-            PaymentOption(name: "Dogecoin", code: "DOGE", icon: UIImage(named: "criptoDOGE")!)
-            // Add other payment options here
-        ]
+        view?.showLoading()
+        currentServiceCart.loadCurrencies { [weak self] result in
+            DispatchQueue.main.async {
+                self?.view?.hideLoading()
+                switch result {
+                case .success(let currentList):
+                    self?.paymentOptions = Array(currentList)
+                    self?.view?.showPaymentOptions(self?.paymentOptions ?? [])
+                    self?.loadImages()
+                case .failure(let error):
+                    print("Ошибка загрузки списка валют: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    private func loadImages() {
+        for (index, option) in paymentOptions.enumerated() {
+            loadImage(from: option.image) { [weak self] image in
+                DispatchQueue.main.async {
+                    self?.view?.updateItemImage(at: index, with: image!)
+                }
+            }
+        }
+    }
+    
+    private func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
         
-        view?.showPaymentOptions(paymentOptions)
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil, let image = UIImage(data: data) else {
+                completion(nil)
+                return
+            }
+            completion(image)
+        }
+        task.resume()
     }
 }

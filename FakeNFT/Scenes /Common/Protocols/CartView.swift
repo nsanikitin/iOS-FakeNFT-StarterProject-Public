@@ -12,4 +12,5 @@ protocol CartView: AnyObject {
     func reloadData()
     func showLoading()
     func hideLoading()
+    func setPayButtonEnabled(_ isEnabled: Bool)
 }

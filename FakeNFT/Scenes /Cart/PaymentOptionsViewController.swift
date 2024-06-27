@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
-    
     private var presenter: PaymentOptionsPresenter!
-    private var paymentOptions: [PaymentOption] = []
+    private var paymentOptions: [CurrencyModel] = []
+    private var isLoading = false
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -71,28 +72,13 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
         setupNavigationBar()
         setupUI()
         setupConstraints()
-        
-        presenter = PaymentOptionsPresenter(view: self)
+        showLoading()
+        let networkClient = NetworkClientCart()
+        presenter = PaymentOptionsPresenter(view: self, currentServiceCart: ServiceCart(networkClient: networkClient))
         presenter.loadPaymentOptions()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapHyperlinkLabel))
-                hyperlinkLabel.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissController() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc private func didTapHyperlinkLabel() {
-        let webViewController = WebViewAgreementController(urlString: "https://yandex.ru/legal/practicum_termsofuse/")
-        present(webViewController, animated: true, completion: nil)
-    }
-    
-    @objc private func Pay() {
-//        let paymentOptionsVC = PaymentOptionsViewController()
-//        let navController = UINavigationController(rootViewController: paymentOptionsVC)
-//        navController.modalPresentationStyle = .fullScreen
-//        present(navController, animated: true, completion: nil)
+        hyperlinkLabel.addGestureRecognizer(tapGesture)
     }
     
     private func setupNavigationBar() {
@@ -143,9 +129,58 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
         ])
     }
     
-    func showPaymentOptions(_ options: [PaymentOption]) {
+    func showPaymentOptions(_ options: [CurrencyModel]) {
         paymentOptions = options
         collectionView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isLoading {
+            ProgressHUD.show("Loading...")
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if isLoading {
+            ProgressHUD.dismiss()
+        }
+    }
+    
+    func showLoading() {
+        isLoading = true
+        ProgressHUD.show("Loading...")
+    }
+    
+    func hideLoading() {
+        isLoading = false
+        ProgressHUD.dismiss()
+    }
+    
+    func updateItemImage(at index: Int, with image: UIImage) {
+        if index < paymentOptions.count {
+            let indexPath = IndexPath(item: index, section: 0)
+            if let cell = collectionView.cellForItem(at: indexPath) as? PaymentOptionCell {
+                cell.updateImage(image)
+            }
+        }
+    }
+    
+    @objc private func dismissController() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func didTapHyperlinkLabel() {
+        let webViewController = WebViewAgreementController(urlString: "https://yandex.ru/legal/practicum_termsofuse/")
+        present(webViewController, animated: true, completion: nil)
+    }
+    
+    @objc private func Pay() {
+        //        let paymentOptionsVC = PaymentOptionsViewController()
+        //        let navController = UINavigationController(rootViewController: paymentOptionsVC)
+        //        navController.modalPresentationStyle = .fullScreen
+        //        present(navController, animated: true, completion: nil)
     }
 }
 
@@ -167,9 +202,5 @@ extension PaymentOptionsViewController: UICollectionViewDataSource, UICollection
         let totalSpacing = layout.sectionInset.left + layout.sectionInset.right + (layout.minimumInteritemSpacing * (numberOfColumns - 1))
         let width = (collectionView.bounds.width - totalSpacing) / numberOfColumns
         return CGSize(width: width, height: 48)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // Handle payment option selection
     }
 }

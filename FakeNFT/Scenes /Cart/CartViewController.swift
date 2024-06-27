@@ -22,7 +22,7 @@ final class CartViewController: UIViewController, CartView {
         let view = UIView()
         view.backgroundColor = .ypLightGrey
         view.layer.cornerRadius = 12
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] 
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -67,8 +67,9 @@ final class CartViewController: UIViewController, CartView {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        setPayButtonEnabled(false)
         let networkClientCart = NetworkClientCart()
-        let nftServiceCart = NFTServiceCart(networkClient: networkClientCart)
+        let nftServiceCart = ServiceCart(networkClient: networkClientCart)
         presenter = CartPresenter(view: self, nftServiceCart: nftServiceCart)
         setupNavigationBar()
         setupBottomView()
@@ -138,7 +139,6 @@ final class CartViewController: UIViewController, CartView {
             
             emptyCartLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyCartLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            
         ])
     }
     
@@ -201,11 +201,20 @@ final class CartViewController: UIViewController, CartView {
         let deleteVC = DeleteConfirmationViewController()
         deleteVC.modalPresentationStyle = .overFullScreen
         deleteVC.modalTransitionStyle = .crossDissolve
-        deleteVC.configure(with: UIImage(named: item.name)) // Assuming the image name is same as the item name
+        deleteVC.configure(with: UIImage(named: item.name))
         deleteVC.confirmHandler = { [weak self] in
             self?.presenter.deleteItem(at: index)
         }
         present(deleteVC, animated: true, completion: nil)
+    }
+    
+    func setPayButtonEnabled(_ isEnabled: Bool) {
+        payButton.isEnabled = isEnabled
+        if isEnabled {
+            payButton.setTitleColor(UIColor(named: "ypWhite"), for: .normal)
+        } else {
+            payButton.setTitleColor(UIColor.gray, for: .normal)
+        }
     }
 }
 

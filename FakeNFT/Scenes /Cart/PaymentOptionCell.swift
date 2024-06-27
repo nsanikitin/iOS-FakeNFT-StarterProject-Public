@@ -75,10 +75,15 @@ final class PaymentOptionCell: UICollectionViewCell {
         contentView.layer.borderColor = UIColor(named: "ypBlack")?.cgColor
     }
     
-    func configure(with option: PaymentOption) {
-        iconImageView.image = option.icon
-        nameLabel.text = option.name
-        codeLabel.text = option.code
+    func configure(with option: CurrencyModel) {
+        //        iconImageView.image = option.image
+        nameLabel.text = option.title
+        codeLabel.text = option.name
+        iconImageView.image = nil
+    }
+    
+    func updateImage(_ image: UIImage?) {
+        iconImageView.image = image
     }
     
     override var isSelected: Bool {
