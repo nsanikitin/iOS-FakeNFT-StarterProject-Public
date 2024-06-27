@@ -80,7 +80,7 @@ final class FavoriteNFTCollectionViewCell: UICollectionViewCell {
             likeButton.widthAnchor.constraint(equalToConstant: 43),
             likeButton.heightAnchor.constraint(equalToConstant: 43),
 
-            ratingImageView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 16),
+            ratingImageView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 6),
             ratingImageView.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
             
             nameLabel.leadingAnchor.constraint(equalTo: ratingImageView.leadingAnchor),

@@ -108,11 +108,11 @@ final class UserNFTTableViewCell: UITableViewCell {
             likeButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor),
             likeButton.topAnchor.constraint(equalTo: nftImageView.topAnchor),
 
-            priceLabel.leadingAnchor.constraint(equalTo: ratingImageView.trailingAnchor, constant: 50),
+            priceLabel.leadingAnchor.constraint(equalTo: costLabel.leadingAnchor),
             priceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 65),
 
             costLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 2),
-            costLabel.leadingAnchor.constraint(equalTo: priceLabel.leadingAnchor),
+            costLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -39),
             costLabel.heightAnchor.constraint(equalToConstant: 22),
 
             nameLabel.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 16),

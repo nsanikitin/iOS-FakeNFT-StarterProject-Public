@@ -10,7 +10,7 @@ import UIKit
 final class ProfileTableViewCell: UITableViewCell {
     static let reuseIdentifier = "ProfileTableViewCell"
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.bodyBold
         label.textColor = .ypBlack
@@ -49,5 +49,9 @@ final class ProfileTableViewCell: UITableViewCell {
             chevronImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             chevronImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
+    }
+    
+    func updateTitle(text: String) {
+        titleLabel.text = text
     }
 }

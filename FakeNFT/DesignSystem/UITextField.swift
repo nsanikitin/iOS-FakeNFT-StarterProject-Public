@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PaddedTextField: UITextField {
+final class PaddedTextField: UITextField {
     var padding: UIEdgeInsets
     
     init(padding: UIEdgeInsets) {
@@ -31,14 +31,3 @@ class PaddedTextField: UITextField {
         return bounds.inset(by: padding)
     }
 }
-
-//class PaddedTextView: UITextView {
-//    override var textContainerInset: UIEdgeInsets {
-//        get {
-//            return super.textContainerInset
-//        }
-//        set {
-//            super.textContainerInset = newValue
-//        }
-//    }
-//}

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MockData {
+enum MockData {
     static let nfts: [NFTModel] = [
         NFTModel(
             createdAt: Date(),

@@ -46,10 +46,13 @@ final class FavoriteNFTViewController: UIViewController {
         collectionView.dataSource = self
     }
     
-    // MARK: - Private Functions
+    // MARK: - Public Functions
+    
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    // MARK: - Private Functions
     
     private func updateUI() {
         if nfts.isEmpty {

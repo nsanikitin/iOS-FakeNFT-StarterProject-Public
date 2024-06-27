@@ -43,7 +43,7 @@ final class UserNFTViewController: UIViewController {
         tableView.delegate = self
     }
     
-    // MARK: - Private Functions
+    // MARK: - Public Functions
     
     @objc func sortButtonTapped() {
         // TODO: Реализация функции сортировки
@@ -63,6 +63,8 @@ final class UserNFTViewController: UIViewController {
             tableView.reloadData()
         }
     }
+    
+    // MARK: - Private Functions
     
     private func setupUI() {
         view.backgroundColor = .ypWhite

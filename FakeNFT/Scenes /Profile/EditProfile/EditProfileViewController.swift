@@ -7,14 +7,18 @@
 
 import UIKit
 
+protocol EditProfileView: AnyObject {
+    func displayProfile(_ profile: ProfileModel)
+    func closeView(with updatedProfile: ProfileModel)
+}
+
 final class EditProfileViewController: UIViewController {
 
     // MARK: - Private Properties
     
-    private var likes: [String]?
-    private var profile: ProfileModel?
-    private var didClearNameTextField = false
+    private var presenter: EditProfilePresenter?
     weak var delegate: ProfileViewControllerDelegate?
+    private var didClearNameTextField = false
     
     private let nameErrorLabel: UILabel = {
         let label = UILabel()
@@ -73,6 +77,9 @@ final class EditProfileViewController: UIViewController {
         textField.backgroundColor = .ypLightGrey
         textField.textColor = .ypBlack
         textField.font = UIFont.bodyRegular
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.returnKeyType = .done
         return textField
     }()
     
@@ -106,6 +113,9 @@ final class EditProfileViewController: UIViewController {
         textField.layer.cornerRadius = 12
         textField.backgroundColor = .ypLightGrey
         textField.font = UIFont.bodyRegular
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.returnKeyType = .done
         return textField
     }()
     
@@ -128,11 +138,7 @@ final class EditProfileViewController: UIViewController {
     }()
 
     func configure(profile: ProfileModel) {
-        self.profile = profile
-        avatarImage.image = UIImage(named: profile.avatar ?? "avatarMockProfile")
-        nameTextField.text = profile.name
-        descriptionTextView.text = profile.description
-        urlTextField.text = profile.website
+        presenter = EditProfilePresenter(view: self, profile: profile)
     }
     
     // MARK: - LifeCycle
@@ -152,30 +158,33 @@ final class EditProfileViewController: UIViewController {
         
         nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         urlTextField.addTarget(self, action: #selector(urlTextFieldDidChange(_:)), for: .editingChanged)
+        
+        initializeHideKeyboard()
+        presenter?.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(moveContentUp(notification:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(moveContentBack(notification:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
     }
     
-    // MARK: - Private Functions
-
+    // MARK: - Public Functions
+    
     @objc func closeButtonTapped() {
-        guard let profile = profile else { return }
-        
-        let updatedProfile = ProfileModel(
-            name: nameTextField.text ?? profile.name,
-            avatar: profile.avatar,
+        presenter?.saveProfile(
+            name: nameTextField.text,
             description: descriptionTextView.text,
-            website: urlTextField.text,
-            nfts: profile.nfts,
-            likes: profile.likes,
-            id: profile.id
+            website: urlTextField.text
         )
-        
-        delegate?.didUpdateProfile(updatedProfile)
-        dismiss(animated: true)
     }
     
     @objc func changeAvatarTapped() {
-        // TODO: Логика измнения ссылки на аватар
-        
         let alert = UIAlertController(
             title: "Введите URL",
             message: "Изменить ссылку на изображение",
@@ -190,8 +199,7 @@ final class EditProfileViewController: UIViewController {
             guard 
                 let textField = alert.textFields?.first,
                 let newURL = textField.text, !newURL.isEmpty else { return }
-            // Обновление ссылки на аватар в модели и UI
-            self?.updateAvatarURL(newURL)
+            self?.presenter?.updateAvatarURL(newURL)
         }
         
         alert.addAction(confirmAction)
@@ -200,9 +208,7 @@ final class EditProfileViewController: UIViewController {
         
     }
     
-    private func updateAvatarURL(_ newURL: String) {
-        // TODO: логика изменения ссылки для изображения
-    }
+    // MARK: - Private Functions
     
     private func setupNavigationItem() {
         navigationController?.isNavigationBarHidden = false
@@ -228,6 +234,7 @@ final class EditProfileViewController: UIViewController {
         }
         
         NSLayoutConstraint.activate([
+            
             avatarImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             avatarImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 22),
             avatarImage.heightAnchor.constraint(equalToConstant: 70),
@@ -338,6 +345,48 @@ extension EditProfileViewController {
             }
         }
     }
+    
+    func initializeHideKeyboard(){
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(dismissMyKeyboard))
+        
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissMyKeyboard(){
+        view.endEditing(true)
+    }
+    
+    @objc func moveContentUp(notification: NSNotification) {
+        guard
+            let userInfo = notification.userInfo,
+            let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+        else { return }
+        let keyboardHeight = keyboardFrame.size.height
+        let emptySpaceHeight = view.frame.size.height - urlTextField.frame.origin.y - urlTextField.frame.size.height
+        let coveredContentHeight = keyboardHeight - emptySpaceHeight
+
+        view.frame.origin.y = -coveredContentHeight
+    }
+    
+    @objc func moveContentBack(notification: NSNotification) {
+        view.frame.origin.y = 0
+    }
+}
+
+extension EditProfileViewController: EditProfileView {
+    func displayProfile(_ profile: ProfileModel) {
+        avatarImage.image = UIImage(named: profile.avatar ?? "avatarMockProfile")
+        nameTextField.text = profile.name
+        descriptionTextView.text = profile.description
+        urlTextField.text = profile.website
+    }
+
+    func closeView(with updatedProfile: ProfileModel) {
+        delegate?.didUpdateProfile(updatedProfile)
+        dismiss(animated: true)
+    }
 }
 
 extension EditProfileViewController: UITextFieldDelegate, UITextViewDelegate {
@@ -353,6 +402,11 @@ extension EditProfileViewController: UITextFieldDelegate, UITextViewDelegate {
         if let rightView = textField.rightView as? UIButton {
             rightView.isHidden = true
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
     
     // MARK: - UITextViewDelegate methods

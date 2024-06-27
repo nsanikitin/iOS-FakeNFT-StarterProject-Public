@@ -11,11 +11,16 @@ protocol ProfileViewControllerDelegate: AnyObject {
     func didUpdateProfile(_ profile: ProfileModel)
 }
 
+protocol ProfileView: AnyObject {
+    func displayProfile(_ profile: ProfileModel)
+    func reloadTableView()
+}
+
 final class ProfileViewController: UIViewController {
 
     // MARK: - Private Properties
     
-    private var profile: ProfileModel?
+    private var presenter: ProfilePresenter?
     private let sections = ["Мои NFT (112)", "Избранные NFT (11)", "О разработчике"]
     
     private let avatarImage: UIImageView = {
@@ -66,36 +71,26 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        profile = MockData.profile
-        setupProfile()
+        presenter = ProfilePresenter(view: self)
         setupUI()
         setupNavigationItem()
         tableView.dataSource = self
         tableView.delegate = self
+        presenter?.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupProfile()
+        presenter?.viewWillAppear()
+    }
+    
+    // MARK: - Public Functions
+    
+    @objc func editProfileTapped() {
+        presenter?.editProfileTapped()
     }
     
     // MARK: - Private Functions
-    private func setupProfile() {
-        guard let profile = profile else { return }
-        avatarImage.image = UIImage(named: profile.avatar ?? "avatarMockProfile")
-        nameLabel.text = profile.name
-        bioTextView.text = profile.description
-        urlButton.setTitle(profile.website, for: .normal)
-    }
-    
-    @objc func editProfileTapped() {
-        guard let profile = profile else { return }
-        let editProfileViewController = EditProfileViewController()
-        editProfileViewController.delegate = self
-        editProfileViewController.configure(profile: profile)
-        let navigationController = UINavigationController(rootViewController: editProfileViewController)
-        present(navigationController, animated: true)
-    }
     
     private func setupUI() {
         view.backgroundColor = .ypWhite
@@ -144,6 +139,22 @@ final class ProfileViewController: UIViewController {
     
 }
 
+// MARK: - Extensions
+
+extension ProfileViewController: ProfileView {
+    func displayProfile(_ profile: ProfileModel) {
+        avatarImage.image = UIImage(named: profile.avatar ?? "avatarMockProfile")
+        nameLabel.text = profile.name
+        bioTextView.text = profile.description
+        urlButton.setTitle(profile.website, for: .normal)
+    }
+    
+    func reloadTableView() {
+        tableView.reloadData()
+    }
+}
+
+
 // MARK: - UITableViewDataSource
 extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,7 +165,8 @@ extension ProfileViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.reuseIdentifier, for: indexPath) as? ProfileTableViewCell else {
             return UITableViewCell()
         }
-        cell.titleLabel.text = sections[indexPath.row]
+        cell.updateTitle(text: sections[indexPath.row])
+        cell.selectionStyle = .none
         return cell
     }
 }
@@ -166,26 +178,16 @@ extension ProfileViewController: UITableViewDelegate {
         
         switch indexPath.row {
         case 0:
-            // Переход на экран NFT пользователя
             let userNFTViewController = UserNFTViewController()
             navigationController?.pushViewController(userNFTViewController, animated: true)
         case 1:
-            // Переход на экран с избранными NFT
             let favoriteNFTViewController = FavoriteNFTViewController()
             navigationController?.pushViewController(favoriteNFTViewController, animated: true)
         case 2:
-            // Переход на экран с информацией о разработчике
             let developerInfoViewController = DeveloperInfoViewController()
             navigationController?.pushViewController(developerInfoViewController, animated: true)
         default:
             break
         }
-    }
-}
-
-extension ProfileViewController: ProfileViewControllerDelegate {
-    func didUpdateProfile(_ profile: ProfileModel) {
-        self.profile = profile
-        setupProfile()
     }
 }
