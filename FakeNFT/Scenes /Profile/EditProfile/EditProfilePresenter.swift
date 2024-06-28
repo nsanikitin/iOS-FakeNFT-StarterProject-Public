@@ -23,17 +23,11 @@ final class EditProfilePresenter {
     }
     
     func saveProfile(name: String?, description: String?, website: String?) {
-        guard let name = name, !name.isEmpty else {
-            return
-        }
-        
-        guard let website = website, !website.contains(" ") else {
-            return
-        }
-        
-        guard let profile = profile else {
-            return
-        }
+        guard 
+            let name = name, !name.isEmpty,
+            let website = website, !website.contains(" "),
+            let profile = profile
+        else { return }
         
         let updatedProfile = ProfileModel(
             name: name,
