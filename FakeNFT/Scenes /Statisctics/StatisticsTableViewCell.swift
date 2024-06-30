@@ -23,6 +23,7 @@ final class StatisticsTableViewCell: UITableViewCell {
         
         label.font = UIFont.caption1
         label.textColor = .ypBlackUniversal
+        label.textAlignment = .center
         
         label.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(label)
@@ -59,6 +60,7 @@ final class StatisticsTableViewCell: UITableViewCell {
         
         label.font = UIFont.headline3
         label.textColor = .ypBlackUniversal
+        label.textAlignment = .center
         
         label.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(label)

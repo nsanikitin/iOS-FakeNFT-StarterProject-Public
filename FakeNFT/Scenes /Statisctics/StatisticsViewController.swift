@@ -16,6 +16,7 @@ final class StatisticsViewController: UIViewController {
         tableView.backgroundColor = .clear
         tableView.rowHeight = 88
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         
         return tableView
     }()
