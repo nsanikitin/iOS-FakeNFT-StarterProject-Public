@@ -61,7 +61,7 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
         button.titleLabel?.font = .bodyBold
         button.setTitleColor(UIColor(named: "ypWhite"), for: .normal)
         button.layer.cornerRadius = 16
-        button.addTarget(self, action: #selector(Pay), for: .touchUpInside)
+        button.addTarget(self, action: #selector(pay), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -176,7 +176,7 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
         present(webViewController, animated: true, completion: nil)
     }
     
-    @objc private func Pay() {
+    @objc private func pay() {
         //        let paymentOptionsVC = PaymentOptionsViewController()
         //        let navController = UINavigationController(rootViewController: paymentOptionsVC)
         //        navController.modalPresentationStyle = .fullScreen
@@ -197,10 +197,13 @@ extension PaymentOptionsViewController: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else {
+            return CGSize(width: 0, height: 0)
+        }
         let numberOfColumns: CGFloat = 2
         let totalSpacing = layout.sectionInset.left + layout.sectionInset.right + (layout.minimumInteritemSpacing * (numberOfColumns - 1))
         let width = (collectionView.bounds.width - totalSpacing) / numberOfColumns
         return CGSize(width: width, height: 48)
     }
+
 }

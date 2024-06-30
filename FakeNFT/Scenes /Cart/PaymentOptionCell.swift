@@ -11,6 +11,14 @@ final class PaymentOptionCell: UICollectionViewCell {
     
     static let identifier = "PaymentOptionCell"
     
+    private let сontainerView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 6
+        view.backgroundColor = UIColor(named: "ypBlack")
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -37,6 +45,7 @@ final class PaymentOptionCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.addSubview(сontainerView)
         contentView.addSubview(iconImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(codeLabel)
@@ -50,13 +59,18 @@ final class PaymentOptionCell: UICollectionViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            iconImageView.widthAnchor.constraint(equalToConstant: 36),
-            iconImageView.heightAnchor.constraint(equalToConstant: 36),
+            сontainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            сontainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            сontainerView.widthAnchor.constraint(equalToConstant: 36),
+            сontainerView.heightAnchor.constraint(equalToConstant: 36),
             
-            nameLabel.topAnchor.constraint(equalTo: iconImageView.topAnchor, constant: 2),
-            nameLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 6),
+            iconImageView.centerXAnchor.constraint(equalTo: сontainerView.centerXAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: сontainerView.centerYAnchor),
+            iconImageView.widthAnchor.constraint(equalTo: сontainerView.widthAnchor, multiplier: 0.8),
+            iconImageView.heightAnchor.constraint(equalTo: сontainerView.heightAnchor, multiplier: 0.8),
+            
+            nameLabel.topAnchor.constraint(equalTo: сontainerView.topAnchor, constant: 2),
+            nameLabel.leadingAnchor.constraint(equalTo: сontainerView.trailingAnchor, constant: 6),
             
             codeLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 1),
             codeLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor)

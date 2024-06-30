@@ -4,7 +4,7 @@
 //
 //  Created by Рамиль Аглямов on 23.06.2024.
 //
-import Foundation
+import UIKit
 
 final class ServiceCart {
     private let networkClient: NetworkClientCart
@@ -45,4 +45,20 @@ final class ServiceCart {
     func loadCurrencies(completion: @escaping (Result<[CurrencyModel], Error>) -> Void) {
         sendRequest(endpoint: "currencies", type: [CurrencyModel].self, completion: completion)
     }
+    
+    func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+            guard let url = URL(string: urlString) else {
+                completion(nil)
+                return
+            }
+            
+            networkClient.loadImage(from: url) { result in
+                switch result {
+                case .success(let image):
+                    completion(image)
+                case .failure:
+                    completion(nil)
+                }
+            }
+        }
 }

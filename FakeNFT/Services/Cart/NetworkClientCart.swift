@@ -5,7 +5,7 @@
 //  Created by Рамиль Аглямов on 23.06.2024.
 //
 
-import Foundation
+import UIKit
 
 class NetworkClientCart {
     private let session: URLSession
@@ -33,5 +33,20 @@ class NetworkClientCart {
         }
         task.resume()
     }
+    
+    func loadImage(from url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
+            let task = session.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                guard let data = data, let image = UIImage(data: data) else {
+                    completion(.failure(NSError(domain: "Invalid image data", code: -1, userInfo: nil)))
+                    return
+                }
+                completion(.success(image))
+            }
+            task.resume()
+        }
 }
 

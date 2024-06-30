@@ -36,27 +36,13 @@ final class PaymentOptionsPresenter {
     
     private func loadImages() {
         for (index, option) in paymentOptions.enumerated() {
-            loadImage(from: option.image) { [weak self] image in
+            currentServiceCart.loadImage(from: option.image) { [weak self] image in
                 DispatchQueue.main.async {
-                    self?.view?.updateItemImage(at: index, with: image!)
+                    if let image = image {
+                        self?.view?.updateItemImage(at: index, with: image)
+                    }
                 }
             }
         }
-    }
-    
-    private func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
-        guard let url = URL(string: urlString) else {
-            completion(nil)
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil, let image = UIImage(data: data) else {
-                completion(nil)
-                return
-            }
-            completion(image)
-        }
-        task.resume()
     }
 }
