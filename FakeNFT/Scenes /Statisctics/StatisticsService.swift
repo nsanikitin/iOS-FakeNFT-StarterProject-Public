@@ -5,47 +5,28 @@ final class StatisticsService {
     // MARK: - Properties
     
     static let shared = StatisticsService()
-    static let didChangeNotification = Notification.Name(rawValue: "StatisticServiceDidChange")
-    
-    private let token = RequestConstants.token
-    private let urlSession = URLSession.shared
-    
-    private var task: URLSessionTask?
-    private (set) var users: [UsersModel] = []
     
     // MARK: - Methods
     
-    func fetchUsers() {
+    func fetchUsers(completion: @escaping (Result<[UsersModel], Error>) -> Void) {
         assert(Thread.isMainThread)
-        
-        if task != nil {
-            task?.cancel()
-        }
         
         guard let request = usersRequest()  else {
             assertionFailure("Invalid users request")
             return
         }
         
-        _ = urlSession.objectTask(for: request) { [weak self] (response: Result<[UsersResult], Error>) in
+        URLSession.shared.objectTask(for: request) { [weak self] (response: Result<[UsersResult], Error>) in
             guard let self = self else { return }
             
             switch response {
             case .success(let body):
-                DispatchQueue.main.async {
-                    body.forEach { result in
-                        self.users.append(self.convertToUserModel(userResult: result))
-                    }
-                    NotificationCenter.default
-                        .post(name: StatisticsService.didChangeNotification,
-                              object: self)
-                }
+                let result = body.map { self.convertToUserModel(userResult: $0) }
+                completion(.success(result))
             case .failure(let error):
-                StatisticsPresenter().showError()
+                completion(.failure(error))
                 print("[StatisticsService]: \(error.localizedDescription) \(request)")
             }
-            
-            self.task = nil
         }
     }
     
@@ -57,7 +38,7 @@ final class StatisticsService {
         )
         
         request?.setValue("application/json", forHTTPHeaderField: "Accept")
-        request?.setValue(token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        request?.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         
         return request
     }

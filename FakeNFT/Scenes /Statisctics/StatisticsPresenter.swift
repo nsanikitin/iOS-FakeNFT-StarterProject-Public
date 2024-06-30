@@ -2,27 +2,29 @@ import Foundation
 
 protocol StatisticsPresenterProtocol: AnyObject {
     
-    var users: [UsersModel] { get set }
-    
     func viewDidLoad()
     func loadUsersList()
+    func getUsers() -> [UsersModel]
     func updateUsers()
     func showError()
-}
-
-private enum statisticsState {
-    case initial, loading, failed, data
 }
 
 final class StatisticsPresenter: StatisticsPresenterProtocol {
     
     // MARK: - Properties
     
-    var users: [UsersModel] = []
-    weak var view: StatisticsViewController?
+    private enum StatisticsState {
+        case initial
+        case loading
+        case failed
+        case data
+    }
     
-    private var statisticsService = StatisticsService.shared
-    private var state = statisticsState.initial {
+    private let  statisticsService = StatisticsService.shared
+    
+    weak var view: StatisticsViewController?
+    private var users: [UsersModel] = []
+    private var state = StatisticsState.initial {
         didSet {
             stateDidChanged()
         }
@@ -35,15 +37,29 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
     }
     
     func loadUsersList() {
-        statisticsService.fetchUsers()
+        statisticsService.fetchUsers { [weak self] (response: Result<[UsersModel], Error>) in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let body):
+                users = body
+                state = .data
+            case .failure:
+                state = .failed
+            }
+        }
+    }
+    
+    func getUsers() -> [UsersModel] {
+        users
     }
     
     func updateUsers() {
-        state = .data
+        view?.updateUsersTableView()
     }
     
     func showError() {
-        state = .failed
+        view?.showErrorAlert()
     }
     
     private func stateDidChanged() {
@@ -54,11 +70,11 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
             view?.showLoadingIndicator()
             loadUsersList()
         case .data:
-            users = statisticsService.users
             view?.hideLoadingIndicator()
+            updateUsers()
         case .failed:
             view?.hideLoadingIndicator()
-            view?.showErrorAlert()
+            showError()
         }
     }
 }

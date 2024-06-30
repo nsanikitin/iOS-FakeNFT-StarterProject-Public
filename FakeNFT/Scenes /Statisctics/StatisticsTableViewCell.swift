@@ -7,64 +7,40 @@ final class StatisticsTableViewCell: UITableViewCell {
     
     private lazy var colorPartImageView = {
         let imageView = UIImageView()
-        
         imageView.backgroundColor = .ypLightGrey
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 12
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(imageView)
-        
         return imageView
     }()
-    
+
     private lazy var rankLabel = {
         let label = UILabel()
-        
         label.font = UIFont.caption1
         label.textColor = .ypBlackUniversal
         label.textAlignment = .center
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(label)
-        
         return label
     }()
     
     private lazy var avatarImageView = {
         let imageView = UIImageView()
-        
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 14
-        
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(imageView)
-        
         return imageView
     }()
     
     private lazy var nameLabel = {
         let label = UILabel()
-        
         label.font = UIFont.headline3
         label.textColor = .ypBlackUniversal
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(label)
-        
         return label
     }()
     
     private lazy var nftQuantityLabel = {
         let label = UILabel()
-        
         label.font = UIFont.headline3
         label.textColor = .ypBlackUniversal
         label.textAlignment = .center
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(label)
-        
         return label
     }()
     
@@ -98,6 +74,11 @@ final class StatisticsTableViewCell: UITableViewCell {
     // MARK: - View Configuration
     
     private func setupConstraints() {
+        [colorPartImageView, rankLabel, avatarImageView, nameLabel, nftQuantityLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            addSubview($0)
+        }
+        
         NSLayoutConstraint.activate([
             rankLabel.widthAnchor.constraint(equalToConstant: 27),
             rankLabel.heightAnchor.constraint(equalToConstant: 20),

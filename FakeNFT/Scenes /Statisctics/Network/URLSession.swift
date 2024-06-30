@@ -12,19 +12,17 @@ extension URLSession {
     func objectTask<T: Decodable>(
         for request: URLRequest,
         completion: @escaping (Result<T, Error>) -> Void
-    ) -> URLSessionTask {
+    ) {
         let fulfillCompletion: (Result<T, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 completion(result)
             }
         }
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data,
                let response = response,
-               let statusCode = (response as? HTTPURLResponse)?.statusCode
-            {
+               let statusCode = (response as? HTTPURLResponse)?.statusCode {
                 if 200 ..< 300 ~= statusCode {
                     do {
                         let decoder = JSONDecoder()
@@ -47,9 +45,8 @@ extension URLSession {
                 print("[objectTask(for:)]: \(String(describing: error?.localizedDescription))")
                 fulfillCompletion(.failure(NetworkError.urlSessionError))
             }
-        })
+        }
         
         task.resume()
-        return task
     }
 }

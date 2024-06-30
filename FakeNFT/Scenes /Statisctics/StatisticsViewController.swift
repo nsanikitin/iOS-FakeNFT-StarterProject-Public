@@ -31,10 +31,13 @@ final class StatisticsViewController: UIViewController {
         
         presenter.view = self
         presenter.viewDidLoad()
-        addObserver()
     }
     
     // MARK: - Methods
+    
+    func updateUsersTableView() {
+        usersTableView.reloadData()
+    }
     
     func showLoadingIndicator() {
         ProgressHUD.show()
@@ -62,19 +65,6 @@ final class StatisticsViewController: UIViewController {
         alert.preferredAction = action
         
         present(alert, animated: true)
-    }
-    
-    private func addObserver() {
-        statisticsServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: StatisticsService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] notification in
-                guard let self = self else { return }
-                self.presenter.updateUsers()
-                self.usersTableView.reloadData()
-            }
     }
     
     private func setupUI() {
@@ -120,12 +110,12 @@ final class StatisticsViewController: UIViewController {
 extension StatisticsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.users.count
+        return presenter.getUsers().count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = StatisticsTableViewCell(style: .subtitle, reuseIdentifier: "cell")
-        let user = presenter.users[indexPath.row]
+        let user = presenter.getUsers()[indexPath.row]
         cell.configure(numberOfCell: indexPath.row + 1, for: user)
         
         return cell
