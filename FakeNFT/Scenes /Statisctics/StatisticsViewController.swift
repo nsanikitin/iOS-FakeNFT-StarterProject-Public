@@ -5,6 +5,8 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let refreshControl = UIRefreshControl()
+    
     private var statisticsServiceObserver: NSObjectProtocol?
     
     private lazy var presenter = StatisticsPresenter()
@@ -17,6 +19,9 @@ final class StatisticsViewController: UIViewController {
         tableView.rowHeight = 88
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
+        
+        refreshControl.addTarget(self, action: #selector(refreshTableView), for: .valueChanged)
+        tableView.addSubview(refreshControl)
         
         return tableView
     }()
@@ -102,6 +107,12 @@ final class StatisticsViewController: UIViewController {
     @objc
     private func sortButtonDidTap() {
         // TODO: - Показ алерта со способом сортировки
+    }
+    
+    @objc
+    private func refreshTableView() {
+        presenter.viewDidLoad()
+        refreshControl.endRefreshing()
     }
 }
 
