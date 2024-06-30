@@ -104,7 +104,7 @@ final class StatisticsViewController: UIViewController {
             target: self,
             action: #selector(sortButtonDidTap)
         )
-        sortButton.tintColor = .ypBlack
+        sortButton.tintColor = .ypBlackUniversal
         self.navigationItem.rightBarButtonItem = sortButton
     }
     
@@ -156,6 +156,10 @@ extension StatisticsViewController: UITableViewDataSource {
 extension StatisticsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: - Переход на экран профиля пользователя
+        let vc = UserViewController()
+        let navigationController = UINavigationController(rootViewController: vc)
+        navigationController.modalPresentationStyle = .overFullScreen
+        navigationController.modalTransitionStyle = .crossDissolve
+        present(navigationController, animated: true)
     }
 }
