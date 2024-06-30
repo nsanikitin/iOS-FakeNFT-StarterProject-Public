@@ -77,6 +77,24 @@ final class StatisticsViewController: UIViewController {
         setupUsersTableView()
     }
     
+    private func showSortAlert() {
+        let alert = UIAlertController(
+            title: "Сортировка",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        
+        let sortByNameAction = UIAlertAction(title: "По имени", style: .default)
+        let sortByRateAction = UIAlertAction(title: "По рейтингу", style: .default)
+        let closeAction = UIAlertAction(title: "Закрыть", style: .cancel)
+        
+        alert.addAction(sortByNameAction)
+        alert.addAction(sortByRateAction)
+        alert.addAction(closeAction)
+        
+        present(alert, animated: true)
+    }
+    
     // MARK: - View Configuration
     
     private func setupNavBar() {
@@ -106,7 +124,7 @@ final class StatisticsViewController: UIViewController {
     
     @objc
     private func sortButtonDidTap() {
-        // TODO: - Показ алерта со способом сортировки
+        showSortAlert()
     }
     
     @objc
