@@ -85,11 +85,11 @@ final class StatisticsViewController: UIViewController {
         )
         
         let sortByNameAction = UIAlertAction(title: "По имени", style: .default) { [weak self] _ in
-            self?.sortByName()
+            self?.presenter.sortUsersByName()
             
         }
         let sortByRateAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
-            self?.sortByRate()
+            self?.presenter.sortUsersByRate()
         }
         let closeAction = UIAlertAction(title: "Закрыть", style: .cancel)
         
@@ -98,14 +98,6 @@ final class StatisticsViewController: UIViewController {
         alert.addAction(closeAction)
         
         present(alert, animated: true)
-    }
-    
-    private func sortByRate() {
-        presenter.sortUsersByRate()
-    }
-    
-    private func sortByName() {
-        presenter.sortUsersByName()
     }
     
     // MARK: - View Configuration
@@ -169,6 +161,8 @@ extension StatisticsViewController: UITableViewDataSource {
 extension StatisticsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showLoadingIndicator()
+        
         let vc = StatisticsUserViewController()
         let user = presenter.getUsers()[indexPath.row]
         vc.configure(for: user)
@@ -176,5 +170,7 @@ extension StatisticsViewController: UITableViewDelegate {
         navigationController.modalPresentationStyle = .overFullScreen
         navigationController.modalTransitionStyle = .crossDissolve
         present(navigationController, animated: true)
+        
+        hideLoadingIndicator()
     }
 }
