@@ -66,7 +66,8 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
     }
     
     func sortUsersByName() {
-        // TODO: - Логика сортировки по имени
+        users = users.sorted(by: { $0.name < $1.name})
+        view?.updateUsersTableView()
     }
     
     func showError() {

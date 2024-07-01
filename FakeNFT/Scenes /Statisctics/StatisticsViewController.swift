@@ -105,7 +105,7 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func sortByName() {
-        // TODO: - Логика сортировки по имени
+        presenter.sortUsersByName()
     }
     
     // MARK: - View Configuration
