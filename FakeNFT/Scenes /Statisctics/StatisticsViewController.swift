@@ -169,7 +169,9 @@ extension StatisticsViewController: UITableViewDataSource {
 extension StatisticsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = UserViewController()
+        let vc = StatisticsUserViewController()
+        let user = presenter.getUsers()[indexPath.row]
+        vc.configure(for: user)
         let navigationController = UINavigationController(rootViewController: vc)
         navigationController.modalPresentationStyle = .overFullScreen
         navigationController.modalTransitionStyle = .crossDissolve

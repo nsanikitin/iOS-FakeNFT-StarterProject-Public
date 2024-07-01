@@ -1,6 +1,7 @@
+import Kingfisher
 import UIKit
 
-final class UserViewController: UIViewController {
+final class StatisticsUserViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -23,6 +24,7 @@ final class UserViewController: UIViewController {
         textView.font = UIFont.caption2
         textView.textColor = .ypBlackUniversal
         textView.isScrollEnabled = true
+        textView.isEditable = false
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 18)
         return textView
     }()
@@ -76,6 +78,13 @@ final class UserViewController: UIViewController {
     }
     
     // MARK: - Methods
+    
+    func configure(for user: UsersModel) {
+        avatarImageView.kf.setImage(with: URL(string: user.avatar), placeholder: UIImage(named: "person"))
+        usernameLabel.text = user.name
+        userDescriptionTextView.text = user.description
+        nftCollectionLabel.text = "Коллекция NFT (\(user.nfts.count))"
+    }
     
     private func setupUI() {
         setupNavBar()
