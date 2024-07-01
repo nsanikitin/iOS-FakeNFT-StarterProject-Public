@@ -62,12 +62,12 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
     
     func sortUsersByRate() {
         users = users.sorted(by: { $0.nfts.count > $1.nfts.count })
-        view?.updateUsersTableView()
+        updateUsers()
     }
     
     func sortUsersByName() {
         users = users.sorted(by: { $0.name < $1.name})
-        view?.updateUsersTableView()
+        updateUsers()
     }
     
     func showError() {
@@ -83,7 +83,7 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
             loadUsersList()
         case .data:
             view?.hideLoadingIndicator()
-            updateUsers()
+            sortUsersByRate()
         case .failed:
             view?.hideLoadingIndicator()
             showError()
