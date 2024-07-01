@@ -22,7 +22,8 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         case data
     }
     
-    private let  statisticsService = StatisticsService.shared
+    private let statisticsService = StatisticsService.shared
+    private let statisticsUserDefaults = StatisticsUserDefaults()
     
     weak var view: StatisticsViewController?
     private var users: [UsersModel] = []
@@ -62,11 +63,13 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
     
     func sortUsersByRate() {
         users = users.sorted(by: { $0.nfts.count > $1.nfts.count })
+        statisticsUserDefaults.sortingWay = "byRate"
         updateUsers()
     }
     
     func sortUsersByName() {
         users = users.sorted(by: { $0.name < $1.name})
+        statisticsUserDefaults.sortingWay = "byName"
         updateUsers()
     }
     
@@ -83,7 +86,14 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
             loadUsersList()
         case .data:
             view?.hideLoadingIndicator()
-            sortUsersByRate()
+            switch statisticsUserDefaults.sortingWay {
+            case "byRate":
+                sortUsersByRate()
+            case "byName":
+                sortUsersByName()
+            default:
+                sortUsersByRate()
+            }
         case .failed:
             view?.hideLoadingIndicator()
             showError()
