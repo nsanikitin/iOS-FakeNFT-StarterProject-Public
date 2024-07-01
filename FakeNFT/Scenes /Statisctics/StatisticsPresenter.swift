@@ -6,6 +6,8 @@ protocol StatisticsPresenterProtocol: AnyObject {
     func loadUsersList()
     func getUsers() -> [UsersModel]
     func updateUsers()
+    func sortUsersByRate()
+    func sortUsersByName()
     func showError()
 }
 
@@ -56,6 +58,15 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
     
     func updateUsers() {
         view?.updateUsersTableView()
+    }
+    
+    func sortUsersByRate() {
+        users = users.sorted(by: { $0.nfts.count > $1.nfts.count })
+        view?.updateUsersTableView()
+    }
+    
+    func sortUsersByName() {
+        // TODO: - Логика сортировки по имени
     }
     
     func showError() {

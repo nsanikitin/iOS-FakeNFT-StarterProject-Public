@@ -84,8 +84,13 @@ final class StatisticsViewController: UIViewController {
             preferredStyle: .actionSheet
         )
         
-        let sortByNameAction = UIAlertAction(title: "По имени", style: .default)
-        let sortByRateAction = UIAlertAction(title: "По рейтингу", style: .default)
+        let sortByNameAction = UIAlertAction(title: "По имени", style: .default) { [weak self] _ in
+            self?.sortByName()
+            
+        }
+        let sortByRateAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
+            self?.sortByRate()
+        }
         let closeAction = UIAlertAction(title: "Закрыть", style: .cancel)
         
         alert.addAction(sortByNameAction)
@@ -93,6 +98,14 @@ final class StatisticsViewController: UIViewController {
         alert.addAction(closeAction)
         
         present(alert, animated: true)
+    }
+    
+    private func sortByRate() {
+        presenter.sortUsersByRate()
+    }
+    
+    private func sortByName() {
+        // TODO: - Логика сортировки по имени
     }
     
     // MARK: - View Configuration
