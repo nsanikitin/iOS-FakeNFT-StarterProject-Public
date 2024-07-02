@@ -14,6 +14,8 @@ final class CatalogViewController: UIViewController {
     
     let filterButton = UIButton()
     let catalogTableView = UITableView()
+    let loadingIndicator = UIActivityIndicatorView(style: .large)
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,9 +23,10 @@ final class CatalogViewController: UIViewController {
         catalogTableView.delegate = self
         catalogTableView.dataSource = self
         
-        fetchCollection()
         configureFilterButton()
         configureCatalogTableView()
+        configureLoadingIndicator()
+        fetchCollection()
     }
     
     private func configureFilterButton() {
@@ -61,16 +64,45 @@ final class CatalogViewController: UIViewController {
         ])
     }
     
+    private func configureLoadingIndicator() {
+        view.addSubview(loadingIndicator)
+        
+        loadingIndicator.hidesWhenStopped = true
+        
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    private func configureRefreshControl() {
+        view.addSubview(refreshControl)
+        
+        refreshControl.tintColor = .ypBlack
+        refreshControl.addTarget(self, action: #selector(refreshCatalog), for: .valueChanged)
+    }
+    
     @objc
     private func tapFiltersButton() {
         print("TODO in Module3")
     }
     
+    @objc private func refreshCatalog() {
+        fetchCollection()
+    }
+    
     private func fetchCollection() {
+        if !refreshControl.isRefreshing {
+            loadingIndicator.startAnimating()
+        }
         presenter.fetchCollectionAndUpdate { [weak self] catalogItems in
+            self?.loadingIndicator.stopAnimating()
             guard let self = self else { return }
             self.catalogItems = catalogItems
             self.catalogTableView.reloadData()
+            self.refreshControl.endRefreshing()
         }
     }
 }

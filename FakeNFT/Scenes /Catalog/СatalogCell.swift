@@ -16,6 +16,7 @@ final class CatalogCell: UITableViewCell {
     let collectionCover = UIImageView()
     let collectionTitle = UILabel()
     var collectionImage = UIImage()
+    let loadingIndicator = UIActivityIndicatorView(style: .medium)
     
     private func configureCollectionCover() {
         contentView.addSubview(collectionCover)
@@ -68,6 +69,19 @@ final class CatalogCell: UITableViewCell {
         ])
     }
     
+    private func configureLoadingIndicator() {
+        contentView.addSubview(loadingIndicator)
+        
+        loadingIndicator.hidesWhenStopped = true
+        
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: collectionCover.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: collectionCover.centerYAnchor)
+        ])
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -82,17 +96,21 @@ final class CatalogCell: UITableViewCell {
         configureCollectionImage()
         configureCollectionCover()
         configureCollectionTitle()
+        configureLoadingIndicator()
     }
     
     func configure(with catalog: CatalogModel, imageLoader: ImageLoader) {
+        loadingIndicator.startAnimating()
         if let url = URL(string: catalog.cover) {
             imageLoader.loadImage(from: url) { [weak self] image in
                 DispatchQueue.main.async {
                     guard let self = self else { return }
+                    self.loadingIndicator.stopAnimating()
                     self.collectionCover.image = image ?? self.collectionImage
                 }
             }
         } else {
+            loadingIndicator.stopAnimating()
             collectionCover.image = collectionImage
         }
         collectionTitle.text = "\(catalog.name) (\(catalog.count))"
