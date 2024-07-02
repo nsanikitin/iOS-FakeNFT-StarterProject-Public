@@ -5,6 +5,8 @@ final class StatisticsViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let refreshControl = UIRefreshControl()
+    
     private var statisticsServiceObserver: NSObjectProtocol?
     
     private lazy var presenter = StatisticsPresenter()
@@ -17,6 +19,9 @@ final class StatisticsViewController: UIViewController {
         tableView.rowHeight = 88
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
+        
+        refreshControl.addTarget(self, action: #selector(refreshTableView), for: .valueChanged)
+        tableView.addSubview(refreshControl)
         
         return tableView
     }()
@@ -72,6 +77,29 @@ final class StatisticsViewController: UIViewController {
         setupUsersTableView()
     }
     
+    private func showSortAlert() {
+        let alert = UIAlertController(
+            title: "Сортировка",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        
+        let sortByNameAction = UIAlertAction(title: "По имени", style: .default) { [weak self] _ in
+            self?.presenter.sortedUsers(.byName)
+            
+        }
+        let sortByRateAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
+            self?.presenter.sortedUsers(.byRate)
+        }
+        let closeAction = UIAlertAction(title: "Закрыть", style: .cancel)
+        
+        alert.addAction(sortByNameAction)
+        alert.addAction(sortByRateAction)
+        alert.addAction(closeAction)
+        
+        present(alert, animated: true)
+    }
+    
     // MARK: - View Configuration
     
     private func setupNavBar() {
@@ -81,7 +109,7 @@ final class StatisticsViewController: UIViewController {
             target: self,
             action: #selector(sortButtonDidTap)
         )
-        sortButton.tintColor = .ypBlack
+        sortButton.tintColor = .ypBlackUniversal
         self.navigationItem.rightBarButtonItem = sortButton
     }
     
@@ -101,7 +129,13 @@ final class StatisticsViewController: UIViewController {
     
     @objc
     private func sortButtonDidTap() {
-        // TODO: - Показ алерта со способом сортировки
+        showSortAlert()
+    }
+    
+    @objc
+    private func refreshTableView() {
+        presenter.viewDidLoad()
+        refreshControl.endRefreshing()
     }
 }
 
@@ -127,6 +161,16 @@ extension StatisticsViewController: UITableViewDataSource {
 extension StatisticsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: - Переход на экран профиля пользователя
+        showLoadingIndicator()
+        
+        let viewController = StatisticsUserViewController()
+        let user = presenter.getUsers()[indexPath.row]
+        viewController.configure(for: user)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        navigationController.modalTransitionStyle = .crossDissolve
+        present(navigationController, animated: true)
+        
+        hideLoadingIndicator()
     }
 }

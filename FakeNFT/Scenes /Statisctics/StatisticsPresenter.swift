@@ -6,6 +6,7 @@ protocol StatisticsPresenterProtocol: AnyObject {
     func loadUsersList()
     func getUsers() -> [UsersModel]
     func updateUsers()
+    func sortedUsers(_ type: UsersSortedType)
     func showError()
 }
 
@@ -20,7 +21,8 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         case data
     }
     
-    private let  statisticsService = StatisticsService.shared
+    private let statisticsService = StatisticsService.shared
+    private let statisticsUserDefaults = StatisticsUserDefaults()
     
     weak var view: StatisticsViewController?
     private var users: [UsersModel] = []
@@ -58,6 +60,18 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         view?.updateUsersTableView()
     }
     
+    func sortedUsers(_ type: UsersSortedType) {
+        view?.hideLoadingIndicator()
+        statisticsUserDefaults.sortingWay = type.rawValue
+        switch type {
+        case .byRate:
+            users = users.sorted { $0.nfts.count > $1.nfts.count }
+        case .byName:
+            users = users.sorted { $0.name < $1.name }
+        }
+        view?.updateUsersTableView()
+    }
+    
     func showError() {
         view?.showErrorAlert()
     }
@@ -71,7 +85,15 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
             loadUsersList()
         case .data:
             view?.hideLoadingIndicator()
-            updateUsers()
+            switch statisticsUserDefaults.sortingWay {
+            case "byRate":
+                users = users.sorted { $0.nfts.count > $1.nfts.count }
+            case "byName":
+                users = users.sorted { $0.name < $1.name }
+            default:
+                break
+            }
+            view?.updateUsersTableView()
         case .failed:
             view?.hideLoadingIndicator()
             showError()

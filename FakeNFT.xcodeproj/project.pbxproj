@@ -45,9 +45,12 @@
 		4F1254672C2822110004A423 /* StatisticsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254662C2822110004A423 /* StatisticsPresenter.swift */; };
 		4F1254692C2B21270004A423 /* StatisticsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254682C2B21270004A423 /* StatisticsTableViewCell.swift */; };
 		4F12546F2C2C76A20004A423 /* StatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12546E2C2C76A20004A423 /* StatisticsService.swift */; };
-		4F1254722C2C76F80004A423 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254712C2C76F80004A423 /* URLSession.swift */; };
-		4F1254742C2C77030004A423 /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254732C2C77030004A423 /* URLRequest.swift */; };
+		4F1254722C2C76F80004A423 /* StatisticsURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254712C2C76F80004A423 /* StatisticsURLSession.swift */; };
+		4F1254742C2C77030004A423 /* StatisticsURLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1254732C2C77030004A423 /* StatisticsURLRequest.swift */; };
 		4F2FC4732C3144B5008AA069 /* UserModelResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FC4722C3144B5008AA069 /* UserModelResult.swift */; };
+		4F2FC4772C3178D8008AA069 /* StatisticsUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FC4762C3178D8008AA069 /* StatisticsUserViewController.swift */; };
+		4F5188A92C33420B00BF056D /* StatisticsUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5188A82C33420B00BF056D /* StatisticsUserDefaults.swift */; };
+		4F5188AE2C34937300BF056D /* UsersSortedType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5188AD2C34937300BF056D /* UsersSortedType.swift */; };
 		951B59642C24442D0050BC72 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59632C24442D0050BC72 /* ProfileViewController.swift */; };
 		951B59662C2444D50050BC72 /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59652C2444D50050BC72 /* CatalogViewController.swift */; };
 		951B59682C24450B0050BC72 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59672C24450B0050BC72 /* CartViewController.swift */; };
@@ -120,9 +123,12 @@
 		4F1254662C2822110004A423 /* StatisticsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsPresenter.swift; sourceTree = "<group>"; };
 		4F1254682C2B21270004A423 /* StatisticsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsTableViewCell.swift; sourceTree = "<group>"; };
 		4F12546E2C2C76A20004A423 /* StatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsService.swift; sourceTree = "<group>"; };
-		4F1254712C2C76F80004A423 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
-		4F1254732C2C77030004A423 /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
+		4F1254712C2C76F80004A423 /* StatisticsURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsURLSession.swift; sourceTree = "<group>"; };
+		4F1254732C2C77030004A423 /* StatisticsURLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsURLRequest.swift; sourceTree = "<group>"; };
 		4F2FC4722C3144B5008AA069 /* UserModelResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModelResult.swift; sourceTree = "<group>"; };
+		4F2FC4762C3178D8008AA069 /* StatisticsUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserViewController.swift; sourceTree = "<group>"; };
+		4F5188A82C33420B00BF056D /* StatisticsUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserDefaults.swift; sourceTree = "<group>"; };
+		4F5188AD2C34937300BF056D /* UsersSortedType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersSortedType.swift; sourceTree = "<group>"; };
 		951B59632C24442D0050BC72 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		951B59652C2444D50050BC72 /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		951B59672C24450B0050BC72 /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
@@ -370,23 +376,42 @@
 			path = Requests;
 			sourceTree = "<group>";
 		};
-		4F1254702C2C76E30004A423 /* Network */ = {
+		4F1254702C2C76E30004A423 /* StatisticsNetwork */ = {
 			isa = PBXGroup;
 			children = (
-				4F1254712C2C76F80004A423 /* URLSession.swift */,
-				4F1254732C2C77030004A423 /* URLRequest.swift */,
+				4F1254712C2C76F80004A423 /* StatisticsURLSession.swift */,
+				4F1254732C2C77030004A423 /* StatisticsURLRequest.swift */,
 			);
-			path = Network;
+			path = StatisticsNetwork;
+			sourceTree = "<group>";
+		};
+		4F2FC4752C3178C1008AA069 /* StatisticsUser */ = {
+			isa = PBXGroup;
+			children = (
+				4F2FC4762C3178D8008AA069 /* StatisticsUserViewController.swift */,
+				4F5188AD2C34937300BF056D /* UsersSortedType.swift */,
+			);
+			path = StatisticsUser;
+			sourceTree = "<group>";
+		};
+		4F5188AA2C33421100BF056D /* StatisticsStorage */ = {
+			isa = PBXGroup;
+			children = (
+				4F5188A82C33420B00BF056D /* StatisticsUserDefaults.swift */,
+			);
+			path = StatisticsStorage;
 			sourceTree = "<group>";
 		};
 		4FDB15B82C28173600104F2E /* Statisctics */ = {
 			isa = PBXGroup;
 			children = (
-				4F1254702C2C76E30004A423 /* Network */,
+				4F5188AA2C33421100BF056D /* StatisticsStorage */,
+				4F1254702C2C76E30004A423 /* StatisticsNetwork */,
 				951B59692C24456E0050BC72 /* StatisticsViewController.swift */,
 				4F1254682C2B21270004A423 /* StatisticsTableViewCell.swift */,
 				4F1254662C2822110004A423 /* StatisticsPresenter.swift */,
 				4F12546E2C2C76A20004A423 /* StatisticsService.swift */,
+				4F2FC4752C3178C1008AA069 /* StatisticsUser */,
 			);
 			path = Statisctics;
 			sourceTree = "<group>";
@@ -584,7 +609,7 @@
 			files = (
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
-				4F1254722C2C76F80004A423 /* URLSession.swift in Sources */,
+				4F1254722C2C76F80004A423 /* StatisticsURLSession.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
 				95C812CB2C21A9F500FE7B1B /* CollectionsModel.swift in Sources */,
 				E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */,
@@ -607,10 +632,11 @@
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
 				4F1254672C2822110004A423 /* StatisticsPresenter.swift in Sources */,
 				95C812C72C21A8C200FE7B1B /* ProfileModel.swift in Sources */,
-				4F1254742C2C77030004A423 /* URLRequest.swift in Sources */,
+				4F1254742C2C77030004A423 /* StatisticsURLRequest.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,
 				3F68069929CBBAF100B4F915 /* SceneDelegate.swift in Sources */,
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
+				4F5188A92C33420B00BF056D /* StatisticsUserDefaults.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExampleRequest.swift in Sources */,
 				0CFCB7462A78064B0009A829 /* NftDetailCellModel.swift in Sources */,
@@ -618,8 +644,10 @@
 				3F6806D729CBC50A00B4F915 /* CellsReusingUtils.swift in Sources */,
 				0C79EE612A76DCD600EE90EA /* NftByIdRequest.swift in Sources */,
 				951B59682C24450B0050BC72 /* CartViewController.swift in Sources */,
+				4F5188AE2C34937300BF056D /* UsersSortedType.swift in Sources */,
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
+				4F2FC4772C3178D8008AA069 /* StatisticsUserViewController.swift in Sources */,
 				951B59662C2444D50050BC72 /* CatalogViewController.swift in Sources */,
 				95C812C92C21A92B00FE7B1B /* NFTModel.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
