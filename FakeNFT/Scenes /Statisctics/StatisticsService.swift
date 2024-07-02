@@ -6,6 +6,10 @@ final class StatisticsService {
     
     static let shared = StatisticsService()
     
+    // MARK: - Init
+    
+    private init() {}
+    
     // MARK: - Methods
     
     func fetchUsers(completion: @escaping (Result<[UsersModel], Error>) -> Void) {

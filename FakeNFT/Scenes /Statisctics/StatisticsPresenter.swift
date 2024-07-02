@@ -6,8 +6,7 @@ protocol StatisticsPresenterProtocol: AnyObject {
     func loadUsersList()
     func getUsers() -> [UsersModel]
     func updateUsers()
-    func sortUsersByRate()
-    func sortUsersByName()
+    func sortedUsers(_ type: UsersSortedType)
     func showError()
 }
 
@@ -61,16 +60,16 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         view?.updateUsersTableView()
     }
     
-    func sortUsersByRate() {
-        users = users.sorted(by: { $0.nfts.count > $1.nfts.count })
-        statisticsUserDefaults.sortingWay = "byRate"
-        updateUsers()
-    }
-    
-    func sortUsersByName() {
-        users = users.sorted(by: { $0.name < $1.name})
-        statisticsUserDefaults.sortingWay = "byName"
-        updateUsers()
+    func sortedUsers(_ type: UsersSortedType) {
+        view?.hideLoadingIndicator()
+        statisticsUserDefaults.sortingWay = type.rawValue
+        switch type {
+        case .byRate:
+            users = users.sorted { $0.nfts.count > $1.nfts.count }
+        case .byName:
+            users = users.sorted { $0.name < $1.name }
+        }
+        view?.updateUsersTableView()
     }
     
     func showError() {
@@ -88,12 +87,13 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
             view?.hideLoadingIndicator()
             switch statisticsUserDefaults.sortingWay {
             case "byRate":
-                sortUsersByRate()
+                users = users.sorted { $0.nfts.count > $1.nfts.count }
             case "byName":
-                sortUsersByName()
+                users = users.sorted { $0.name < $1.name }
             default:
-                sortUsersByRate()
+                break
             }
+            view?.updateUsersTableView()
         case .failed:
             view?.hideLoadingIndicator()
             showError()

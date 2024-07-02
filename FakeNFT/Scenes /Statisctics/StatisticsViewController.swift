@@ -85,11 +85,11 @@ final class StatisticsViewController: UIViewController {
         )
         
         let sortByNameAction = UIAlertAction(title: "По имени", style: .default) { [weak self] _ in
-            self?.presenter.sortUsersByName()
+            self?.presenter.sortedUsers(.byName)
             
         }
         let sortByRateAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
-            self?.presenter.sortUsersByRate()
+            self?.presenter.sortedUsers(.byRate)
         }
         let closeAction = UIAlertAction(title: "Закрыть", style: .cancel)
         
@@ -163,10 +163,10 @@ extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showLoadingIndicator()
         
-        let vc = StatisticsUserViewController()
+        let viewController = StatisticsUserViewController()
         let user = presenter.getUsers()[indexPath.row]
-        vc.configure(for: user)
-        let navigationController = UINavigationController(rootViewController: vc)
+        viewController.configure(for: user)
+        let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .overFullScreen
         navigationController.modalTransitionStyle = .crossDissolve
         present(navigationController, animated: true)

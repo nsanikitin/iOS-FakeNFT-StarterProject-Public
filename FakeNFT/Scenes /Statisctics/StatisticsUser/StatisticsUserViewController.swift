@@ -152,7 +152,7 @@ final class StatisticsUserViewController: UIViewController {
     
     @objc
     private func backToStaticsVC() {
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
     
     @objc

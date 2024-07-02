@@ -50,6 +50,7 @@
 		4F2FC4732C3144B5008AA069 /* UserModelResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FC4722C3144B5008AA069 /* UserModelResult.swift */; };
 		4F2FC4772C3178D8008AA069 /* StatisticsUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2FC4762C3178D8008AA069 /* StatisticsUserViewController.swift */; };
 		4F5188A92C33420B00BF056D /* StatisticsUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5188A82C33420B00BF056D /* StatisticsUserDefaults.swift */; };
+		4F5188AE2C34937300BF056D /* UsersSortedType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5188AD2C34937300BF056D /* UsersSortedType.swift */; };
 		951B59642C24442D0050BC72 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59632C24442D0050BC72 /* ProfileViewController.swift */; };
 		951B59662C2444D50050BC72 /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59652C2444D50050BC72 /* CatalogViewController.swift */; };
 		951B59682C24450B0050BC72 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59672C24450B0050BC72 /* CartViewController.swift */; };
@@ -127,6 +128,7 @@
 		4F2FC4722C3144B5008AA069 /* UserModelResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModelResult.swift; sourceTree = "<group>"; };
 		4F2FC4762C3178D8008AA069 /* StatisticsUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserViewController.swift; sourceTree = "<group>"; };
 		4F5188A82C33420B00BF056D /* StatisticsUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserDefaults.swift; sourceTree = "<group>"; };
+		4F5188AD2C34937300BF056D /* UsersSortedType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersSortedType.swift; sourceTree = "<group>"; };
 		951B59632C24442D0050BC72 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		951B59652C2444D50050BC72 /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		951B59672C24450B0050BC72 /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
@@ -387,6 +389,7 @@
 			isa = PBXGroup;
 			children = (
 				4F2FC4762C3178D8008AA069 /* StatisticsUserViewController.swift */,
+				4F5188AD2C34937300BF056D /* UsersSortedType.swift */,
 			);
 			path = StatisticsUser;
 			sourceTree = "<group>";
@@ -641,6 +644,7 @@
 				3F6806D729CBC50A00B4F915 /* CellsReusingUtils.swift in Sources */,
 				0C79EE612A76DCD600EE90EA /* NftByIdRequest.swift in Sources */,
 				951B59682C24450B0050BC72 /* CartViewController.swift in Sources */,
+				4F5188AE2C34937300BF056D /* UsersSortedType.swift in Sources */,
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
 				4F2FC4772C3178D8008AA069 /* StatisticsUserViewController.swift in Sources */,
