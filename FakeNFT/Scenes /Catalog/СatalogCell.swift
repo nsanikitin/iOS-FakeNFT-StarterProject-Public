@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 final class CatalogCell: UITableViewCell {
     
@@ -68,18 +69,32 @@ final class CatalogCell: UITableViewCell {
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-            super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-            setupCell()
-        }
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        setupCell()
+    }
     
     required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private func setupCell() {
         configureCollectionImage()
         configureCollectionCover()
         configureCollectionTitle()
+    }
+    
+    func configure(with catalog: CatalogModel, imageLoader: ImageLoader) {
+        if let url = URL(string: catalog.cover) {
+            imageLoader.loadImage(from: url) { [weak self] image in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.collectionCover.image = image ?? self.collectionImage
+                }
+            }
+        } else {
+            collectionCover.image = collectionImage
+        }
+        collectionTitle.text = "\(catalog.name) (\(catalog.count))"
     }
 }

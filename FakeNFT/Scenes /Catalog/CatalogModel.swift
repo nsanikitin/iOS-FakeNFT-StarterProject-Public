@@ -7,8 +7,14 @@
 
 import Foundation
 
-struct CatalogModel {
-    let image: URL
-    let title: String
-    let count: Int
+struct CatalogModel: Codable {
+    let name: String
+    let cover: String
+    let nfts: [String]
+    let id: String
+    let description: String
+    let author: String
+    var count: Int {
+        nfts.count
+    }
 }

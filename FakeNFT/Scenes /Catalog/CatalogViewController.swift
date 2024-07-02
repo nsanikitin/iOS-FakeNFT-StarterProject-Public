@@ -8,6 +8,8 @@
 import UIKit
 
 final class CatalogViewController: UIViewController {
+    
+    private let presenter = CatalogPresenter()
     private var catalogItems: [CatalogModel] = []
     
     let filterButton = UIButton()
@@ -19,6 +21,7 @@ final class CatalogViewController: UIViewController {
         catalogTableView.delegate = self
         catalogTableView.dataSource = self
         
+        fetchCollection()
         configureFilterButton()
         configureCatalogTableView()
     }
@@ -63,22 +66,41 @@ final class CatalogViewController: UIViewController {
         print("TODO in Module3")
     }
     
+    private func fetchCollection() {
+        presenter.fetchCollectionAndUpdate { [weak self] catalogItems in
+            guard let self = self else { return }
+            self.catalogItems = catalogItems
+            self.catalogTableView.reloadData()
+        }
+    }
 }
 
 extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 187
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let collectionDetailsVC = CollectionDetailsViewController()
+        collectionDetailsVC.modalPresentationStyle = .fullScreen
+        present(collectionDetailsVC, animated: true, completion: nil)
+    }
 }
 
 extension CatalogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return catalogItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CatalogCell.reuseIdentifier, for: indexPath) as! CatalogCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CatalogCell.reuseIdentifier, for: indexPath) as? CatalogCell else {
+            return UITableViewCell()
+        }
+        let catalogItem = catalogItems[indexPath.row]
+        cell.configure(with: catalogItem, imageLoader: CatalogProviderImpl(networkClient: DefaultNetworkClient()))
         cell.selectionStyle = .none
+        cell.backgroundColor = .ypWhite
         return cell
     }
 }
