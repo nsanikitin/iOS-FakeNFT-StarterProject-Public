@@ -47,18 +47,23 @@ final class ServiceCart {
     }
     
     func loadImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
-            guard let url = URL(string: urlString) else {
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        networkClient.loadImage(from: url) { result in
+            switch result {
+            case .success(let image):
+                completion(image)
+            case .failure:
                 completion(nil)
-                return
-            }
-            
-            networkClient.loadImage(from: url) { result in
-                switch result {
-                case .success(let image):
-                    completion(image)
-                case .failure:
-                    completion(nil)
-                }
             }
         }
+    }
+    
+    func pay(currencyId: String, completion: @escaping (Result<PaymentResponse, Error>) -> Void) {
+        let endpoint = "orders/1/payment/\(currencyId)"
+        sendRequest(endpoint: endpoint, type: PaymentResponse.self, completion: completion)
+    }
 }

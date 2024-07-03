@@ -8,7 +8,7 @@ final class ExampleUnitTests: XCTestCase {
 }
 
 class NetworkClientCartTests: XCTestCase {
-
+    
     func testSendSuccess() {
         // Given
         let mockSession = MockURLSession()
@@ -38,17 +38,17 @@ class NetworkClientCartTests: XCTestCase {
         ]
         """.data(using: .utf8)!
         mockSession.nextData = mockData
-
+        
         let request = URLRequest(url: URL(string: "https://example.com")!)
         let expectation = self.expectation(description: "Completion handler invoked")
-
+        
         // When
         var result: Result<[NFTModel], Error>?
         networkClient.send(request: request, type: [NFTModel].self) { response in
             result = response
             expectation.fulfill()
         }
-
+        
         // Then
         waitForExpectations(timeout: 1) { _ in
             switch result {
@@ -63,23 +63,23 @@ class NetworkClientCartTests: XCTestCase {
             }
         }
     }
-
+    
     func testSendFailure() {
         // Given
         let mockSession = MockURLSession()
         let networkClient = NetworkClientCart(session: mockSession)
         mockSession.nextError = NSError(domain: "Test", code: -1, userInfo: nil)
-
+        
         let request = URLRequest(url: URL(string: "https://example.com")!)
         let expectation = self.expectation(description: "Completion handler invoked")
-
+        
         // When
         var result: Result<[NFTModel], Error>?
         networkClient.send(request: request, type: [NFTModel].self) { response in
             result = response
             expectation.fulfill()
         }
-
+        
         // Then
         waitForExpectations(timeout: 1) { _ in
             switch result {
@@ -92,4 +92,33 @@ class NetworkClientCartTests: XCTestCase {
             }
         }
     }
+    
+    
+    func testCurrencyModelDecoding() {
+        // Пример JSON для тестирования
+        let jsonString = """
+            {
+                "title": "Bitcoin",
+                "name": "BTC",
+                "image": "https://example.com/bitcoin.png",
+                "id": "1"
+            }
+            """
+        // Преобразуем JSON строку в Data
+        let jsonData = jsonString.data(using: .utf8)!
+        
+        // Декодируем JSON в модель
+        do {
+            let currency = try JSONDecoder().decode(CurrencyModel.self, from: jsonData)
+            // Проверяем значения
+            XCTAssertEqual(currency.title, "Bitcoin")
+            XCTAssertEqual(currency.name, "BTC")
+            XCTAssertEqual(currency.image, "https://example.com/bitcoin.png")
+            XCTAssertEqual(currency.id, "1")
+        } catch {
+            XCTFail("Failed to decode JSON: \(error)")
+        }
+    }
+    
 }
+

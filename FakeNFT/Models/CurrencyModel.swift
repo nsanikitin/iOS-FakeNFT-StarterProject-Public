@@ -11,5 +11,5 @@ struct CurrencyModel: Decodable {
     let title: String
     let name: String
     let image: String
-//    let id: String
+    let id: String
 }

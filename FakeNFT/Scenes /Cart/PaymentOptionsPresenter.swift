@@ -5,6 +5,8 @@ protocol PaymentOptionsView: AnyObject {
     func showLoading()
     func hideLoading()
     func updateItemImage(at index: Int, with image: UIImage)
+    func showError(_ message: String)
+    func showPaymentSuccess(_ orderId: String)
 }
 
 final class PaymentOptionsPresenter {
@@ -29,6 +31,7 @@ final class PaymentOptionsPresenter {
                     self?.loadImages()
                 case .failure(let error):
                     print("Ошибка загрузки списка валют: \(error.localizedDescription)")
+                    self?.view?.showError("Ошибка загрузки списка валют: \(error.localizedDescription)")
                 }
             }
         }
@@ -45,4 +48,19 @@ final class PaymentOptionsPresenter {
             }
         }
     }
+    
+    func pay(currencyId: String) {
+            view?.showLoading()
+            currentServiceCart.pay(currencyId: currencyId) { [weak self] result in
+                DispatchQueue.main.async {
+                    self?.view?.hideLoading()
+                    switch result {
+                    case .success(let response):
+                        self?.view?.showPaymentSuccess(response.orderId)
+                    case .failure(let error):
+                        self?.view?.showError("Не удалось произвести оплату")
+                    }
+                }
+            }
+        }
 }
