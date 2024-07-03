@@ -1,4 +1,5 @@
 import Kingfisher
+import ProgressHUD
 import UIKit
 
 final class StatisticsUserViewController: UIViewController {
@@ -86,6 +87,14 @@ final class StatisticsUserViewController: UIViewController {
         nftCollectionLabel.text = "Коллекция NFT (\(user.nfts.count))"
     }
     
+    func showLoadingIndicator() {
+        ProgressHUD.show()
+    }
+    
+    func hideLoadingIndicator() {
+        ProgressHUD.dismiss()
+    }
+    
     private func setupUI() {
         setupNavBar()
         setupConstraints()
@@ -157,7 +166,15 @@ final class StatisticsUserViewController: UIViewController {
     
     @objc
     private func goToNFTCollection() {
-        // TODO: - Переход на экран с коллекцией NFT пользователя
+        showLoadingIndicator()
+        
+        let viewController = StatisticsUserNFTCollectionViewController()
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        navigationController.modalTransitionStyle = .crossDissolve
+        present(navigationController, animated: true)
+        
+        hideLoadingIndicator()
     }
     
     @objc
