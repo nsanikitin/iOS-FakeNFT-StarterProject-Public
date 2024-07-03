@@ -66,6 +66,13 @@ final class CartPresenter {
         }
         view?.reloadData()
     }
+    
+    func clearCart() {
+        items.removeAll()
+        view?.updateTotalPrice(totalCount: 0, totalPrice: 0)
+        view?.reloadData()
+        view?.setPayButtonEnabled(false)
+    }
 }
 
 extension Float {

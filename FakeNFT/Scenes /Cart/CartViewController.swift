@@ -2,7 +2,7 @@ import UIKit
 import ProgressHUD
 
 final class CartViewController: UIViewController, CartView {
-    private var presenter: CartPresenter!
+    var presenter: CartPresenter!
     private var isLoading = false
     
     private lazy var sortButton: UIBarButtonItem = {

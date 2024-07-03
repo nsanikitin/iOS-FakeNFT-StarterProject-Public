@@ -58,6 +58,7 @@
 		75DE52C92C2DDF44006C54C8 /* WebViewAgreementController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE52C82C2DDF44006C54C8 /* WebViewAgreementController.swift */; };
 		75DE52CB2C2E024D006C54C8 /* ConfigCart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE52CA2C2E024D006C54C8 /* ConfigCart.swift */; };
 		75DE52CD2C346E16006C54C8 /* PaymentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE52CC2C346E16006C54C8 /* PaymentResponse.swift */; };
+		75E140A32C35B3EC0092EBC1 /* PaymentSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E140A22C35B3EC0092EBC1 /* PaymentSuccessViewController.swift */; };
 		951B59642C24442D0050BC72 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59632C24442D0050BC72 /* ProfileViewController.swift */; };
 		951B59662C2444D50050BC72 /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59652C2444D50050BC72 /* CatalogViewController.swift */; };
 		951B59682C24450B0050BC72 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 951B59672C24450B0050BC72 /* CartViewController.swift */; };
@@ -143,6 +144,7 @@
 		75DE52C82C2DDF44006C54C8 /* WebViewAgreementController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewAgreementController.swift; sourceTree = "<group>"; };
 		75DE52CA2C2E024D006C54C8 /* ConfigCart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigCart.swift; sourceTree = "<group>"; };
 		75DE52CC2C346E16006C54C8 /* PaymentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentResponse.swift; sourceTree = "<group>"; };
+		75E140A22C35B3EC0092EBC1 /* PaymentSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentSuccessViewController.swift; sourceTree = "<group>"; };
 		951B59632C24442D0050BC72 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		951B59652C2444D50050BC72 /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		951B59672C24450B0050BC72 /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 				951B59672C24450B0050BC72 /* CartViewController.swift */,
 				7562E68B2C24905D00970667 /* CartCell.swift */,
 				75DE52BF2C28458C006C54C8 /* DeleteConfirmationViewController.swift */,
+				75E140A22C35B3EC0092EBC1 /* PaymentSuccessViewController.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				75DE52B62C282357006C54C8 /* NetworkClientCart.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
+				75E140A32C35B3EC0092EBC1 /* PaymentSuccessViewController.swift in Sources */,
 				951B59662C2444D50050BC72 /* CatalogViewController.swift in Sources */,
 				95C812C92C21A92B00FE7B1B /* NFTModel.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
