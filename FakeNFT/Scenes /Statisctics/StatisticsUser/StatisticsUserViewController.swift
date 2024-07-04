@@ -6,6 +6,8 @@ final class StatisticsUserViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var userWebsite = ""
+    
     private lazy var avatarImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
@@ -85,6 +87,7 @@ final class StatisticsUserViewController: UIViewController {
         usernameLabel.text = user.name
         userDescriptionTextView.text = user.description
         nftCollectionLabel.text = "Коллекция NFT (\(user.nfts.count))"
+        userWebsite = user.website
     }
     
     func showLoadingIndicator() {
@@ -93,6 +96,17 @@ final class StatisticsUserViewController: UIViewController {
     
     func hideLoadingIndicator() {
         ProgressHUD.dismiss()
+    }
+    
+    private func goToViewController(viewController: UIViewController) {
+        showLoadingIndicator()
+        
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        navigationController.modalTransitionStyle = .crossDissolve
+        present(navigationController, animated: true)
+        
+        hideLoadingIndicator()
     }
     
     private func setupUI() {
@@ -166,19 +180,14 @@ final class StatisticsUserViewController: UIViewController {
     
     @objc
     private func goToNFTCollection() {
-        showLoadingIndicator()
-        
         let viewController = StatisticsUserNFTCollectionViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.modalPresentationStyle = .overFullScreen
-        navigationController.modalTransitionStyle = .crossDissolve
-        present(navigationController, animated: true)
-        
-        hideLoadingIndicator()
+        goToViewController(viewController: viewController)
     }
     
     @objc
     private func goToUserWebsite() {
-        // TODO: - Переход на вебвью сайта пользователя
+        let viewController = StatisticsUserWebViewController()
+        goToViewController(viewController: viewController)
+        viewController.loadUserWebsite(website: userWebsite)
     }
 }
