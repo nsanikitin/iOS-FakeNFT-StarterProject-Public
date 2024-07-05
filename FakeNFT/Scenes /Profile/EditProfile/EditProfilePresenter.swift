@@ -10,6 +10,7 @@ import UIKit
 final class EditProfilePresenter {
     private weak var view: EditProfileView?
     private var profile: ProfileModel?
+    private let profileService = ProfileService.shared
     
     init(view: EditProfileView, profile: ProfileModel) {
         self.view = view
@@ -23,24 +24,28 @@ final class EditProfilePresenter {
     }
     
     func saveProfile(name: String?, description: String?, website: String?) {
-        guard 
+        guard
             let name = name, !name.isEmpty,
+            let description = description, !description.isEmpty,
             let website = website, !website.contains(" "),
             let profile = profile
         else { return }
         
-        let updatedProfile = ProfileModel(
+        let updatedProfile = ProfileUpdate(
             name: name,
-            avatar: profile.avatar,
             description: description,
             website: website,
-            nfts: profile.nfts,
-            likes: profile.likes,
-            id: profile.id
+            likes: profile.likes
         )
+        ProfileService.shared.updateProfile(with: updatedProfile) { [weak self] result in
+            switch result {
+            case .success(let updatedProfileModel):
+                self?.view?.closeView(with: updatedProfileModel)
+            case .failure(let error):
+                print("Failed to update profile: \(error)")
+            }
+        }
         
-        self.profile = updatedProfile
-        view?.closeView(with: updatedProfile)
     }
     
     func updateAvatarURL(_ newURL: String) {

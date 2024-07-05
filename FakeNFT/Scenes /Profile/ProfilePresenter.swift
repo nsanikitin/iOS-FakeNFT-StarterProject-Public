@@ -9,22 +9,34 @@ import UIKit
 
 final class ProfilePresenter {
     private weak var view: ProfileView?
-    private var profile: ProfileModel?
+    var profile: ProfileModel?
+    private let profileService = ProfileService.shared
     
     init(view: ProfileView) {
         self.view = view
-        self.profile = MockData.profile
     }
     
     func viewDidLoad() {
-        if let profile = profile {
-            view?.displayProfile(profile)
-        }
+        loadProfile()
     }
     
     func viewWillAppear() {
         if let profile = profile {
             view?.displayProfile(profile)
+        }
+    }
+    
+    private func loadProfile() {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                self?.view?.displayProfile(profile)
+            case .failure(let error):
+                print("Failed to load profile: \(error)")
+            }
         }
     }
     

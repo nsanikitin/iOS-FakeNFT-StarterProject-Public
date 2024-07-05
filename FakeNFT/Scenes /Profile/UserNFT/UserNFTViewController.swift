@@ -30,7 +30,9 @@ final class UserNFTViewController: UIViewController {
         return label
     }()
     
-    private let nfts: [NFTModel] = MockData.nfts
+//    private let userNfts: [NFTModel] = MockData.nfts
+    private var userNfts: [ProfileNFT] = []
+//    var nftIds: String?
     
     // MARK: - LifeCycle
     
@@ -41,6 +43,7 @@ final class UserNFTViewController: UIViewController {
         updateUI()
         tableView.dataSource = self
         tableView.delegate = self
+        loadProfileAndNFTs()
     }
     
     // MARK: - Public Functions
@@ -53,18 +56,38 @@ final class UserNFTViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - Private Functions
+    
     private func updateUI() {
-        if nfts.isEmpty {
+        if userNfts.isEmpty {
+            print("No NFTs to display")
             placeHolderLabel.isHidden = false
             tableView.isHidden = true
         } else {
+            print("Displaying \(userNfts.count) NFTs")
             placeHolderLabel.isHidden = true
             tableView.isHidden = false
             tableView.reloadData()
         }
     }
     
-    // MARK: - Private Functions
+    private func loadProfileAndNFTs() {
+        UIBlockingProgressHUD.show()
+        ProfileService.shared.fetchProfile { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    if let nfts = ProfileService.shared.userNfts {
+                        self?.userNfts = nfts
+                        self?.updateUI()
+                    }
+                case .failure(let error):
+                    print("Failed to load profile: \(error)")
+                }
+            }
+        }
+    }
     
     private func setupUI() {
         view.backgroundColor = .ypWhite
@@ -114,7 +137,7 @@ final class UserNFTViewController: UIViewController {
 
 extension UserNFTViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MockData.nfts.count
+        return userNfts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -124,7 +147,7 @@ extension UserNFTViewController: UITableViewDataSource {
         ) as? UserNFTTableViewCell else { return UITableViewCell() }
         
         cell.selectionStyle = .none
-        let nft = MockData.nfts[indexPath.row]
+        let nft = userNfts[indexPath.row]
         cell.configure(with: nft)
         return cell
     }

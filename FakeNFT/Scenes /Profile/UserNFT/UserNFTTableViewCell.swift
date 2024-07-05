@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class UserNFTTableViewCell: UITableViewCell {
     static let reuseIdentifier = "UserNFTTableViewCell"
@@ -126,10 +127,14 @@ final class UserNFTTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with nft: NFTModel) {
-        nftImageView.image = UIImage(named: nft.images.first ?? "")
+    func configure(with nft: ProfileNFT) {
+        if let firstImageURL = nft.images.first, let url = URL(string: firstImageURL) {
+            nftImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
+                }
+//        nftImageView.image = UIImage(named: nft.images.first ?? "")
         nameLabel.text = nft.name
-        authorLabel.text = "от \(nft.author)"
+//        authorLabel.text = "от \(nft.author)"
+        authorLabel.text = "от \(nft.name)"
         costLabel.text = "\(nft.price) ETH"
         
         switch nft.rating {

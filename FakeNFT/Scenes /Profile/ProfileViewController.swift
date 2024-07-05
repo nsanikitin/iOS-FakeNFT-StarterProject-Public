@@ -17,7 +17,7 @@ protocol ProfileView: AnyObject {
 }
 
 final class ProfileViewController: UIViewController {
-
+    
     // MARK: - Private Properties
     
     private var presenter: ProfilePresenter?
@@ -142,8 +142,13 @@ final class ProfileViewController: UIViewController {
 // MARK: - Extensions
 
 extension ProfileViewController: ProfileView {
+    
     func displayProfile(_ profile: ProfileModel) {
-        avatarImage.image = UIImage(named: profile.avatar ?? "avatarMockProfile")
+        if let urlString = profile.avatar, let url = URL(string: urlString) {
+            avatarImage.loadImage(from: url, placeholder: UIImage(named: "avatarMockProfile"))
+        } else {
+            avatarImage.image = UIImage(named: "avatarMockProfile")
+        }
         nameLabel.text = profile.name
         bioTextView.text = profile.description
         urlButton.setTitle(profile.website, for: .normal)
