@@ -10,7 +10,6 @@ import UIKit
 protocol EditProfileView: AnyObject {
     func displayProfile(_ profile: ProfileModel)
     func closeView(with updatedProfile: ProfileModel)
-//    func closeView(with updatedProfile: ProfileUpdate)
 }
 
 final class EditProfileViewController: UIViewController {

@@ -29,8 +29,8 @@ final class ProfileService {
         urlSessionTask = urlSession.objectTask(for: request) { (response: Result<ProfileModel, Error>) in
             switch response {
             case .success(let profileResult):
-                completion(.success(profileResult))
                 self.fetchNFTs(profileResult.nfts, completion: completion)
+                completion(.success(profileResult))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -89,7 +89,7 @@ final class ProfileService {
 }
 
 extension ProfileService {
-    private func fetchNFTs(_ ids: [String], completion: @escaping (Result<ProfileModel, Error>) -> Void) {
+    func fetchNFTs(_ ids: [String], completion: @escaping (Result<ProfileModel, Error>) -> Void) {
         let idsString = ids.joined(separator: ",")
         guard let url = URL(string: "\(RequestConstants.baseURL)/api/v1/nft?ids=\(idsString)") else {
             assertionFailure("Invalid URL")

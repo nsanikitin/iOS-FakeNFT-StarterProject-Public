@@ -30,20 +30,18 @@ final class UserNFTViewController: UIViewController {
         return label
     }()
     
-//    private let userNfts: [NFTModel] = MockData.nfts
     private var userNfts: [ProfileNFT] = []
-//    var nftIds: String?
-    
+ 
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupNavigationItem()
-        updateUI()
         tableView.dataSource = self
         tableView.delegate = self
         loadProfileAndNFTs()
+        updateUI()
     }
     
     // MARK: - Public Functions
@@ -58,13 +56,12 @@ final class UserNFTViewController: UIViewController {
     
     // MARK: - Private Functions
     
-    private func updateUI() {
+    func updateUI() {
         if userNfts.isEmpty {
             print("No NFTs to display")
             placeHolderLabel.isHidden = false
             tableView.isHidden = true
         } else {
-            print("Displaying \(userNfts.count) NFTs")
             placeHolderLabel.isHidden = true
             tableView.isHidden = false
             tableView.reloadData()
@@ -88,7 +85,7 @@ final class UserNFTViewController: UIViewController {
             }
         }
     }
-    
+ 
     private func setupUI() {
         view.backgroundColor = .ypWhite
         
