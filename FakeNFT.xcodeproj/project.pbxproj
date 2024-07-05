@@ -205,13 +205,13 @@
 		0CFCB7472A7808870009A829 /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
-				951B59652C2444D50050BC72 /* CatalogViewController.swift */,
 				00738A8B2C31FDAD0095985D /* СatalogCell.swift */,
 				00738A8D2C3201570095985D /* CatalogModel.swift */,
-				00738A8F2C320DF10095985D /* CatalogProvider.swift */,
-				00738A912C336BBB0095985D /* CollectionsRequest.swift */,
 				00738A932C336ECC0095985D /* CatalogPresenter.swift */,
+				00738A8F2C320DF10095985D /* CatalogProvider.swift */,
+				951B59652C2444D50050BC72 /* CatalogViewController.swift */,
 				00738A952C336FCE0095985D /* CollectionDetailsViewController.swift */,
+				00738A912C336BBB0095985D /* CollectionsRequest.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";

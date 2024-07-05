@@ -115,6 +115,7 @@ extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let collectionDetailsVC = CollectionDetailsViewController()
+        collectionDetailsVC.collection = catalogItems[indexPath.row]
         collectionDetailsVC.modalPresentationStyle = .fullScreen
         present(collectionDetailsVC, animated: true, completion: nil)
     }
