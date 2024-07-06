@@ -28,9 +28,42 @@ final class CollectionDetailsViewController: UIViewController {
     
     let authorTitle = UILabel()
     let descriptionNFT = UILabel()
+    let scrollView = UIScrollView()
+    var containerView = UIView()
+    
+    private var nftCollectionViewHeightConstraint: NSLayoutConstraint?
+    
+    private func configureScrollView() {
+        view.addSubview(scrollView)
+        
+        scrollView.showsVerticalScrollIndicator = false
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    private func configureСontainerView() {
+        scrollView.addSubview(containerView)
+        
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+    }
     
     private func configureBackButton() {
-        view.addSubview(backButton)
+        containerView.addSubview(backButton)
         
         backButton.setImage(UIImage(named: "backward")?.withTintColor(.ypBlack), for: .normal)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
@@ -46,7 +79,7 @@ final class CollectionDetailsViewController: UIViewController {
     }
     
     private func configureCollectionCover() {
-        view.addSubview(collectionCover)
+        containerView.addSubview(collectionCover)
         
         collectionCover.contentMode = .scaleAspectFill
         collectionCover.layer.masksToBounds = true
@@ -56,9 +89,9 @@ final class CollectionDetailsViewController: UIViewController {
         collectionCover.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            collectionCover.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionCover.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionCover.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionCover.topAnchor.constraint(equalTo: containerView.topAnchor),
+            collectionCover.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            collectionCover.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             collectionCover.heightAnchor.constraint(equalToConstant: 310)
         ])
     }
@@ -81,7 +114,7 @@ final class CollectionDetailsViewController: UIViewController {
     }
     
     private func configureCollectionTitle() {
-        view.addSubview(collectionTitle)
+        containerView.addSubview(collectionTitle)
         
         collectionTitle.numberOfLines = 0
         collectionTitle.textColor = .ypBlack
@@ -91,13 +124,13 @@ final class CollectionDetailsViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             collectionTitle.topAnchor.constraint(equalTo: collectionCover.bottomAnchor, constant: 16),
-            collectionTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            collectionTitle.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            collectionTitle.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16)
         ])
     }
     
     private func configureAuthorTitle() {
-        view.addSubview(authorTitle)
+        containerView.addSubview(authorTitle)
         
         authorTitle.numberOfLines = 0
         authorTitle.textColor = .ypBlack
@@ -113,7 +146,7 @@ final class CollectionDetailsViewController: UIViewController {
     }
     
     private func configureDescriptionNFT() {
-        view.addSubview(descriptionNFT)
+        containerView.addSubview(descriptionNFT)
         
         descriptionNFT.numberOfLines = 0
         descriptionNFT.lineBreakMode = .byWordWrapping
@@ -130,15 +163,15 @@ final class CollectionDetailsViewController: UIViewController {
     }
     
     private func configureLoadingIndicator() {
-        view.addSubview(loadingIndicator)
+        containerView.addSubview(loadingIndicator)
         
         loadingIndicator.hidesWhenStopped = true
         
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            loadingIndicator.centerXAnchor.constraint(equalTo: collectionCover.centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: collectionCover.centerYAnchor)
+            loadingIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
     }
     
@@ -164,6 +197,8 @@ final class CollectionDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
+        configureScrollView()
+        configureСontainerView()
         configureCollectionImage()
         configureCollectionCover()
         configureCollectionTitle()
