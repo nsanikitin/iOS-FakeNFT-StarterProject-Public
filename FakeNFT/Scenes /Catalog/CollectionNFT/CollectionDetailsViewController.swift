@@ -31,17 +31,20 @@ final class CollectionDetailsViewController: UIViewController {
     let scrollView = UIScrollView()
     var containerView = UIView()
     
+    let nftCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
     private var nftCollectionViewHeightConstraint: NSLayoutConstraint?
     
     private func configureScrollView() {
         view.addSubview(scrollView)
         
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: -60),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -175,6 +178,30 @@ final class CollectionDetailsViewController: UIViewController {
         ])
     }
     
+    private func configureNftCollection() {
+        containerView.addSubview(nftCollection)
+        
+        nftCollection.isScrollEnabled = false
+        nftCollection.dataSource = self
+        nftCollection.delegate = self
+        nftCollection.backgroundColor = .ypWhite
+        nftCollection.register(
+            CollectionNftCell.self,
+            forCellWithReuseIdentifier: CollectionNftCell.reuseIdentifier
+        )
+        nftCollectionViewHeightConstraint = nftCollection.heightAnchor.constraint(equalToConstant: 0)
+        nftCollectionViewHeightConstraint?.isActive = true
+        
+        nftCollection.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            nftCollection.topAnchor.constraint(equalTo: descriptionNFT.bottomAnchor, constant: 24),
+            nftCollection.leadingAnchor.constraint(equalTo: collectionTitle.leadingAnchor),
+            nftCollection.trailingAnchor.constraint(equalTo: collectionTitle.trailingAnchor),
+            nftCollection.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+    
     func configure(with catalog: CatalogModel, imageLoader: ImageLoader) {
         loadingIndicator.startAnimating()
         if let url = URL(string: catalog.cover) {
@@ -206,9 +233,41 @@ final class CollectionDetailsViewController: UIViewController {
         configureLoadingIndicator()
         configureAuthorTitle()
         configureDescriptionNFT()
+        configureNftCollection()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        nftCollection.layoutIfNeeded()
+        nftCollectionViewHeightConstraint?.constant = nftCollection.contentSize.height
     }
     
     @objc private func backButtonTapped() {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+extension CollectionDetailsViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 17
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionNftCell.reuseIdentifier, for: indexPath) as? CollectionNftCell else {
+            return UICollectionViewCell()
+        }
+        return cell
+    }
+}
+
+extension CollectionDetailsViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let interItemSpacing: CGFloat = 10
+        let width = (collectionView.bounds.width - 2 * interItemSpacing) / 3
+        return CGSize(width: width, height: 202)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
     }
 }
