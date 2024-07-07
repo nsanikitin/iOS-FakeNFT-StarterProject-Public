@@ -7,13 +7,7 @@
 
 import UIKit
 
-protocol PaymentSuccessViewControllerDelegate: AnyObject {
-    func didTapReturnToCatalog()
-}
-
 final class PaymentSuccessViewController: UIViewController {
-    
-    weak var delegate: PaymentSuccessViewControllerDelegate?
     
     private let successImageView: UIImageView = {
         let imageView = UIImageView()
@@ -49,6 +43,7 @@ final class PaymentSuccessViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "ypWhite")
+        navigationItem.hidesBackButton = true
         setupUI()
         setupConstraints()
     }
@@ -78,6 +73,7 @@ final class PaymentSuccessViewController: UIViewController {
     }
     
     @objc private func returnToCatalog() {
-        delegate?.didTapReturnToCatalog()
+        NotificationCenter.default.post(name: NSNotification.Name("ReturnToCatalog"), object: nil)
+        dismiss(animated: true, completion: nil)
     }
 }

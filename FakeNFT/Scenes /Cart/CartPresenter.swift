@@ -11,6 +11,7 @@ final class CartPresenter {
     weak var view: CartView?
     private var items: [NFTModel] = []
     private let nftServiceCart: ServiceCart
+    private var shouldLoadItemsFromNetwork: Bool = true
     
     init(view: CartView, nftServiceCart: ServiceCart) {
         self.view = view
@@ -27,7 +28,7 @@ final class CartPresenter {
         view?.showLoading()
         nftServiceCart.loadNFTs { [weak self] result in
             DispatchQueue.main.async {
-                self?.view?.hideLoading()  
+                self?.view?.hideLoading()
                 switch result {
                 case .success(let nftList):
                     self?.items = Array(nftList.prefix(3))
@@ -72,6 +73,10 @@ final class CartPresenter {
         view?.updateTotalPrice(totalCount: 0, totalPrice: 0)
         view?.reloadData()
         view?.setPayButtonEnabled(false)
+    }
+    
+    func setShouldLoadItemsFromNetwork(_ shouldLoad: Bool) {
+        shouldLoadItemsFromNetwork = shouldLoad
     }
 }
 

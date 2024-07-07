@@ -8,7 +8,7 @@
 import UIKit
 import ProgressHUD
 
-final class PaymentOptionsViewController: UIViewController, PaymentOptionsView, PaymentSuccessViewControllerDelegate {
+final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
     
     private var presenter: PaymentOptionsPresenter!
     private var paymentOptions: [CurrencyModel] = []
@@ -192,9 +192,8 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView, 
     
     func showPaymentSuccess(_ orderId: String) {
         let successVC = PaymentSuccessViewController()
-        successVC.delegate = self
         successVC.modalPresentationStyle = .fullScreen
-        present(successVC, animated: true, completion: nil)
+        navigationController?.pushViewController(successVC, animated: true)
     }
     
     private func showAlert(message: String) {
@@ -210,13 +209,6 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView, 
             self?.pay()
         })
         present(alertController, animated: true, completion: nil)
-    }
-    
-    func didTapReturnToCatalog() {
-        if let navigationController = navigationController, let cartVC = navigationController.viewControllers.first(where: { $0 is CartViewController }) as? CartViewController {
-            cartVC.presenter.clearCart()
-            navigationController.popToViewController(cartVC, animated: true)
-        }
     }
 }
 

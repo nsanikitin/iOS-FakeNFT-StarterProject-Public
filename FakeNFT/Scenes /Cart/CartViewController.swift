@@ -76,6 +76,8 @@ final class CartViewController: UIViewController, CartView {
         setupTableView()
         setupEmptyCartLabel()
         setupConstraints()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleReturnToCatalog), name: NSNotification.Name("ReturnToCatalog"), object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -169,6 +171,7 @@ final class CartViewController: UIViewController, CartView {
     
     @objc private func showPaymentOptions() {
         let paymentOptionsVC = PaymentOptionsViewController()
+        
         let navController = UINavigationController(rootViewController: paymentOptionsVC)
         navController.modalPresentationStyle = .fullScreen
         present(navController, animated: true, completion: nil)
@@ -197,6 +200,10 @@ final class CartViewController: UIViewController, CartView {
         ProgressHUD.dismiss()
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     private func showDeleteConfirmation(for item: NFTModel, at index: Int) {
         let deleteVC = DeleteConfirmationViewController()
         deleteVC.modalPresentationStyle = .overFullScreen
@@ -214,6 +221,16 @@ final class CartViewController: UIViewController, CartView {
             payButton.setTitleColor(UIColor(named: "ypWhite"), for: .normal)
         } else {
             payButton.setTitleColor(UIColor.gray, for: .normal)
+        }
+    }
+    
+    @objc private func handleReturnToCatalog() {
+        if let cartVC = navigationController?.viewControllers.first(where: { $0 is CartViewController }) as? CartViewController {
+            cartVC.presenter.setShouldLoadItemsFromNetwork(false)
+            cartVC.presenter.clearCart()
+            navigationController?.popToViewController(cartVC, animated: true)
+        } else {
+            navigationController?.popToRootViewController(animated: true)
         }
     }
 }
