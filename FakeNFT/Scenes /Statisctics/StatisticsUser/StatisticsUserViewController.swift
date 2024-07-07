@@ -6,7 +6,9 @@ final class StatisticsUserViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var userNFTs: [String] = []
     private var userWebsite = ""
+    private var userNFTsNumber = 0
     
     private lazy var avatarImageView = {
         let imageView = UIImageView()
@@ -87,26 +89,29 @@ final class StatisticsUserViewController: UIViewController {
         usernameLabel.text = user.name
         userDescriptionTextView.text = user.description
         nftCollectionLabel.text = "Коллекция NFT (\(user.nfts.count))"
+        userNFTs = user.nfts
         userWebsite = user.website
-    }
-    
-    func showLoadingIndicator() {
-        ProgressHUD.show()
-    }
-    
-    func hideLoadingIndicator() {
-        ProgressHUD.dismiss()
+        userNFTsNumber = user.nfts.count
     }
     
     private func goToViewController(viewController: UIViewController) {
-        showLoadingIndicator()
-        
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .overFullScreen
         navigationController.modalTransitionStyle = .crossDissolve
         present(navigationController, animated: true)
+    }
+    
+    private func showAlertNFTsAreEmpty() {
+        let alert = UIAlertController(
+            title: "У пользователя нет NFT",
+            message: nil,
+            preferredStyle: .alert
+        )
         
-        hideLoadingIndicator()
+        let action = UIAlertAction(title: "Ок", style: .default)
+        alert.addAction(action)
+        
+        present(alert, animated: true)
     }
     
     private func setupUI() {
@@ -180,7 +185,12 @@ final class StatisticsUserViewController: UIViewController {
     
     @objc
     private func goToNFTCollection() {
-        let viewController = StatisticsUserNFTCollectionViewController()
+        if userNFTsNumber == 0 {
+            showAlertNFTsAreEmpty()
+            return
+        }
+        
+        let viewController = StatisticsUserNFTCollectionViewController(userNFTs: userNFTs)
         goToViewController(viewController: viewController)
     }
     

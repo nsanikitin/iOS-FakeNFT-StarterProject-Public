@@ -1,13 +1,6 @@
-//
-//  NFTModel.swift
-//  FakeNFT
-//
-//  Created by Anna on 18.06.2024.
-//
+import Foundation
 
-import UIKit
-
-struct NFTModel {
+struct NFTResult: Codable {
     let createdAt: String
     let name: String
     let images: [String]

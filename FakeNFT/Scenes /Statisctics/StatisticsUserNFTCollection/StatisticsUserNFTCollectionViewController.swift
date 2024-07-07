@@ -1,13 +1,17 @@
+import ProgressHUD
 import UIKit
 
 final class StatisticsUserNFTCollectionViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var userNFTs: [String]
+    
+    private lazy var presenter = StatisticsUserNFTCollectionPresenter()
     private lazy var nftCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 9
-        layout.minimumLineSpacing = 7
+        layout.minimumLineSpacing = 8
         let collectionView = UICollectionView(
             frame: .zero,
             collectionViewLayout: layout
@@ -17,11 +21,23 @@ final class StatisticsUserNFTCollectionViewController: UIViewController {
             forCellWithReuseIdentifier: "cell"
         )
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.backgroundColor = .clear
         collectionView.allowsMultipleSelection = false
         
         return collectionView
     }()
+    
+    // MARK: - Init
+    
+    init(userNFTs: [String]) {
+        self.userNFTs = userNFTs
+        super .init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     
@@ -30,9 +46,44 @@ final class StatisticsUserNFTCollectionViewController: UIViewController {
         
         view.backgroundColor = .viewBackgroundColor
         setupUI()
+        
+        presenter.view = self
+        presenter.viewDidLoad(with: userNFTs)
     }
     
     // MARK: - Methods
+    
+    func updateNFTCollectionView() {
+        nftCollectionView.reloadData()
+    }
+    
+    func showLoadingIndicator() {
+        ProgressHUD.show()
+    }
+    
+    func hideLoadingIndicator() {
+        ProgressHUD.dismiss()
+    }
+    
+    func showErrorAlert() {
+        let alert = UIAlertController(
+            title: "Не удалось получить данные",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .default)
+        let action = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.presenter.viewDidLoad(with: userNFTs)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(action)
+        alert.preferredAction = action
+        
+        present(alert, animated: true)
+    }
     
     private func setupUI() {
         setupNavBar()
@@ -79,12 +130,10 @@ final class StatisticsUserNFTCollectionViewController: UIViewController {
 extension StatisticsUserNFTCollectionViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // TODO: - Загрузить количество NFT
-        return 0
+        return presenter.getUserNFTs().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // TODO: - Настройка данных в ячейке коллекции
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "cell",
             for: indexPath
@@ -92,7 +141,8 @@ extension StatisticsUserNFTCollectionViewController: UICollectionViewDataSource 
             return UICollectionViewCell()
         }
         
-        cell.configure()
+        let nft = presenter.getUserNFTs()[indexPath.row]
+        cell.configure(for: nft)
         
         return cell
     }
@@ -104,7 +154,7 @@ extension StatisticsUserNFTCollectionViewController: UICollectionViewDelegateFlo
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(
-            width: collectionView.bounds.width / 3,
+            width: 108,
             height: 192
         )
     }

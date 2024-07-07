@@ -1,8 +1,12 @@
+import Kingfisher
 import UIKit
 
 final class StatisticsCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
+    
+    private var isLiked = false
+    private var isInCart = false
     
     private lazy var nftPictureImageView = {
         let imageView = UIImageView()
@@ -40,7 +44,6 @@ final class StatisticsCollectionViewCell: UICollectionViewCell {
     private lazy var cartButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(cartButtonDidTap), for: .touchUpInside)
-        button.setImage(UIImage.cartEmptyImage, for: .normal)
         button.backgroundColor = .clear
         return button
     }()
@@ -59,20 +62,22 @@ final class StatisticsCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Methods
     
-    func configure() {
-        // TODO: - Загрузка данных по NFT
+    func configure(for nft: NFTModel) {
+        nftPictureImageView.kf.setImage(with: URL(string: nft.images[0]))
+        nftRatingImageView.image = UIImage(named: "stars\(nft.rating)")
+        nftNameLabel.text = nft.name
+        nftCostLabel.text = "\(nft.price) ETH"
+        likeButton.setImage(UIImage.likesNoActiveImage, for: .normal)
+        cartButton.setImage(UIImage.cartEmptyImage, for: .normal)
     }
     
     // MARK: - View Configuration
     
     private func setupConstraints() {
-        [nftPictureImageView, nftRatingImageView, nftNameLabel, nftCostLabel, cartButton].forEach {
+        [nftPictureImageView, likeButton, nftRatingImageView, nftNameLabel, nftCostLabel, cartButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             addSubview($0)
         }
-        
-        likeButton.translatesAutoresizingMaskIntoConstraints = false
-        nftPictureImageView.addSubview(likeButton)
         
         NSLayoutConstraint.activate([
             nftPictureImageView.topAnchor.constraint(equalTo: topAnchor),
@@ -111,11 +116,13 @@ final class StatisticsCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func likeButtonDidTap() {
-        // TODO: - Действие по нажатию на кнопку лайка
+        isLiked ? likeButton.setImage(UIImage.likesNoActiveImage, for: .normal) : likeButton.setImage(UIImage.likesActiveImage, for: .normal)
+        isLiked = !isLiked
     }
 
     @objc
     private func cartButtonDidTap() {
-        // TODO: - Действие по нажатию на кнопку корзины
+        isInCart ? cartButton.setImage(UIImage.cartEmptyImage, for: .normal) : cartButton.setImage(UIImage.cartDeleteImage, for: .normal)
+        isInCart = !isInCart
     }
 }

@@ -7,8 +7,6 @@ final class StatisticsViewController: UIViewController {
     
     private let refreshControl = UIRefreshControl()
     
-    private var statisticsServiceObserver: NSObjectProtocol?
-    
     private lazy var presenter = StatisticsPresenter()
     private lazy var usersTableView = {
         let tableView = UITableView()
