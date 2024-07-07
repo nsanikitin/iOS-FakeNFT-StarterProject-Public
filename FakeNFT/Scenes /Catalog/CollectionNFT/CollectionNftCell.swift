@@ -155,7 +155,6 @@ final class CollectionNftCell: UICollectionViewCell {
     }
     
     private func setupConfigure() {
-        
         configureNftImage()
         configureLikeButton()
         configureRatingView()

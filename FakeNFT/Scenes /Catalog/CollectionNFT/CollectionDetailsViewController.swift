@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class CollectionDetailsViewController: UIViewController {
+final class CollectionDetailsViewController: UIViewController, ErrorView {
     
     var collection: CatalogModel? {
         didSet {
@@ -24,7 +24,7 @@ final class CollectionDetailsViewController: UIViewController {
     let collectionCover = UIImageView()
     let collectionTitle = UILabel()
     var collectionImage = UIImage()
-    let loadingIndicator = UIActivityIndicatorView(style: .medium)
+    let loadingIndicator = UIActivityIndicatorView(style: .large)
     
     let authorTitle = UILabel()
     let descriptionNFT = UILabel()
@@ -33,6 +33,8 @@ final class CollectionDetailsViewController: UIViewController {
     
     let nftCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
+    private let presenter: CollectionPresenter
+    private var nfts: [Nft] = []
     private var nftCollectionViewHeightConstraint: NSLayoutConstraint?
     
     private func configureScrollView() {
@@ -173,8 +175,8 @@ final class CollectionDetailsViewController: UIViewController {
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            loadingIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -219,10 +221,21 @@ final class CollectionDetailsViewController: UIViewController {
         collectionTitle.text = catalog.name
         authorTitle.text = "Автор коллекции: \(catalog.author)"
         descriptionNFT.text = catalog.description
+        nftCollection.reloadData()
+    }
+    
+    init(presenter: CollectionPresenter) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .ypWhite
         configureScrollView()
         configureСontainerView()
@@ -230,10 +243,18 @@ final class CollectionDetailsViewController: UIViewController {
         configureCollectionCover()
         configureCollectionTitle()
         configureBackButton()
-        configureLoadingIndicator()
         configureAuthorTitle()
         configureDescriptionNFT()
         configureNftCollection()
+        
+        configureLoadingIndicator()
+        
+        presenter.viewController = self
+        presenter.setOnLoadCompletion { [weak self] nfts in
+            self?.nfts = nfts
+            self?.nftCollection.reloadData()
+        }
+        presenter.processNFTsLoading()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -249,13 +270,15 @@ final class CollectionDetailsViewController: UIViewController {
 
 extension CollectionDetailsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 17
+        return  nfts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionNftCell.reuseIdentifier, for: indexPath) as? CollectionNftCell else {
             return UICollectionViewCell()
         }
+        let nft = presenter.returnCollectionCell(for: indexPath.row)
+        cell.configure(data: nft)
         return cell
     }
 }

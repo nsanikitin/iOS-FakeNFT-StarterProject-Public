@@ -114,7 +114,18 @@ extension CatalogViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let collectionDetailsVC = CollectionDetailsViewController()
+        
+        let nftService = ServicesAssembly(
+            networkClient: DefaultNetworkClient(),
+            nftStorage: NftStorageImpl()
+        ).nftService
+        let collectionDetailsVC = CollectionDetailsViewController(
+            presenter: CollectionPresenter(
+                nftModel: catalogItems[indexPath.row],
+                nftService: nftService
+            )
+        )
+        
         collectionDetailsVC.collection = catalogItems[indexPath.row]
         collectionDetailsVC.modalPresentationStyle = .fullScreen
         present(collectionDetailsVC, animated: true, completion: nil)
