@@ -3,25 +3,25 @@ import UIKit
 final class TabBarController: UITabBarController {
     
     private let profileTabBarItem = UITabBarItem(
-        title: "Профиль",
+        title: NSLocalizedString("Tab.profile", comment: "Профиль"),
         image: UIImage.profileTabBar,
         tag: 0
     )
     
     private let catalogTabBarItem = UITabBarItem(
-        title: "Каталог",
+        title: NSLocalizedString("Tab.catalog", comment: "Каталог"),
         image: UIImage.catalogTabBar,
         tag: 1
     )
     
     private let cartTabBarItem = UITabBarItem(
-        title: "Корзина",
+        title: NSLocalizedString("Tab.cart", comment: "Корзина"),
         image: UIImage.basketTabBar,
         tag: 2
     )
     
     private let statisticsTabBarItem = UITabBarItem(
-        title: "Статистика",
+        title: NSLocalizedString("Tab.statistics", comment: "Статистика"),
         image: UIImage.statisticsTabBar,
         tag: 3
     )

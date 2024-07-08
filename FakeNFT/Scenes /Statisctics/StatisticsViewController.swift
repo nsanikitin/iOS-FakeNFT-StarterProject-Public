@@ -52,13 +52,16 @@ final class StatisticsViewController: UIViewController {
     
     func showErrorAlert() {
         let alert = UIAlertController(
-            title: "Не удалось получить данные",
+            title: NSLocalizedString("Error.data", 
+                                     comment: "Не удалось получить данные"),
             message: nil,
             preferredStyle: .alert
         )
         
-        let cancelAction = UIAlertAction(title: "Отмена", style: .default)
-        let action = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Error.cancel", comment: "Отмена"), 
+                                         style: .default)
+        let action = UIAlertAction(title: NSLocalizedString("Error.repeat", comment: "Повторить"), 
+                                   style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.presenter.viewDidLoad()
         }
@@ -77,19 +80,22 @@ final class StatisticsViewController: UIViewController {
     
     private func showSortAlert() {
         let alert = UIAlertController(
-            title: "Сортировка",
+            title: NSLocalizedString("Statistics.sorting", comment: "Сортировка"),
             message: nil,
             preferredStyle: .actionSheet
         )
         
-        let sortByNameAction = UIAlertAction(title: "По имени", style: .default) { [weak self] _ in
+        let sortByNameAction = UIAlertAction(title: NSLocalizedString("Statistics.sortByName", comment: "По имени"),
+                                             style: .default) { [weak self] _ in
             self?.presenter.sortedUsers(.byName)
             
         }
-        let sortByRateAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
+        let sortByRateAction = UIAlertAction(title: NSLocalizedString("Statistics.sortByRate", comment: "По рейтингу"),
+                                             style: .default) { [weak self] _ in
             self?.presenter.sortedUsers(.byRate)
         }
-        let closeAction = UIAlertAction(title: "Закрыть", style: .cancel)
+        let closeAction = UIAlertAction(title: NSLocalizedString("Statistics.close", comment: "Закрыть"),
+                                        style: .cancel)
         
         alert.addAction(sortByNameAction)
         alert.addAction(sortByRateAction)

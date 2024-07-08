@@ -1,0 +1,22 @@
+"Tab.profile" = "Profile";
+"Tab.catalog" = "Catalog";
+"Tab.cart" = "Cart";
+"Tab.statistics" = "Statistics";
+
+"Catalog.openNft" = "Open NFT";
+
+"Statistics.sorting" = "Sorting";
+"Statistics.sortByName" = "by Name";
+"Statistics.sortByRate" = "by Rate";
+"Statistics.close" = "Close";
+"Statistics.goToUserWebsite" = "Go to user website";
+"Statistics.nftCollection" = "NFT collection";
+
+"Error.network" = "Network error";
+"Error.unknown" = "Unknown error";
+"Error.repeat" = "Repeat";
+"Error.title" = "Error";
+"Error.cancel" = "Cancel";
+"Error.ok" = "Ok";
+"Error.noNft" = "The user hasn't any NFT";
+"Error.data" = "Failed to get data";

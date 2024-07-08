@@ -67,13 +67,15 @@ final class StatisticsUserNFTCollectionViewController: UIViewController {
     
     func showErrorAlert() {
         let alert = UIAlertController(
-            title: "Не удалось получить данные",
+            title: NSLocalizedString("Error.data", comment: "Не удалось получить данные"),
             message: nil,
             preferredStyle: .alert
         )
         
-        let cancelAction = UIAlertAction(title: "Отмена", style: .default)
-        let action = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Error.cancel", comment: "Отмена"),
+                                         style: .default)
+        let action = UIAlertAction(title: NSLocalizedString("Error.repeat", comment: "Повторить"),
+                                   style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.presenter.viewDidLoad(with: userNFTs)
         }
@@ -93,7 +95,7 @@ final class StatisticsUserNFTCollectionViewController: UIViewController {
     // MARK: - View Configuration
     
     private func setupNavBar() {
-        title = "Коллекция NFT"
+        title = NSLocalizedString("Statistics.nftCollection" , comment: "Коллекция NFT")
         
         let backButton = UIBarButtonItem(
             image: UIImage.backwardImage,

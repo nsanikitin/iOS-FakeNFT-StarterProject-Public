@@ -36,7 +36,8 @@ final class StatisticsUserViewController: UIViewController {
     private lazy var userWebsiteButton = {
         let button = UIButton()
         button.backgroundColor = .clear
-        button.setTitle("Перейти на сайт пользователя", for: .normal)
+        button.setTitle(NSLocalizedString("Statistics.goToUserWebsite", comment: "Перейти на сайт пользователя"),
+                        for: .normal)
         button.setTitleColor(.ypBlackUniversal, for: .normal)
         button.titleLabel?.font = UIFont.caption1
         button.titleLabel?.textAlignment = .center
@@ -87,7 +88,7 @@ final class StatisticsUserViewController: UIViewController {
         avatarImageView.kf.setImage(with: URL(string: user.avatar), placeholder: UIImage(named: "person"))
         usernameLabel.text = user.name
         userDescriptionTextView.text = user.description
-        nftCollectionLabel.text = "Коллекция NFT (\(user.nfts.count))"
+        nftCollectionLabel.text = "\(NSLocalizedString("Statistics.nftCollection", comment: "Колекция NFT")) (\(user.nfts.count))"
         userNFTs = user.nfts
         userWebsite = user.website
     }
@@ -101,12 +102,13 @@ final class StatisticsUserViewController: UIViewController {
     
     private func showAlertNFTsAreEmpty() {
         let alert = UIAlertController(
-            title: "У пользователя нет NFT",
+            title: NSLocalizedString("Error.noNft", comment: "У пользователя нет NFT"),
             message: nil,
             preferredStyle: .alert
         )
         
-        let action = UIAlertAction(title: "Ок", style: .default)
+        let action = UIAlertAction(title: NSLocalizedString("Error.ok" , comment: "Ок"),
+                                   style: .default)
         alert.addAction(action)
         
         present(alert, animated: true)
