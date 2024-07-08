@@ -9,7 +9,7 @@ import UIKit
 
 final class ProfilePresenter {
     private weak var view: ProfileView?
-    var profile: ProfileModel?
+    private var profile: ProfileModel?
     private let profileService = ProfileService.shared
     
     init(view: ProfileView) {
@@ -27,9 +27,9 @@ final class ProfilePresenter {
     }
     
     private func loadProfile() {
-        UIBlockingProgressHUD.show()
+        view?.showLoading()
         profileService.fetchProfile { [weak self] result in
-            UIBlockingProgressHUD.dismiss()
+            self?.view?.hideLoading()
             switch result {
             case .success(let profile):
                 self?.profile = profile

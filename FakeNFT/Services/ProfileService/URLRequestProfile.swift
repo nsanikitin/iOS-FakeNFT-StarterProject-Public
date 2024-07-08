@@ -13,8 +13,10 @@ extension URLRequest {
         httpMethod: String,
         baseURL: URL?
     ) -> URLRequest? {
-        guard let baseURL = baseURL else { return nil }
-        guard let url = URL(string: path, relativeTo: baseURL) else { return nil }
+        guard
+            let baseURL = baseURL,
+            let url = URL(string: path, relativeTo: baseURL)
+        else { return nil }
         
         var request = URLRequest(url: url)
         request.httpMethod = httpMethod

@@ -16,7 +16,6 @@ final class ProfileService {
     
     private let urlSession = URLSession.shared
     private var urlSessionTask: URLSessionTask?
-    private var token: String?
     private let tokenKey = TokenKeys.practicumMobile
     
     func fetchProfile(completion: @escaping (Result<ProfileModel, Error>)-> Void) {
@@ -29,7 +28,7 @@ final class ProfileService {
         urlSessionTask = urlSession.objectTask(for: request) { (response: Result<ProfileModel, Error>) in
             switch response {
             case .success(let profileResult):
-                self.fetchNFTs(profileResult.nfts, completion: completion)
+                self.profile = profileResult
                 completion(.success(profileResult))
             case .failure(let error):
                 completion(.failure(error))
@@ -56,9 +55,7 @@ final class ProfileService {
             return
         }
         
-        UIBlockingProgressHUD.show()
         urlSessionTask = urlSession.objectTask(for: request) { (response: Result<ProfileModel, Error>) in
-            UIBlockingProgressHUD.dismiss()
             switch response {
             case .success(let profileResult):
                 self.profile = profileResult
@@ -89,7 +86,7 @@ final class ProfileService {
 }
 
 extension ProfileService {
-    func fetchNFTs(_ ids: [String], completion: @escaping (Result<ProfileModel, Error>) -> Void) {
+    func fetchNFTs(_ ids: [String], completion: @escaping (Result<[ProfileNFT], Error>) -> Void) {
         let idsString = ids.joined(separator: ",")
         guard let url = URL(string: "\(RequestConstants.baseURL)/api/v1/nft?ids=\(idsString)") else {
             assertionFailure("Invalid URL")
@@ -113,9 +110,7 @@ extension ProfileService {
             do {
                 let nftResponse = try JSONDecoder().decode([ProfileNFT].self, from: data)
                 self.userNfts = nftResponse
-                if let profile = self.profile {
-                    completion(.success(profile))
-                }
+                completion(.success(nftResponse))
             } catch {
                 completion(.failure(error))
             }

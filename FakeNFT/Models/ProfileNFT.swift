@@ -18,13 +18,13 @@ struct ProfileNFT: Decodable {
     let id: String
     
     enum CodingKeys: String, CodingKey {
-        case id = "id"
+        case createdAt = "createdAt"
         case name = "name"
+        case images = "images"
+        case rating = "rating"
         case description = "description"
         case price = "price"
-        case rating = "rating"
         case author = "author"
-        case createdAt = "createdAt"
-        case images = "images"
+        case id = "id"
     }
 }

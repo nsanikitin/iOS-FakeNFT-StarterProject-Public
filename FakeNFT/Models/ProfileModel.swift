@@ -12,7 +12,7 @@ struct ProfileModel: Decodable {
     let avatar: String?
     let description: String?
     let website: String?
-    let nfts: [String]
+    let nfts: [String]?
     let likes: [String]
     let id: String
 }

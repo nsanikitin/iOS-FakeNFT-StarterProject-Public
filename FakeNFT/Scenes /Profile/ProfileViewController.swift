@@ -14,6 +14,8 @@ protocol ProfileViewControllerDelegate: AnyObject {
 protocol ProfileView: AnyObject {
     func displayProfile(_ profile: ProfileModel)
     func reloadTableView()
+    func showLoading()
+    func hideLoading()
 }
 
 final class ProfileViewController: UIViewController {
@@ -156,6 +158,14 @@ extension ProfileViewController: ProfileView {
     
     func reloadTableView() {
         tableView.reloadData()
+    }
+    
+    func showLoading() {
+        UIBlockingProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        UIBlockingProgressHUD.dismiss()
     }
 }
 

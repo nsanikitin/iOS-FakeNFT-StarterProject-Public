@@ -10,6 +10,8 @@ import UIKit
 protocol EditProfileView: AnyObject {
     func displayProfile(_ profile: ProfileModel)
     func closeView(with updatedProfile: ProfileModel)
+    func showLoading()
+    func hideLoading()
 }
 
 final class EditProfileViewController: UIViewController {
@@ -390,6 +392,14 @@ extension EditProfileViewController: EditProfileView {
     func closeView(with updatedProfile: ProfileModel) {
         delegate?.didUpdateProfile(updatedProfile)
         dismiss(animated: true)
+    }
+    
+    func showLoading() {
+        UIBlockingProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        UIBlockingProgressHUD.dismiss()
     }
 }
 
