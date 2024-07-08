@@ -9,7 +9,7 @@ import UIKit
 
 final class ProfilePresenter {
     private weak var view: ProfileView?
-    private var profile: ProfileModel?
+    private var profile: ProfileModel = ProfileModel()
     private let profileService = ProfileService.shared
     
     init(view: ProfileView) {
@@ -21,9 +21,7 @@ final class ProfilePresenter {
     }
     
     func viewWillAppear() {
-        if let profile = profile {
-            view?.displayProfile(profile)
-        }
+        view?.displayProfile(profile)
     }
     
     private func loadProfile() {
@@ -35,20 +33,18 @@ final class ProfilePresenter {
                 self?.profile = profile
                 self?.view?.displayProfile(profile)
             case .failure(let error):
-                print("Failed to load profile: \(error)")
+                self?.view?.showError(error)
             }
         }
     }
     
     func editProfileTapped() {
-        if let profile = profile {
-            let editProfileViewController = EditProfileViewController()
-            editProfileViewController.delegate = self
-            editProfileViewController.configure(profile: profile)
-            if let viewController = view as? UIViewController {
-                let navigationController = UINavigationController(rootViewController: editProfileViewController)
-                viewController.present(navigationController, animated: true)
-            }
+        let editProfileViewController = EditProfileViewController()
+        editProfileViewController.delegate = self
+        editProfileViewController.configure(profile: profile)
+        if let viewController = view as? UIViewController {
+            let navigationController = UINavigationController(rootViewController: editProfileViewController)
+            viewController.present(navigationController, animated: true)
         }
     }
     

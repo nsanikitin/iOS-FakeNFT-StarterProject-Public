@@ -16,6 +16,7 @@ protocol ProfileView: AnyObject {
     func reloadTableView()
     func showLoading()
     func hideLoading()
+    func showError(_ error: Error)
 }
 
 final class ProfileViewController: UIViewController {
@@ -138,7 +139,6 @@ final class ProfileViewController: UIViewController {
         navigationItem.rightBarButtonItem = editButton
         navigationController?.navigationBar.isHidden = false
     }
-    
 }
 
 // MARK: - Extensions
@@ -166,6 +166,21 @@ extension ProfileViewController: ProfileView {
     
     func hideLoading() {
         UIBlockingProgressHUD.dismiss()
+    }
+    
+    func showError(_ error: Error) {
+        let alertController = UIAlertController(
+            title: "Ошибка",
+            message: error.localizedDescription,
+            preferredStyle: .alert
+        )
+        let retryAction = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            self?.presenter?.viewDidLoad()
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        alertController.addAction(retryAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
 }
 

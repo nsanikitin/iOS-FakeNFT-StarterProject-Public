@@ -9,8 +9,6 @@ import Foundation
 
 final class ProfileService {
     static let shared = ProfileService()
-    private (set) var profile: ProfileModel?
-    private (set) var userNfts: [ProfileNFT]?
     
     private init() {}
     
@@ -26,13 +24,7 @@ final class ProfileService {
         }
         
         urlSessionTask = urlSession.objectTask(for: request) { (response: Result<ProfileModel, Error>) in
-            switch response {
-            case .success(let profileResult):
-                self.profile = profileResult
-                completion(.success(profileResult))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            completion(response)
         }
     }
     
@@ -56,13 +48,7 @@ final class ProfileService {
         }
         
         urlSessionTask = urlSession.objectTask(for: request) { (response: Result<ProfileModel, Error>) in
-            switch response {
-            case .success(let profileResult):
-                self.profile = profileResult
-                completion(.success(profileResult))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            completion(response)
         }
     }
     
@@ -109,7 +95,6 @@ extension ProfileService {
             }
             do {
                 let nftResponse = try JSONDecoder().decode([ProfileNFT].self, from: data)
-                self.userNfts = nftResponse
                 completion(.success(nftResponse))
             } catch {
                 completion(.failure(error))
