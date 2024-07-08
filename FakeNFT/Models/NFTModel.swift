@@ -8,7 +8,7 @@
 import UIKit
 
 struct NFTModel {
-    let createdAt: Date
+    let createdAt: String
     let name: String
     let images: [String]
     let rating: Int
