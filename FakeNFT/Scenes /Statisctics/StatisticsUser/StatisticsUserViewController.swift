@@ -8,7 +8,6 @@ final class StatisticsUserViewController: UIViewController {
     
     private var userNFTs: [String] = []
     private var userWebsite = ""
-    private var userNFTsNumber = 0
     
     private lazy var avatarImageView = {
         let imageView = UIImageView()
@@ -91,7 +90,6 @@ final class StatisticsUserViewController: UIViewController {
         nftCollectionLabel.text = "Коллекция NFT (\(user.nfts.count))"
         userNFTs = user.nfts
         userWebsite = user.website
-        userNFTsNumber = user.nfts.count
     }
     
     private func goToViewController(viewController: UIViewController) {
@@ -185,7 +183,7 @@ final class StatisticsUserViewController: UIViewController {
     
     @objc
     private func goToNFTCollection() {
-        if userNFTsNumber == 0 {
+        if userNFTs.count == 0 {
             showAlertNFTsAreEmpty()
             return
         }

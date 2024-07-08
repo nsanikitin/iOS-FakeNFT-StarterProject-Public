@@ -116,13 +116,15 @@ final class StatisticsCollectionViewCell: UICollectionViewCell {
     
     @objc
     private func likeButtonDidTap() {
-        isLiked ? likeButton.setImage(UIImage.likesNoActiveImage, for: .normal) : likeButton.setImage(UIImage.likesActiveImage, for: .normal)
-        isLiked = !isLiked
+        let image: UIImage = isLiked ? .likesNoActiveImage : .likesActiveImage
+        likeButton.setImage(image, for: .normal)
+        isLiked.toggle()
     }
 
     @objc
     private func cartButtonDidTap() {
-        isInCart ? cartButton.setImage(UIImage.cartEmptyImage, for: .normal) : cartButton.setImage(UIImage.cartDeleteImage, for: .normal)
-        isInCart = !isInCart
+        let image: UIImage = isInCart ? .cartEmptyImage : .cartDeleteImage
+        cartButton.setImage(image, for: .normal)
+        isInCart.toggle()
     }
 }
