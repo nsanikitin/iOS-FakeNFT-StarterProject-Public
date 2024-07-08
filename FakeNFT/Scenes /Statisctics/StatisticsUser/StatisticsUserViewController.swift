@@ -183,7 +183,7 @@ final class StatisticsUserViewController: UIViewController {
     
     @objc
     private func goToNFTCollection() {
-        if userNFTs.count == 0 {
+        if userNFTs.isEmpty {
             showAlertNFTsAreEmpty()
             return
         }
