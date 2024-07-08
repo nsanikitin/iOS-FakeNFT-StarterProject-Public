@@ -10,7 +10,7 @@ final class StatisticsService {
     
     private init() {}
     
-    // MARK: - Methods
+    // MARK: - Users fetching
     
     func fetchUsers(completion: @escaping (Result<[UsersModel], Error>) -> Void) {
         assert(Thread.isMainThread)
@@ -59,5 +59,57 @@ final class StatisticsService {
         )
         
         return userModel
+    }
+    
+    // MARK: - NFTs fetching
+    
+    func fetchNFTs(completion: @escaping (Result<[NFTModel], Error>) -> Void) {
+        assert(Thread.isMainThread)
+        
+        guard let request = nftRequest()  else {
+            assertionFailure("Invalid users request")
+            return
+        }
+        
+        URLSession.shared.objectTask(for: request) { [weak self] (response: Result<[NFTResult], Error>) in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let body):
+                let result = body.map { self.convertToNFTModel(nftResult: $0) }
+                completion(.success(result))
+            case .failure(let error):
+                completion(.failure(error))
+                print("[StatisticsService]: \(error.localizedDescription) \(request)")
+            }
+        }
+    }
+    
+    private func nftRequest() -> URLRequest? {
+        var request = URLRequest.makeHTTPRequest(
+            path: "/api/v1/nft",
+            httpMethod: "GET",
+            baseURL: URL(string: RequestConstants.baseURL)
+        )
+        
+        request?.setValue("application/json", forHTTPHeaderField: "Accept")
+        request?.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        
+        return request
+    }
+    
+    private func convertToNFTModel(nftResult: NFTResult) -> NFTModel {
+        let nftModel = NFTModel(
+            createdAt: nftResult.createdAt,
+            name: nftResult.name,
+            images: nftResult.images,
+            rating: nftResult.rating,
+            description: nftResult.description,
+            price: nftResult.price,
+            author: nftResult.author,
+            id: nftResult.id
+        )
+        
+        return nftModel
     }
  }
