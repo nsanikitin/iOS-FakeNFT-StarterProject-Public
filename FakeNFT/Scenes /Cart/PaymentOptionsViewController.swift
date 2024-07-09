@@ -13,7 +13,6 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
     private var presenter: PaymentOptionsPresenter!
     private var paymentOptions: [CurrencyModel] = []
     private var isLoading = false
-    private var selectedCurrencyId: String?
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -179,36 +178,17 @@ final class PaymentOptionsViewController: UIViewController, PaymentOptionsView {
     }
     
     @objc private func pay() {
-        guard let currencyId = selectedCurrencyId else {
-            showAlert(message: "Выберите способ оплаты")
-            return
-        }
-        presenter.pay(currencyId: currencyId)
+        presenter.pay()
     }
     
-    func showError(_ message: String) {
-        showRetryAlert(message: message)
+    func showError(_ alertController: UIAlertController) {
+        present(alertController, animated: true, completion: nil)
     }
     
     func showPaymentSuccess(_ orderId: String) {
         let successVC = PaymentSuccessViewController()
         successVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(successVC, animated: true)
-    }
-    
-    private func showAlert(message: String) {
-        let alertController = UIAlertController(title: "Payment", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    private func showRetryAlert(message: String) {
-        let alertController = UIAlertController(title: message, message: "", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
-            self?.pay()
-        })
-        present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -235,7 +215,8 @@ extension PaymentOptionsViewController: UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedCurrencyId = paymentOptions[indexPath.item].id
+        let selectedCurrencyId = paymentOptions[indexPath.item].id
+        presenter.selectCurrencyId(selectedCurrencyId)
     }
     
 }
