@@ -29,7 +29,7 @@ final class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .viewBackgroundColor
+        view.backgroundColor = .ypWhite
         setupUI()
         
         presenter.view = self
@@ -113,7 +113,7 @@ final class StatisticsViewController: UIViewController {
             target: self,
             action: #selector(sortButtonDidTap)
         )
-        sortButton.tintColor = .ypBlackUniversal
+        sortButton.tintColor = .ypBlack
         self.navigationItem.rightBarButtonItem = sortButton
     }
     

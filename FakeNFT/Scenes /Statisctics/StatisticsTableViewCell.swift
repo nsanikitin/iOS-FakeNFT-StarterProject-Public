@@ -17,7 +17,7 @@ final class StatisticsTableViewCell: UITableViewCell {
     private lazy var rankLabel = {
         let label = UILabel()
         label.font = UIFont.caption1
-        label.textColor = .ypBlackUniversal
+        label.textColor = .ypBlack
         label.textAlignment = .center
         return label
     }()
@@ -32,14 +32,14 @@ final class StatisticsTableViewCell: UITableViewCell {
     private lazy var nameLabel = {
         let label = UILabel()
         label.font = UIFont.headline3
-        label.textColor = .ypBlackUniversal
+        label.textColor = .ypBlack
         return label
     }()
     
     private lazy var nftQuantityLabel = {
         let label = UILabel()
         label.font = UIFont.headline3
-        label.textColor = .ypBlackUniversal
+        label.textColor = .ypBlack
         label.textAlignment = .center
         return label
     }()

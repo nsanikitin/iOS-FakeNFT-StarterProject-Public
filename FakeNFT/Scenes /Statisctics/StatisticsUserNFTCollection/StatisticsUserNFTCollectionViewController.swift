@@ -44,7 +44,7 @@ final class StatisticsUserNFTCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .viewBackgroundColor
+        view.backgroundColor = .ypWhite
         setupUI()
         
         presenter.view = self
@@ -103,7 +103,7 @@ final class StatisticsUserNFTCollectionViewController: UIViewController {
             target: self,
             action: #selector(backToStatisticsUserVC)
         )
-        backButton.tintColor = .ypBlackUniversal
+        backButton.tintColor = .ypBlack
         self.navigationItem.leftBarButtonItem = backButton
     }
     

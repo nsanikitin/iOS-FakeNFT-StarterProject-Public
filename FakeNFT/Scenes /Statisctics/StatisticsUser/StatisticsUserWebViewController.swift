@@ -13,7 +13,7 @@ final class StatisticsUserWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .viewBackgroundColor
+        view.backgroundColor = .ypWhite
         setupUI()
     }
     
@@ -101,7 +101,7 @@ final class StatisticsUserWebViewController: UIViewController {
             target: self,
             action: #selector(backToStatisticsUserVC)
         )
-        backButton.tintColor = .ypBlackUniversal
+        backButton.tintColor = .ypBlack
         self.navigationItem.leftBarButtonItem = backButton
     }
     

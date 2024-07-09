@@ -19,14 +19,15 @@ final class StatisticsUserViewController: UIViewController {
     private lazy var usernameLabel = {
         let label = UILabel()
         label.font = UIFont.headline3
-        label.textColor = .ypBlackUniversal
+        label.textColor = .ypBlack
         return label
     }()
     
     private lazy var userDescriptionTextView = {
         let textView = UITextView()
         textView.font = UIFont.caption2
-        textView.textColor = .ypBlackUniversal
+        textView.textColor = .ypBlack
+        textView.backgroundColor = .clear
         textView.isScrollEnabled = true
         textView.isEditable = false
         textView.textContainerInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 18)
@@ -38,7 +39,7 @@ final class StatisticsUserViewController: UIViewController {
         button.backgroundColor = .clear
         button.setTitle(NSLocalizedString("Statistics.goToUserWebsite", comment: "Перейти на сайт пользователя"),
                         for: .normal)
-        button.setTitleColor(.ypBlackUniversal, for: .normal)
+        button.setTitleColor(.ypBlack, for: .normal)
         button.titleLabel?.font = UIFont.caption1
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(goToUserWebsite), for: .touchUpInside)
@@ -46,7 +47,7 @@ final class StatisticsUserViewController: UIViewController {
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.ypBlackUniversal.cgColor
+        button.layer.borderColor = UIColor.ypBlack?.cgColor
         return button
     }()
     
@@ -61,7 +62,7 @@ final class StatisticsUserViewController: UIViewController {
     private lazy var nftCollectionLabel = {
         let label = UILabel()
         label.font = UIFont.caption1
-        label.textColor = .ypBlackUniversal
+        label.textColor = .ypBlack
         label.font = UIFont.bodyBold
         return label
     }()
@@ -69,7 +70,7 @@ final class StatisticsUserViewController: UIViewController {
     private lazy var nftCollectionImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "chevron.forward")
-        imageView.tintColor = .ypBlackUniversal
+        imageView.tintColor = .ypBlack
         return imageView
     }()
     
@@ -78,7 +79,7 @@ final class StatisticsUserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .viewBackgroundColor
+        view.backgroundColor = .ypWhite
         setupUI()
     }
     
@@ -128,7 +129,7 @@ final class StatisticsUserViewController: UIViewController {
             target: self,
             action: #selector(backToStaticsVC)
         )
-        backButton.tintColor = .ypBlackUniversal
+        backButton.tintColor = .ypBlack
         self.navigationItem.leftBarButtonItem = backButton
     }
     

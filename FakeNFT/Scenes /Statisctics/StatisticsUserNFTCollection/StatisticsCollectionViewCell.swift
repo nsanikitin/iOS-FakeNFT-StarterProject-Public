@@ -30,20 +30,21 @@ final class StatisticsCollectionViewCell: UICollectionViewCell {
     private lazy var nftNameLabel = {
         let label = UILabel()
         label.font = UIFont.bodyBold
-        label.textColor = .ypBlackUniversal
+        label.textColor = .ypBlack
         return label
     }()
     
     private lazy var nftCostLabel = {
         let label = UILabel()
         label.font = UIFont.caption3
-        label.textColor = .ypBlackUniversal
+        label.textColor = .ypBlack
         return label
     }()
     
     private lazy var cartButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(cartButtonDidTap), for: .touchUpInside)
+        button.tintColor = .ypBlack
         button.backgroundColor = .clear
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
         return button
