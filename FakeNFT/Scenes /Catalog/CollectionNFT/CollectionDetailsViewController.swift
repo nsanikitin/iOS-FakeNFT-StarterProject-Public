@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SafariServices
 
 final class CollectionDetailsViewController: UIViewController, ErrorView {
     
@@ -25,7 +26,7 @@ final class CollectionDetailsViewController: UIViewController, ErrorView {
     let collectionTitle = UILabel()
     var collectionImage = UIImage()
     let loadingIndicator = UIActivityIndicatorView(style: .large)
-    
+    let collectionOwnerTitle = UILabel()
     let authorTitle = UILabel()
     let descriptionNFT = UILabel()
     let scrollView = UIScrollView()
@@ -36,6 +37,37 @@ final class CollectionDetailsViewController: UIViewController, ErrorView {
     private let presenter: CollectionPresenter
     private var nfts: [Nft] = []
     private var nftCollectionViewHeightConstraint: NSLayoutConstraint?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .ypWhite
+        configureScrollView()
+        configureСontainerView()
+        configureCollectionImage()
+        configureCollectionCover()
+        configureCollectionTitle()
+        configureBackButton()
+        configureCollectionOwnerTitle()
+        configureAuthorTitle()
+        configureDescriptionNFT()
+        configureNftCollection()
+        
+        configureLoadingIndicator()
+        
+        presenter.viewController = self
+        presenter.setOnLoadCompletion { [weak self] nfts in
+            self?.nfts = nfts
+            self?.nftCollection.reloadData()
+        }
+        presenter.processNFTsLoading()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        nftCollection.layoutIfNeeded()
+        nftCollectionViewHeightConstraint?.constant = nftCollection.contentSize.height
+    }
     
     private func configureScrollView() {
         view.addSubview(scrollView)
@@ -134,21 +166,41 @@ final class CollectionDetailsViewController: UIViewController, ErrorView {
         ])
     }
     
+    private func configureCollectionOwnerTitle() {
+        containerView.addSubview(collectionOwnerTitle)
+        
+        collectionOwnerTitle.numberOfLines = 0
+        collectionOwnerTitle.font = .caption2
+        collectionOwnerTitle.textColor = .ypBlack
+        collectionOwnerTitle.text = "Автор коллекции: "
+        
+        collectionOwnerTitle.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            collectionOwnerTitle.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 13),
+            collectionOwnerTitle.leadingAnchor.constraint(equalTo: collectionTitle.leadingAnchor)
+        ])
+    }
+    
     private func configureAuthorTitle() {
         containerView.addSubview(authorTitle)
         
         authorTitle.numberOfLines = 0
-        authorTitle.textColor = .ypBlack
-        authorTitle.font = .caption2
+        authorTitle.font = .caption1
+        authorTitle.textColor = .ypBlueUniversal
+        authorTitle.isUserInteractionEnabled = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(authorLinkTapped))
+        authorTitle.addGestureRecognizer(tapGesture)
         
         authorTitle.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            authorTitle.topAnchor.constraint(equalTo: collectionTitle.bottomAnchor, constant: 13),
-            authorTitle.leadingAnchor.constraint(equalTo: collectionTitle.leadingAnchor),
-            authorTitle.trailingAnchor.constraint(equalTo: collectionTitle.trailingAnchor)
+            authorTitle.leadingAnchor.constraint(equalTo: collectionOwnerTitle.trailingAnchor, constant: 4),
+            authorTitle.bottomAnchor.constraint(equalTo: collectionOwnerTitle.bottomAnchor),
         ])
     }
+    
     
     private func configureDescriptionNFT() {
         containerView.addSubview(descriptionNFT)
@@ -161,7 +213,7 @@ final class CollectionDetailsViewController: UIViewController, ErrorView {
         descriptionNFT.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            descriptionNFT.topAnchor.constraint(equalTo: authorTitle.bottomAnchor, constant: 5),
+            descriptionNFT.topAnchor.constraint(equalTo: collectionOwnerTitle.bottomAnchor, constant: 5),
             descriptionNFT.leadingAnchor.constraint(equalTo: collectionTitle.leadingAnchor),
             descriptionNFT.trailingAnchor.constraint(equalTo: collectionTitle.trailingAnchor)
         ])
@@ -219,7 +271,7 @@ final class CollectionDetailsViewController: UIViewController, ErrorView {
             collectionCover.image = collectionImage
         }
         collectionTitle.text = catalog.name
-        authorTitle.text = "Автор коллекции: \(catalog.author)"
+        authorTitle.text = catalog.author
         descriptionNFT.text = catalog.description
         nftCollection.reloadData()
     }
@@ -233,38 +285,16 @@ final class CollectionDetailsViewController: UIViewController, ErrorView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .ypWhite
-        configureScrollView()
-        configureСontainerView()
-        configureCollectionImage()
-        configureCollectionCover()
-        configureCollectionTitle()
-        configureBackButton()
-        configureAuthorTitle()
-        configureDescriptionNFT()
-        configureNftCollection()
-        
-        configureLoadingIndicator()
-        
-        presenter.viewController = self
-        presenter.setOnLoadCompletion { [weak self] nfts in
-            self?.nfts = nfts
-            self?.nftCollection.reloadData()
-        }
-        presenter.processNFTsLoading()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        nftCollection.layoutIfNeeded()
-        nftCollectionViewHeightConstraint?.constant = nftCollection.contentSize.height
-    }
-    
     @objc private func backButtonTapped() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func authorLinkTapped() {
+        if let url = URL(string: "https://practicum.yandex.ru/ios-developer/") {
+            let webViewController = WebViewController(urlName: url)
+            webViewController.modalPresentationStyle = .fullScreen
+            present(webViewController, animated: true)
+        }
     }
 }
 
