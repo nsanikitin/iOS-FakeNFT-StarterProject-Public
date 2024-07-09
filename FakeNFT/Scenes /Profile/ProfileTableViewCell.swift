@@ -43,7 +43,7 @@ final class ProfileTableViewCell: UITableViewCell {
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 22),
-            
+
             chevronImageView.heightAnchor.constraint(equalToConstant: 16),
             chevronImageView.widthAnchor.constraint(equalToConstant: 10),
             chevronImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -52,6 +52,6 @@ final class ProfileTableViewCell: UITableViewCell {
     }
     
     func updateTitle(text: String) {
-        titleLabel.text = text
+        titleLabel.text = "\(text)"
     }
 }

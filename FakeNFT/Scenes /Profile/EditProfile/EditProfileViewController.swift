@@ -10,6 +10,8 @@ import UIKit
 protocol EditProfileView: AnyObject {
     func displayProfile(_ profile: ProfileModel)
     func closeView(with updatedProfile: ProfileModel)
+    func showLoading()
+    func hideLoading()
 }
 
 final class EditProfileViewController: UIViewController {
@@ -377,15 +379,27 @@ extension EditProfileViewController {
 
 extension EditProfileViewController: EditProfileView {
     func displayProfile(_ profile: ProfileModel) {
-        avatarImage.image = UIImage(named: profile.avatar ?? "avatarMockProfile")
+        if let urlString = profile.avatar, let url = URL(string: urlString) {
+            avatarImage.loadImage(from: url, placeholder: UIImage(named: "avatarMockProfile"))
+        } else {
+            avatarImage.image = UIImage(named: "avatarMockProfile")
+        }
         nameTextField.text = profile.name
         descriptionTextView.text = profile.description
         urlTextField.text = profile.website
     }
-
+    
     func closeView(with updatedProfile: ProfileModel) {
         delegate?.didUpdateProfile(updatedProfile)
         dismiss(animated: true)
+    }
+    
+    func showLoading() {
+        UIBlockingProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        UIBlockingProgressHUD.dismiss()
     }
 }
 

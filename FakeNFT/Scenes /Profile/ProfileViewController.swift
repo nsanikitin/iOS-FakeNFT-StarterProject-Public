@@ -14,10 +14,13 @@ protocol ProfileViewControllerDelegate: AnyObject {
 protocol ProfileView: AnyObject {
     func displayProfile(_ profile: ProfileModel)
     func reloadTableView()
+    func showLoading()
+    func hideLoading()
+    func showError(_ error: Error)
 }
 
 final class ProfileViewController: UIViewController {
-
+    
     // MARK: - Private Properties
     
     private var presenter: ProfilePresenter?
@@ -136,14 +139,18 @@ final class ProfileViewController: UIViewController {
         navigationItem.rightBarButtonItem = editButton
         navigationController?.navigationBar.isHidden = false
     }
-    
 }
 
 // MARK: - Extensions
 
 extension ProfileViewController: ProfileView {
+    
     func displayProfile(_ profile: ProfileModel) {
-        avatarImage.image = UIImage(named: profile.avatar ?? "avatarMockProfile")
+        if let urlString = profile.avatar, let url = URL(string: urlString) {
+            avatarImage.loadImage(from: url, placeholder: UIImage(named: "avatarMockProfile"))
+        } else {
+            avatarImage.image = UIImage(named: "avatarMockProfile")
+        }
         nameLabel.text = profile.name
         bioTextView.text = profile.description
         urlButton.setTitle(profile.website, for: .normal)
@@ -151,6 +158,29 @@ extension ProfileViewController: ProfileView {
     
     func reloadTableView() {
         tableView.reloadData()
+    }
+    
+    func showLoading() {
+        UIBlockingProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        UIBlockingProgressHUD.dismiss()
+    }
+    
+    func showError(_ error: Error) {
+        let alertController = UIAlertController(
+            title: "Ошибка",
+            message: error.localizedDescription,
+            preferredStyle: .alert
+        )
+        let retryAction = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            self?.presenter?.viewDidLoad()
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        alertController.addAction(retryAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
 }
 

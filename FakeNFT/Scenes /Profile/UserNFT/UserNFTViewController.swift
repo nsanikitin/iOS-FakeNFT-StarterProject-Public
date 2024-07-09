@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol UserNFTViewProtocol: AnyObject {
+    func displayUserNFT(_ userNfts: [ProfileNFT]?)
+    func showLoading()
+    func hideLoading()
+}
+
 final class UserNFTViewController: UIViewController {
+    private var presenter: UserNFTPresenter?
     
     // MARK: - Private Properties
     
@@ -29,18 +36,18 @@ final class UserNFTViewController: UIViewController {
         label.text = "У Вас ещё нет NFT"
         return label
     }()
-    
-    private let nfts: [NFTModel] = MockData.nfts
-    
+ 
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter = UserNFTPresenter(view: self)
         setupUI()
         setupNavigationItem()
-        updateUI()
         tableView.dataSource = self
         tableView.delegate = self
+        presenter?.viewDidLoad()
+        updateUI()
     }
     
     // MARK: - Public Functions
@@ -53,8 +60,12 @@ final class UserNFTViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    private func updateUI() {
-        if nfts.isEmpty {
+    // MARK: - Private Functions
+    
+    func updateUI() {
+        guard let presenter = presenter else { return }
+        
+        if presenter.userNfts.isEmpty {
             placeHolderLabel.isHidden = false
             tableView.isHidden = true
         } else {
@@ -63,8 +74,6 @@ final class UserNFTViewController: UIViewController {
             tableView.reloadData()
         }
     }
-    
-    // MARK: - Private Functions
     
     private func setupUI() {
         view.backgroundColor = .ypWhite
@@ -114,7 +123,7 @@ final class UserNFTViewController: UIViewController {
 
 extension UserNFTViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return MockData.nfts.count
+        return presenter?.userNfts.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -124,8 +133,9 @@ extension UserNFTViewController: UITableViewDataSource {
         ) as? UserNFTTableViewCell else { return UITableViewCell() }
         
         cell.selectionStyle = .none
-        let nft = MockData.nfts[indexPath.row]
-        cell.configure(with: nft)
+        if let nft = presenter?.userNfts[indexPath.row] {
+            cell.configure(with: nft)
+        }
         return cell
     }
 }
@@ -139,5 +149,21 @@ extension UserNFTViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+// MARK: - Extensions
+
+extension UserNFTViewController: UserNFTViewProtocol {
+    func displayUserNFT(_ userNfts: [ProfileNFT]?) {
+        updateUI()
+    }
+    
+    func showLoading() {
+        UIBlockingProgressHUD.show()
+    }
+    
+    func hideLoading() {
+        UIBlockingProgressHUD.dismiss()
     }
 }
