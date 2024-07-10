@@ -44,7 +44,6 @@ final class EditProfilePresenter {
                 print("Failed to update profile: \(error)")
             }
         }
-        
     }
     
     func updateAvatarURL(_ newURL: String) {

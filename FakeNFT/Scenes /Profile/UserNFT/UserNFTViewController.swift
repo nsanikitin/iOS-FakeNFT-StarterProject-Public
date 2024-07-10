@@ -11,6 +11,7 @@ protocol UserNFTViewProtocol: AnyObject {
     func displayUserNFT(_ userNfts: [ProfileNFT]?)
     func showLoading()
     func hideLoading()
+    func updateLikes(_ likes: [String])
 }
 
 final class UserNFTViewController: UIViewController {
@@ -134,8 +135,10 @@ extension UserNFTViewController: UITableViewDataSource {
         
         cell.selectionStyle = .none
         if let nft = presenter?.userNfts[indexPath.row] {
-            cell.configure(with: nft)
+            let isLiked = presenter?.isLiked(nftId: nft.id) ?? false
+            cell.configure(with: nft, isLiked: isLiked)
         }
+        cell.delegate = self
         return cell
     }
 }
@@ -165,5 +168,16 @@ extension UserNFTViewController: UserNFTViewProtocol {
     
     func hideLoading() {
         UIBlockingProgressHUD.dismiss()
+    }
+    
+    func updateLikes(_ likes: [String]) {
+        tableView.reloadData()
+    }
+}
+
+extension UserNFTViewController: UserNFTTableViewCellDelegate {
+    func didTapLikeButton(_ cell: UserNFTTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        presenter?.didTapLikeButton(at: indexPath)
     }
 }

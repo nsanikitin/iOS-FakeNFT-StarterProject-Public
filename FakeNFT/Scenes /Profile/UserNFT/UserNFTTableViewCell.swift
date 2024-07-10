@@ -8,8 +8,13 @@
 import UIKit
 import Kingfisher
 
+protocol UserNFTTableViewCellDelegate: AnyObject {
+    func didTapLikeButton(_ cell: UserNFTTableViewCell)
+}
+
 final class UserNFTTableViewCell: UITableViewCell {
     static let reuseIdentifier = "UserNFTTableViewCell"
+    weak var delegate: UserNFTTableViewCellDelegate?
     
     // MARK: - Private Properties
     
@@ -86,7 +91,7 @@ final class UserNFTTableViewCell: UITableViewCell {
     // MARK: - Private Functions
     
     @objc func likeButtonTapped() {
-        // TODO: Логика для лайка
+        delegate?.didTapLikeButton(self)
     }
     
     private func setupUI() {
@@ -133,10 +138,11 @@ final class UserNFTTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with nft: ProfileNFT) {
+    func configure(with nft: ProfileNFT, isLiked: Bool) {
         if let firstImageURL = nft.images.first, let url = URL(string: firstImageURL) {
             nftImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
                 }
+        likeButton.setImage(isLiked ? UIImage.likesActiveImage : UIImage.likesNoActiveImage, for: .normal)
         nameLabel.text = nft.name
         authorLabel.text = "от \(nft.author)"
         costLabel.text = "\(nft.price) ETH"

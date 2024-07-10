@@ -11,6 +11,8 @@ final class FavoriteNFTViewController: UIViewController {
     
     // MARK: - Private Properties
     
+    private var favoriteNFTS: [ProfileNFT] = []
+    
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(
             frame: .zero,

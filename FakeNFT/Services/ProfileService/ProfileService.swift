@@ -16,7 +16,7 @@ final class ProfileService {
     private var urlSessionTask: URLSessionTask?
     private let tokenKey = TokenKeys.practicumMobile
     
-    func fetchProfile(completion: @escaping (Result<ProfileModel, Error>)-> Void) {
+    func fetchProfile(completion: @escaping (Result<ProfileModel, Error>) -> Void) {
         guard let request = makeProfileGetRequest() else {
             assertionFailure("Invalid request")
             completion(.failure(NetworkError.invalidRequest))
@@ -68,6 +68,69 @@ final class ProfileService {
         }
         request.httpBody = dataString.data(using: .utf8)
         return request
+    }
+    
+    func updateLikes(_ likeRequest: LikeRequest, completion: @escaping (Result<ProfileModel, Error>) -> Void) {
+        //        guard let url = RequestConstants.profileURL else {
+        guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1") else {
+            assertionFailure("Invalid URL")
+            completion(.failure(NetworkError.invalidRequest))
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethods.put
+        request.setValue(HTTPHeaders.applicationFormUrlEncoded, forHTTPHeaderField: HeaderFields.content)
+        request.setValue(tokenKey, forHTTPHeaderField: HeaderFields.token)
+        
+        var dataString = ""
+        likeRequest.likes.forEach { likeId in
+            if !dataString.isEmpty {
+                dataString += "&"
+            }
+            dataString += "likes=\(likeId)"
+        }
+        request.httpBody = dataString.data(using: .utf8)
+        
+        print("Request URL: \(url)")
+        print("Request Body: \(dataString)")
+        
+        //        do {
+        //            request.httpBody = try JSONEncoder().encode(likeRequest)
+        //        } catch {
+        //            completion(.failure(error))
+        //            return
+        //        }
+        
+        urlSessionTask = urlSession.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Network error: \(error)")
+                completion(.failure(error))
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("HTTP Response: \(httpResponse.statusCode)")
+                if httpResponse.statusCode == 200 {
+                    guard let data = data else {
+                        print("No data received")
+                        completion(.failure(NetworkError.noData))
+                        return
+                    }
+                    
+                    do {
+                        let updatedProfile = try JSONDecoder().decode(ProfileModel.self, from: data)
+                        completion(.success(updatedProfile))
+                    } catch {
+                        print("Decoding error: \(error)")
+                        completion(.failure(error))
+                    }
+                } else {
+                    print("HTTP error: statusCode = \(httpResponse.statusCode)")
+                    completion(.failure(NetworkError.invalidResponse))
+                }
+            }
+        }
+        urlSessionTask?.resume()
     }
 }
 
