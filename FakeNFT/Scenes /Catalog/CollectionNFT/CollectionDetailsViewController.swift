@@ -304,7 +304,9 @@ extension CollectionDetailsViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionNftCell.reuseIdentifier, for: indexPath) as? CollectionNftCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CollectionNftCell.reuseIdentifier,
+            for: indexPath) as? CollectionNftCell else {
             return UICollectionViewCell()
         }
         let nft = presenter.returnCollectionCell(for: indexPath.row)
@@ -314,13 +316,17 @@ extension CollectionDetailsViewController: UICollectionViewDataSource {
 }
 
 extension CollectionDetailsViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         let interItemSpacing: CGFloat = 10
         let width = (collectionView.bounds.width - 2 * interItemSpacing) / 3
         return CGSize(width: width, height: 202)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
     }
 }
