@@ -11,7 +11,9 @@ final class FavoriteNFTViewController: UIViewController {
     
     // MARK: - Private Properties
     
-    private var favoriteNFTS: [ProfileNFT] = []
+    private var favoriteNfts: [ProfileNFT] = []
+    private var nftIds: [String] = []
+    private(set) var profile: ProfileModel = ProfileModel()
     
     private let collectionView: UICollectionView = {
         let collectionView = UICollectionView(
@@ -34,18 +36,17 @@ final class FavoriteNFTViewController: UIViewController {
         label.text = "У Вас ещё нет избранных NFT"
         return label
     }()
-    
-    private let nfts: [NFTModel] = MockData.nftsCollection
-    
+
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupNavigationItem()
-        updateUI()
+//        updateUI()
         collectionView.delegate = self
         collectionView.dataSource = self
+        fetchProfile()
     }
     
     // MARK: - Public Functions
@@ -57,7 +58,7 @@ final class FavoriteNFTViewController: UIViewController {
     // MARK: - Private Functions
     
     private func updateUI() {
-        if nfts.isEmpty {
+        if favoriteNfts.isEmpty {
             placeHolderLabel.isHidden = false
             collectionView.isHidden = true
         } else {
@@ -100,12 +101,69 @@ final class FavoriteNFTViewController: UIViewController {
         backButton.tintColor = .ypBlack
         navigationItem.leftBarButtonItem = backButton
     }
+    
+    private func fetchProfile() {
+        ProfileService.shared.fetchProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                self?.fetchFavoriteNFTs()
+            case .failure(let error):
+                print("Failed to load profile: \(error)")
+            }
+        }
+    }
+    
+    private func fetchFavoriteNFTs() {
+        UIBlockingProgressHUD.show()
+        let nftIds = profile.likes
+        
+        ProfileService.shared.fetchFavoriteNFTs(nftIds) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let nfts):
+                    self?.favoriteNfts = nfts
+                    self?.updateUI()
+                case .failure(let error):
+                    print("Failed to load NFTs: \(error)")
+                }
+            }
+        }
+    }
+    
+    private func updateLikes(for nft: ProfileNFT) {
+        UIBlockingProgressHUD.show()
+        var updatedLikes = profile.likes
+        if let index = updatedLikes.firstIndex(of: nft.id) {
+            updatedLikes.remove(at: index)
+        } 
+        
+        let likeRequest = LikeRequest(likes: updatedLikes)
+        
+        ProfileService.shared.updateLikes(likeRequest) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            switch result {
+            case .success(let updatedProfile):
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.profile = updatedProfile
+                    if let index = self.favoriteNfts.firstIndex(where: { $0.id == nft.id }) {
+                        self.favoriteNfts.remove(at: index)
+                    }
+                    self.updateUI()
+                }
+            case .failure(let error):
+                print("Error updating likes: \(error)")
+            }
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
 extension FavoriteNFTViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return nfts.count
+        return favoriteNfts.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -115,8 +173,11 @@ extension FavoriteNFTViewController: UICollectionViewDataSource {
             for: indexPath
         ) as? FavoriteNFTCollectionViewCell
         guard let cell = cell else { return UICollectionViewCell() }
-
-        cell.configure(with: nfts[indexPath.row])
+        
+        let nft = favoriteNfts[indexPath.row]
+        let isLiked = profile.likes.contains(nft.id)
+        cell.configure(with: nft, isLiked: isLiked)
+        cell.delegate = self
 
         return cell
     }
@@ -154,4 +215,15 @@ extension FavoriteNFTViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
     }
+}
+
+// MARK: - Extension
+
+extension FavoriteNFTViewController: FavoriteNFTCollectionViewDelegate {
+    func didTapLikeButton(_ cell: FavoriteNFTCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let nft = favoriteNfts[indexPath.row]
+        updateLikes(for: nft)
+    }
+    
 }

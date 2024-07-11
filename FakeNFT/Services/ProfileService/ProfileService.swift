@@ -71,8 +71,7 @@ final class ProfileService {
     }
     
     func updateLikes(_ likeRequest: LikeRequest, completion: @escaping (Result<ProfileModel, Error>) -> Void) {
-        //        guard let url = RequestConstants.profileURL else {
-        guard let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/profile/1") else {
+        guard let url = RequestConstants.profileURL else {
             assertionFailure("Invalid URL")
             completion(.failure(NetworkError.invalidRequest))
             return
@@ -83,23 +82,18 @@ final class ProfileService {
         request.setValue(tokenKey, forHTTPHeaderField: HeaderFields.token)
         
         var dataString = ""
-        likeRequest.likes.forEach { likeId in
-            if !dataString.isEmpty {
-                dataString += "&"
+        if likeRequest.likes.isEmpty {
+            dataString = "likes=null"
+        } else {
+            likeRequest.likes.forEach { likeId in
+                if !dataString.isEmpty {
+                    dataString += "&"
+                }
+                dataString += "likes=\(likeId)"
             }
-            dataString += "likes=\(likeId)"
         }
+
         request.httpBody = dataString.data(using: .utf8)
-        
-        print("Request URL: \(url)")
-        print("Request Body: \(dataString)")
-        
-        //        do {
-        //            request.httpBody = try JSONEncoder().encode(likeRequest)
-        //        } catch {
-        //            completion(.failure(error))
-        //            return
-        //        }
         
         urlSessionTask = urlSession.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -164,6 +158,18 @@ extension ProfileService {
             }
         }
         urlSessionTask?.resume()
+    }
+    
+    func fetchFavoriteNFTs(_ ids: [String], completion: @escaping (Result<[ProfileNFT], Error>) -> Void) {
+        fetchNFTs(ids) { result in
+            switch result {
+            case .success(let allNfts):
+                let favoriteNfts = allNfts.filter { ids.contains($0.id) }
+                completion(.success(favoriteNfts))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 }
 

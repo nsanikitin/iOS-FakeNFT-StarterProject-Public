@@ -56,20 +56,19 @@ final class UserNFTPresenter {
     }
     
     func didTapLikeButton(at indexPath: IndexPath) {
-        let nft = userNfts[indexPath.row] 
-        
+        view?.showLoading()
+        let nft = userNfts[indexPath.row]
         var updatedLikes = profile.likes
-        
         if let index = updatedLikes.firstIndex(of: nft.id) {
             updatedLikes.remove(at: index)
         } else {
             updatedLikes.append(nft.id)
         }
-        
         let likeRequest = LikeRequest(likes: updatedLikes)
         print("Before updateLikes: \(likeRequest.likes)")
         
         profileService.updateLikes(likeRequest) { [weak self] result in
+            self?.view?.hideLoading()
             switch result {
             case .success:
                 DispatchQueue.main.async { [weak self] in

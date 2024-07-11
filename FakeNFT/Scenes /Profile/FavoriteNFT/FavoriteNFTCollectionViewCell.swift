@@ -6,9 +6,15 @@
 //
 
 import UIKit
+import Kingfisher
+
+protocol FavoriteNFTCollectionViewDelegate: AnyObject {
+    func didTapLikeButton(_ cell: FavoriteNFTCollectionViewCell)
+}
 
 final class FavoriteNFTCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "FavoriteNFTCollectionViewCell"
+    weak var delegate: FavoriteNFTCollectionViewDelegate?
     
     private let nftImageView: UIImageView = {
         let imageView = UIImageView()
@@ -31,6 +37,8 @@ final class FavoriteNFTCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.bodyBold
         label.textAlignment = .left
         label.textColor = .ypBlack
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 1
         return label
     }()
     
@@ -57,7 +65,7 @@ final class FavoriteNFTCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func likeButtonTapped() {
-        // TODO: Логика для лайка
+        delegate?.didTapLikeButton(self)
     }
     
     private func setupUI() {
@@ -84,6 +92,7 @@ final class FavoriteNFTCollectionViewCell: UICollectionViewCell {
             ratingImageView.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
             
             nameLabel.leadingAnchor.constraint(equalTo: ratingImageView.leadingAnchor),
+            nameLabel.widthAnchor.constraint(equalToConstant: 76),
             nameLabel.bottomAnchor.constraint(equalTo: ratingImageView.topAnchor, constant: -4),
             
             costLabel.topAnchor.constraint(equalTo: ratingImageView.bottomAnchor, constant: 8),
@@ -91,10 +100,13 @@ final class FavoriteNFTCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(with nft: NFTModel) {
-        nftImageView.image = UIImage(named: nft.images.first ?? "")
+    func configure(with nft: ProfileNFT, isLiked: Bool) {
+        if let firstImageURL = nft.images.first, let url = URL(string: firstImageURL) {
+            nftImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
+        }
         nameLabel.text = nft.name
         costLabel.text = "\(nft.price) ETH"
+        likeButton.setImage(isLiked ? UIImage.likesActiveImage : UIImage.likesNoActiveImage, for: .normal)
         
         switch nft.rating {
         case 1:
