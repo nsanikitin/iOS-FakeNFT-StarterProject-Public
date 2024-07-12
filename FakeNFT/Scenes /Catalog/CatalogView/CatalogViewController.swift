@@ -86,7 +86,6 @@ final class CatalogViewController: UIViewController {
     
     @objc
     private func tapFiltersButton() {
-//        print("TODO in Module3")
         let action = UIAlertController(
             title: "Сортировка",
             message: nil,
@@ -152,7 +151,8 @@ extension CatalogViewController: UITableViewDelegate {
         let collectionDetailsVC = CollectionDetailsViewController(
             presenter: CollectionPresenter(
                 nftModel: catalogItems[indexPath.row],
-                nftService: nftService
+                nftService: nftService,
+                collectionService: CollectionService.shared
             )
         )
         

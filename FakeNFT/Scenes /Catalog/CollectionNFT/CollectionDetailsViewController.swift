@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SafariServices
+import ProgressHUD
 
 final class CollectionDetailsViewController: UIViewController, ErrorView {
     
@@ -37,6 +38,15 @@ final class CollectionDetailsViewController: UIViewController, ErrorView {
     private let presenter: CollectionPresenter
     private var nfts: [Nft] = []
     private var nftCollectionViewHeightConstraint: NSLayoutConstraint?
+    
+    private func indexPath(for itemId: String) -> IndexPath? {
+        for (index, nft) in nfts.enumerated() {
+            if nft.id == itemId {
+                return IndexPath(row: index, section: 0)
+            }
+        }
+        return nil
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -296,11 +306,29 @@ final class CollectionDetailsViewController: UIViewController, ErrorView {
             present(webViewController, animated: true)
         }
     }
+    
+    func reloadCollectionView() {
+        nftCollection.reloadData()
+    }
+    
+    func updateLikeButtonColor(isLiked: Bool, for itemId: String) {
+        guard let indexPath = indexPath(for: itemId) else { return }
+        if let cell = nftCollection.cellForItem(at: indexPath) as? CollectionNftCell {
+            cell.setLikeButtonState(isLiked: isLiked)
+        }
+    }
+    
+    func updateCartButtonImage(isAddedToCart: Bool, for itemId: String) {
+        guard let indexPath = indexPath(for: itemId) else { return }
+        if let cell = nftCollection.cellForItem(at: indexPath) as? CollectionNftCell {
+            cell.setCartButtonState(isAdded: isAddedToCart)
+        }
+    }
 }
 
 extension CollectionDetailsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return  nfts.count
+        return nfts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -310,7 +338,10 @@ extension CollectionDetailsViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         let nft = presenter.returnCollectionCell(for: indexPath.row)
+        let nftx = nfts[indexPath.row]
+        cell.nft = nftx
         cell.configure(data: nft)
+        cell.delegate = self
         return cell
     }
 }
@@ -328,5 +359,33 @@ extension CollectionDetailsViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
+    }
+}
+
+extension CollectionDetailsViewController: CollectionNftCellDelegate {
+    func cartButtonTapped(cell: CollectionNftCell, for itemId: String) {
+        presenter.changeCart(nftID: itemId) { result in
+            switch result {
+            case .success(let isAdded):
+                cell.setCartButtonState(isAdded: isAdded)
+                ProgressHUD.dismiss()
+            case .failure(let error):
+                print(error)
+                ProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    func likeButtonTapped(cell: CollectionNftCell, for itemId: String) {
+        presenter.changeLike(nftID: itemId) { result in
+            switch result {
+            case .success(let isAdded):
+                cell.setLikeButtonState(isLiked: isAdded)
+                ProgressHUD.dismiss()
+            case .failure(let error):
+                print(error)
+                ProgressHUD.dismiss()
+            }
+        }
     }
 }
