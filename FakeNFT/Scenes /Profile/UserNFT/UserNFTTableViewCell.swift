@@ -60,7 +60,7 @@ final class UserNFTTableViewCell: UITableViewCell {
         label.font = UIFont.caption2
         label.textColor = .ypBlack
         label.lineBreakMode = .byTruncatingTail
-        label.numberOfLines = 1
+        label.numberOfLines = 2
         return label
     }()
     
@@ -133,7 +133,7 @@ final class UserNFTTableViewCell: UITableViewCell {
             ratingImageView.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
             
             authorLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            authorLabel.trailingAnchor.constraint(equalTo: costLabel.leadingAnchor, constant: -8),
+            authorLabel.widthAnchor.constraint(equalToConstant: 78),
             authorLabel.topAnchor.constraint(equalTo: ratingImageView.bottomAnchor, constant: 4),
         ])
     }
@@ -144,7 +144,7 @@ final class UserNFTTableViewCell: UITableViewCell {
                 }
         likeButton.setImage(isLiked ? UIImage.likesActiveImage : UIImage.likesNoActiveImage, for: .normal)
         nameLabel.text = nft.name
-        authorLabel.text = "от \(nft.author)"
+        setAuthorLabelText(nft.author)
         costLabel.text = "\(nft.price) ETH"
         
         switch nft.rating {
@@ -161,5 +161,27 @@ final class UserNFTTableViewCell: UITableViewCell {
         default:
             ratingImageView.image = nil
         }
+    }
+    
+    private func setAuthorLabelText(_ author: String) {
+        let authorName = extractAuthorName(author)
+        let fullText = "от \(authorName)"
+        let attributedText = NSMutableAttributedString(string: fullText)
+        let range = NSRange(location: 0, length: fullText.count)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = .byWordWrapping
+        attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
+        authorLabel.attributedText = attributedText
+    }
+    
+    private func extractAuthorName(_ author: String) -> String {
+        let prefix = "https://"
+        let suffix = ".fakenfts.org/"
+        guard author.hasPrefix(prefix), author.hasSuffix(suffix) else {
+            return author
+        }
+        let startIndex = author.index(author.startIndex, offsetBy: prefix.count)
+        let endIndex = author.index(author.endIndex, offsetBy: -suffix.count)
+        return String(author[startIndex..<endIndex])
     }
 }
