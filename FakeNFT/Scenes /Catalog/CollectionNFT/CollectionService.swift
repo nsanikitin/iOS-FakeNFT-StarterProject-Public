@@ -16,7 +16,7 @@ final class CollectionService {
     var visibleNFT: [Nft] = []
     var nft: Nft?
     
-    func changeLike(newLikes: [String], profile: ProfileModel, completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeLike(newLikes: [String], profile: ProfileModelNFT, completion: @escaping (Result<Void, Error>) -> Void) {
         
         guard let nft = self.nft else { return }
         let likesString = newLikes.joined(separator: ",")
@@ -49,7 +49,7 @@ final class CollectionService {
         task.resume()
     }
     
-    func changeCart(newCart: [String], cart: Cart, completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeCart(newCart: [String], cart: CartModel, completion: @escaping (Result<Void, Error>) -> Void) {
         let cartString = newCart.joined(separator: ",")
         let url = URL(string: "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net/api/v1/orders/1")!
         var request = URLRequest(url: url)
@@ -73,7 +73,7 @@ final class CollectionService {
         task.resume()
     }
     
-    func getProfile(completion: @escaping (Result<ProfileModel, Error>) -> Void) {
+    func getProfile(completion: @escaping (Result<ProfileModelNFT, Error>) -> Void) {
         let headers = [
             "Accept": "application/json",
             "X-Practicum-Mobile-Token": "61d3c8db-a147-4ae1-87cc-74329c18ff32"
@@ -95,7 +95,7 @@ final class CollectionService {
             }
             
             do {
-                let object = try JSONDecoder().decode(ProfileModel.self, from: data)
+                let object = try JSONDecoder().decode(ProfileModelNFT.self, from: data)
                 completion(.success(object))
             } catch {
                 completion(.failure(error))
@@ -104,7 +104,7 @@ final class CollectionService {
         task.resume()
     }
     
-    func getCart(completion: @escaping (Result<Cart, Error>) -> Void) {
+    func getCart(completion: @escaping (Result<CartModel, Error>) -> Void) {
         let headers = [
             "Accept": "application/json",
             "X-Practicum-Mobile-Token": "61d3c8db-a147-4ae1-87cc-74329c18ff32"
@@ -126,7 +126,7 @@ final class CollectionService {
             }
             
             do {
-                let object = try JSONDecoder().decode(Cart.self, from: data)
+                let object = try JSONDecoder().decode(CartModel.self, from: data)
                 completion(.success(object))
             } catch {
                 completion(.failure(error))
