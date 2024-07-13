@@ -7,9 +7,19 @@
 
 import Foundation
 
+protocol UserNFTPresenterDelegate: AnyObject {
+    func didUpdateUserNFTCount(_ count: Int)
+}
+
 final class UserNFTPresenter {
+    weak var userNftCountDelegate: UserNFTPresenterDelegate?
     private weak var view: UserNFTViewProtocol?
-    private(set) var userNfts: [ProfileNFT] = []
+    private(set) var userNfts: [ProfileNFT] = [] {
+        didSet {
+            print("userNfts didSet called with count: \(userNfts.count)")
+            userNftCountDelegate?.didUpdateUserNFTCount(userNfts.count)
+        }
+    }
     private(set) var profile: ProfileModel = ProfileModel()
     private var nftIds: [String] = []
     private let profileService = ProfileService.shared
@@ -93,5 +103,17 @@ final class UserNFTPresenter {
     
     func isLiked(nftId: String) -> Bool {
         return profile.likes.contains(nftId)
+    }
+    
+    func sortNFTs(by filter: FilterNFT){
+        switch filter {
+        case .price:
+            userNfts.sort { $0.price > $1.price }
+        case .rating:
+            userNfts.sort { $0.rating > $1.rating }
+        case .name:
+            userNfts.sort { $0.name < $1.name }
+        }
+        view?.reloadData()
     }
 }
