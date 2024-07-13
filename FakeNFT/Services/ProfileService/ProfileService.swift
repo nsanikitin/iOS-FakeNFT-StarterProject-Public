@@ -103,10 +103,8 @@ final class ProfileService {
             }
             
             if let httpResponse = response as? HTTPURLResponse {
-                print("HTTP Response: \(httpResponse.statusCode)")
                 if httpResponse.statusCode == 200 {
                     guard let data = data else {
-                        print("No data received")
                         completion(.failure(NetworkError.noData))
                         return
                     }
@@ -115,7 +113,6 @@ final class ProfileService {
                         let updatedProfile = try JSONDecoder().decode(ProfileModel.self, from: data)
                         completion(.success(updatedProfile))
                     } catch {
-                        print("Decoding error: \(error)")
                         completion(.failure(error))
                     }
                 } else {

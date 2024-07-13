@@ -123,10 +123,6 @@ extension FavoriteNFTViewController: UICollectionViewDataSource {
         ) as? FavoriteNFTCollectionViewCell
         guard let cell = cell else { return UICollectionViewCell() }
         
-//        let nft = favoriteNfts[indexPath.row]
-        //        let isLiked = profile.likes.contains(nft.id)
-        //        cell.configure(with: nft, isLiked: isLiked)
-        
         if let nft = presenter?.favoriteNfts[indexPath.row] {
             let isLiked = presenter?.profile.likes.contains(nft.id) ?? false
             cell.configure(with: nft, isLiked: isLiked)
@@ -177,9 +173,6 @@ extension FavoriteNFTViewController: FavoriteNFTCollectionViewDelegate {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         guard let nft = presenter?.favoriteNfts[indexPath.row] else { return }
         presenter?.updateLikes(for: nft)
-
-//        let nft = favoriteNfts[indexPath.row]
-//        updateLikes(for: nft)
     }
 }
 

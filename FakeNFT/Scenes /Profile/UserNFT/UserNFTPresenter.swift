@@ -16,7 +16,6 @@ final class UserNFTPresenter {
     private weak var view: UserNFTViewProtocol?
     private(set) var userNfts: [ProfileNFT] = [] {
         didSet {
-            print("userNfts didSet called with count: \(userNfts.count)")
             userNftCountDelegate?.didUpdateUserNFTCount(userNfts.count)
         }
     }
@@ -75,7 +74,6 @@ final class UserNFTPresenter {
             updatedLikes.append(nft.id)
         }
         let likeRequest = LikeRequest(likes: updatedLikes)
-        print("Before updateLikes: \(likeRequest.likes)")
         
         profileService.updateLikes(likeRequest) { [weak self] result in
             self?.view?.hideLoading()
@@ -92,7 +90,6 @@ final class UserNFTPresenter {
                         likes: updatedLikes,
                         id: self.profile.id
                     )
-                    print("Updated profile: \(self.profile.likes)")
                     self.view?.updateLikes(updatedLikes)
                 }
             case .failure(let error):

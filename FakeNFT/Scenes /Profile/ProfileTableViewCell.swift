@@ -51,10 +51,6 @@ final class ProfileTableViewCell: UITableViewCell {
         ])
     }
     
-//    func updateTitle(text: String) {
-//        titleLabel.text = "\(text)"
-//    }
-    
     func updateTitle(text: String) {
         titleLabel.text = text
     }

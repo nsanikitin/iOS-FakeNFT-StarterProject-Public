@@ -158,7 +158,7 @@ extension ProfileViewController: ProfileView {
         bioTextView.text = profile.description
         urlButton.setTitle(profile.website, for: .normal)
         myFavoritesCount = profile.likes.count
-//        tableView.reloadData()
+        tableView.reloadData()
     }
     
     func reloadTableView() {
