@@ -51,7 +51,7 @@ final class EditProfileViewController: UIViewController {
     private let shadowView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 35
-        view.backgroundColor = .ypBlack?.withAlphaComponent(0.4)
+        view.backgroundColor = .black.withAlphaComponent(0.4)
         return view
     }()
     
@@ -201,13 +201,11 @@ final class EditProfileViewController: UIViewController {
             guard 
                 let textField = alert.textFields?.first,
                 let newURL = textField.text, !newURL.isEmpty else { return }
-            self?.presenter?.updateAvatarURL(newURL)
         }
         
         alert.addAction(confirmAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
-        
     }
     
     // MARK: - Private Functions

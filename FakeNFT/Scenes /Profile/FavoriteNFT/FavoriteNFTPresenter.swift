@@ -11,7 +11,6 @@ final class FavoriteNFTPresenter {
     private weak var view: FavoriteNFTViewProtocol?
     private(set) var favoriteNfts: [ProfileNFT] = []
     private(set) var profile: ProfileModel = ProfileModel()
-    private(set) var nftIds: [String] = []
     private let profileService = ProfileService.shared
     
     init(view: FavoriteNFTViewProtocol) {
@@ -23,6 +22,7 @@ final class FavoriteNFTPresenter {
     }
     
     private func fetchProfile() {
+        view?.showLoading()
         profileService.fetchProfile { [weak self] result in
             switch result {
             case .success(let profile):
@@ -35,10 +35,7 @@ final class FavoriteNFTPresenter {
     }
     
     private func fetchFavoriteNFTs() {
-        view?.showLoading()
-        let nftIds = profile.likes
-        
-        profileService.fetchFavoriteNFTs(nftIds) { [weak self] result in
+        profileService.fetchFavoriteNFTs(profile.likes) { [weak self] result in
             self?.view?.hideLoading()
             DispatchQueue.main.async {
                 switch result {

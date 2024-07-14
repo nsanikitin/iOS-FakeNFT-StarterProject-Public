@@ -69,7 +69,7 @@ extension ProfilePresenter: ProfileViewControllerDelegate {
 
 extension ProfilePresenter: UserNFTPresenterDelegate {
     func didUpdateUserNFTCount(_ count: Int) {
-        view?.myNFTsCount = count
-        view?.reloadTableView()
+        self.view?.myNFTsCount = count
+        self.view?.reloadTableView()
     }
 }

@@ -34,6 +34,8 @@ final class ProfileTableViewCell: UITableViewCell {
     }
     
     private func setupUI() {
+        contentView.backgroundColor = .ypWhite
+        
         [titleLabel, chevronImageView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)

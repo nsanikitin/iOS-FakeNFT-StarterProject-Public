@@ -63,15 +63,9 @@ final class FavoriteNFTViewController: UIViewController {
     
     private func updateUI() {
         guard let presenter = presenter else { return }
-        
-        if presenter.favoriteNfts.isEmpty {
-            placeHolderLabel.isHidden = false
-            collectionView.isHidden = true
-        } else {
-            placeHolderLabel.isHidden = true
-            collectionView.isHidden = false
-            collectionView.reloadData()
-        }
+        placeHolderLabel.isHidden = !presenter.favoriteNfts.isEmpty
+        collectionView.isHidden = presenter.favoriteNfts.isEmpty
+        collectionView.reloadData()
     }
     
     private func setupUI() {

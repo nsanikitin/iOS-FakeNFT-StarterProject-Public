@@ -14,11 +14,7 @@ protocol UserNFTPresenterDelegate: AnyObject {
 final class UserNFTPresenter {
     weak var userNftCountDelegate: UserNFTPresenterDelegate?
     private weak var view: UserNFTViewProtocol?
-    private(set) var userNfts: [ProfileNFT] = [] {
-        didSet {
-            userNftCountDelegate?.didUpdateUserNFTCount(userNfts.count)
-        }
-    }
+    private(set) var userNfts: [ProfileNFT] = []
     private(set) var profile: ProfileModel = ProfileModel()
     private var nftIds: [String] = []
     private let profileService = ProfileService.shared
@@ -35,7 +31,6 @@ final class UserNFTPresenter {
         view?.showLoading()
         profileService.fetchProfile { [weak self] result in
             DispatchQueue.main.async {
-                self?.view?.hideLoading()
                 switch result {
                 case .success(let profile):
                     self?.profile = profile
@@ -48,7 +43,6 @@ final class UserNFTPresenter {
     }
     
     private func loadUserNFTs() {
-        view?.showLoading()
         nftIds = profile.nfts ?? []
         profileService.fetchNFTs(nftIds) { [weak self] nftResult in
             self?.view?.hideLoading()
@@ -56,6 +50,7 @@ final class UserNFTPresenter {
                 switch nftResult {
                 case .success(let nfts):
                     self?.userNfts = nfts
+                    self?.userNftCountDelegate?.didUpdateUserNFTCount(nfts.count)
                     self?.view?.displayUserNFT(nfts)
                 case .failure(let error):
                     print("Failed to load NFTs: \(error)")
@@ -81,15 +76,7 @@ final class UserNFTPresenter {
             case .success:
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    self.profile = ProfileModel(
-                        name: self.profile.name,
-                        avatar: self.profile.avatar,
-                        description: self.profile.description,
-                        website: self.profile.website,
-                        nfts: self.profile.nfts,
-                        likes: updatedLikes,
-                        id: self.profile.id
-                    )
+                    self.profile = self.profile.update(updateLikes: updatedLikes)
                     self.view?.updateLikes(updatedLikes)
                 }
             case .failure(let error):

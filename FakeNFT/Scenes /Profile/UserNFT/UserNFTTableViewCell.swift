@@ -95,6 +95,7 @@ final class UserNFTTableViewCell: UITableViewCell {
     }
     
     private func setupUI() {
+        contentView.backgroundColor = .ypWhite
         contentView.addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -118,15 +119,16 @@ final class UserNFTTableViewCell: UITableViewCell {
             likeButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor),
             likeButton.topAnchor.constraint(equalTo: nftImageView.topAnchor),
 
-            priceLabel.leadingAnchor.constraint(equalTo: costLabel.leadingAnchor),
+            priceLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 30),
             priceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 65),
 
             costLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 2),
+            costLabel.leadingAnchor.constraint(equalTo: priceLabel.leadingAnchor),
             costLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -39),
             costLabel.heightAnchor.constraint(equalToConstant: 22),
 
             nameLabel.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 16),
-            nameLabel.widthAnchor.constraint(equalToConstant: 78),
+            nameLabel.widthAnchor.constraint(equalToConstant: 90),
             nameLabel.bottomAnchor.constraint(equalTo: ratingImageView.topAnchor, constant: -4),
             
             ratingImageView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 16),

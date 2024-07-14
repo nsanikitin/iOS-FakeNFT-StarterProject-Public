@@ -45,8 +45,4 @@ final class EditProfilePresenter {
             }
         }
     }
-    
-    func updateAvatarURL(_ newURL: String) {
-        // TODO: логика изменения ссылки для изображения
-    }
 }

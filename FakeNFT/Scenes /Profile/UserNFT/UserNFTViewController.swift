@@ -66,7 +66,7 @@ final class UserNFTViewController: UIViewController {
             style: .default
         ) { [weak self] _ in
             self?.presenter?.sortNFTs(by: .price)
-            }
+        }
         
         let byRatingAction = UIAlertAction(
             title: "По рейтингу",
