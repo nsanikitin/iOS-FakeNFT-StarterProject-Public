@@ -11,6 +11,8 @@ protocol UserNFTViewProtocol: AnyObject {
     func displayUserNFT(_ userNfts: [ProfileNFT]?)
     func showLoading()
     func hideLoading()
+    func updateLikes(_ likes: [String])
+    func reloadData()
 }
 
 final class UserNFTViewController: UIViewController {
@@ -53,7 +55,44 @@ final class UserNFTViewController: UIViewController {
     // MARK: - Public Functions
     
     @objc func sortButtonTapped() {
-        // TODO: Реализация функции сортировки
+        let alert = UIAlertController(
+            title: nil,
+            message: "Сортировка",
+            preferredStyle: .actionSheet
+        )
+        
+        let byPriceAction = UIAlertAction(
+            title: "По цене",
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter?.sortNFTs(by: .price)
+        }
+        
+        let byRatingAction = UIAlertAction(
+            title: "По рейтингу",
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter?.sortNFTs(by: .rating)
+        }
+        
+        let byNameAction = UIAlertAction(
+            title: "По названию",
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter?.sortNFTs(by: .name)
+        }
+        
+        let close = UIAlertAction(
+            title: "Закрыть",
+            style: .cancel
+        )
+        
+        alert.addAction(byPriceAction)
+        alert.addAction(byRatingAction)
+        alert.addAction(byNameAction)
+        alert.addAction(close)
+        
+        present(alert, animated: true)
     }
     
     @objc func backButtonTapped() {
@@ -134,8 +173,10 @@ extension UserNFTViewController: UITableViewDataSource {
         
         cell.selectionStyle = .none
         if let nft = presenter?.userNfts[indexPath.row] {
-            cell.configure(with: nft)
+            let isLiked = presenter?.isLiked(nftId: nft.id) ?? false
+            cell.configure(with: nft, isLiked: isLiked)
         }
+        cell.delegate = self
         return cell
     }
 }
@@ -165,5 +206,20 @@ extension UserNFTViewController: UserNFTViewProtocol {
     
     func hideLoading() {
         UIBlockingProgressHUD.dismiss()
+    }
+    
+    func updateLikes(_ likes: [String]) {
+        tableView.reloadData()
+    }
+    
+    func reloadData() {
+        tableView.reloadData()
+    }
+}
+
+extension UserNFTViewController: UserNFTTableViewCellDelegate {
+    func didTapLikeButton(_ cell: UserNFTTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        presenter?.didTapLikeButton(at: indexPath)
     }
 }

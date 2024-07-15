@@ -17,6 +17,7 @@ protocol ProfileView: AnyObject {
     func showLoading()
     func hideLoading()
     func showError(_ error: Error)
+    var myNFTsCount: Int { get set }
 }
 
 final class ProfileViewController: UIViewController {
@@ -24,7 +25,9 @@ final class ProfileViewController: UIViewController {
     // MARK: - Private Properties
     
     private var presenter: ProfilePresenter?
-    private let sections = ["Мои NFT (112)", "Избранные NFT (11)", "О разработчике"]
+    private let sections = ["Мои NFT", "Избранные NFT", "О разработчике"]
+    internal var myNFTsCount = 0
+    private var myFavoritesCount = 0
     
     private let avatarImage: UIImageView = {
         let imageView = UIImageView()
@@ -154,6 +157,8 @@ extension ProfileViewController: ProfileView {
         nameLabel.text = profile.name
         bioTextView.text = profile.description
         urlButton.setTitle(profile.website, for: .normal)
+        myFavoritesCount = profile.likes.count
+        tableView.reloadData()
     }
     
     func reloadTableView() {
@@ -184,18 +189,30 @@ extension ProfileViewController: ProfileView {
     }
 }
 
-
 // MARK: - UITableViewDataSource
 extension ProfileViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.reuseIdentifier, for: indexPath) as? ProfileTableViewCell else {
             return UITableViewCell()
         }
-        cell.updateTitle(text: sections[indexPath.row])
+        switch indexPath.section {
+        case 0:
+            cell.updateTitle(text: "\(sections[indexPath.section]) (\(myNFTsCount))")
+        case 1:
+            cell.updateTitle(text: "\(sections[indexPath.section]) (\(myFavoritesCount))")
+        case 2:
+            cell.updateTitle(text: "\(sections[indexPath.section])")
+        default:
+            break
+        }
         cell.selectionStyle = .none
         return cell
     }
@@ -206,7 +223,7 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        switch indexPath.row {
+        switch indexPath.section {
         case 0:
             let userNFTViewController = UserNFTViewController()
             navigationController?.pushViewController(userNFTViewController, animated: true)
@@ -219,5 +236,9 @@ extension ProfileViewController: UITableViewDelegate {
         default:
             break
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 54
     }
 }

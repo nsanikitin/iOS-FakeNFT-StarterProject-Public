@@ -8,8 +8,13 @@
 import UIKit
 import Kingfisher
 
+protocol UserNFTTableViewCellDelegate: AnyObject {
+    func didTapLikeButton(_ cell: UserNFTTableViewCell)
+}
+
 final class UserNFTTableViewCell: UITableViewCell {
     static let reuseIdentifier = "UserNFTTableViewCell"
+    weak var delegate: UserNFTTableViewCellDelegate?
     
     // MARK: - Private Properties
     
@@ -55,7 +60,7 @@ final class UserNFTTableViewCell: UITableViewCell {
         label.font = UIFont.caption2
         label.textColor = .ypBlack
         label.lineBreakMode = .byTruncatingTail
-        label.numberOfLines = 1
+        label.numberOfLines = 2
         return label
     }()
     
@@ -86,10 +91,11 @@ final class UserNFTTableViewCell: UITableViewCell {
     // MARK: - Private Functions
     
     @objc func likeButtonTapped() {
-        // TODO: Логика для лайка
+        delegate?.didTapLikeButton(self)
     }
     
     private func setupUI() {
+        contentView.backgroundColor = .ypWhite
         contentView.addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -113,32 +119,34 @@ final class UserNFTTableViewCell: UITableViewCell {
             likeButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor),
             likeButton.topAnchor.constraint(equalTo: nftImageView.topAnchor),
 
-            priceLabel.leadingAnchor.constraint(equalTo: costLabel.leadingAnchor),
+            priceLabel.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 30),
             priceLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 65),
 
             costLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 2),
+            costLabel.leadingAnchor.constraint(equalTo: priceLabel.leadingAnchor),
             costLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -39),
             costLabel.heightAnchor.constraint(equalToConstant: 22),
 
             nameLabel.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 16),
-            nameLabel.widthAnchor.constraint(equalToConstant: 78),
+            nameLabel.widthAnchor.constraint(equalToConstant: 90),
             nameLabel.bottomAnchor.constraint(equalTo: ratingImageView.topAnchor, constant: -4),
             
             ratingImageView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 16),
             ratingImageView.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
             
             authorLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            authorLabel.trailingAnchor.constraint(equalTo: costLabel.leadingAnchor, constant: -8),
+            authorLabel.widthAnchor.constraint(equalToConstant: 78),
             authorLabel.topAnchor.constraint(equalTo: ratingImageView.bottomAnchor, constant: 4),
         ])
     }
     
-    func configure(with nft: ProfileNFT) {
+    func configure(with nft: ProfileNFT, isLiked: Bool) {
         if let firstImageURL = nft.images.first, let url = URL(string: firstImageURL) {
             nftImageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"))
                 }
+        likeButton.setImage(isLiked ? UIImage.likesActiveImage : UIImage.likesNoActiveImage, for: .normal)
         nameLabel.text = nft.name
-        authorLabel.text = "от \(nft.author)"
+        setAuthorLabelText(nft.author)
         costLabel.text = "\(nft.price) ETH"
         
         switch nft.rating {
@@ -155,5 +163,27 @@ final class UserNFTTableViewCell: UITableViewCell {
         default:
             ratingImageView.image = nil
         }
+    }
+    
+    private func setAuthorLabelText(_ author: String) {
+        let authorName = extractAuthorName(author)
+        let fullText = "от \(authorName)"
+        let attributedText = NSMutableAttributedString(string: fullText)
+        let range = NSRange(location: 0, length: fullText.count)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = .byWordWrapping
+        attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
+        authorLabel.attributedText = attributedText
+    }
+    
+    private func extractAuthorName(_ author: String) -> String {
+        let prefix = "https://"
+        let suffix = ".fakenfts.org/"
+        guard author.hasPrefix(prefix), author.hasSuffix(suffix) else {
+            return author
+        }
+        let startIndex = author.index(author.startIndex, offsetBy: prefix.count)
+        let endIndex = author.index(author.endIndex, offsetBy: -suffix.count)
+        return String(author[startIndex..<endIndex])
     }
 }

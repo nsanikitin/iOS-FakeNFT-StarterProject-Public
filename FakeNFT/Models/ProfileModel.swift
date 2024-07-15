@@ -25,4 +25,15 @@ struct ProfileModel: Decodable {
         self.likes = likes
         self.id = id
     }
+    
+    func update(updateLikes: [String]) -> Self {
+        .init(
+            name: name,
+            avatar: avatar,
+            description: description,
+            website: website,
+            nfts: nfts,
+            likes: updateLikes,
+            id: id)
+    }
 }

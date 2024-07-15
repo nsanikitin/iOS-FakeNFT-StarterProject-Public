@@ -9,6 +9,7 @@ import UIKit
 
 final class ProfilePresenter {
     private weak var view: ProfileView?
+    private var userNFTPresenter: UserNFTPresenter?
     private var profile: ProfileModel = ProfileModel()
     private let profileService = ProfileService.shared
     
@@ -18,9 +19,14 @@ final class ProfilePresenter {
     
     func viewDidLoad() {
         loadProfile()
+        let userNFTView = UserNFTViewController()
+        userNFTPresenter = UserNFTPresenter(view: userNFTView)
+        userNFTPresenter?.userNftCountDelegate = self
+        userNFTPresenter?.viewDidLoad()
     }
     
     func viewWillAppear() {
+        loadProfile()
         view?.displayProfile(profile)
     }
     
@@ -58,5 +64,12 @@ final class ProfilePresenter {
 extension ProfilePresenter: ProfileViewControllerDelegate {
     func didUpdateProfile(_ profile: ProfileModel) {
         updateProfile(profile)
+    }
+}
+
+extension ProfilePresenter: UserNFTPresenterDelegate {
+    func didUpdateUserNFTCount(_ count: Int) {
+        self.view?.myNFTsCount = count
+        self.view?.reloadTableView()
     }
 }
