@@ -9,10 +9,18 @@ import Foundation
 import UIKit
 import Kingfisher
 
+protocol CollectionNftCellDelegate: AnyObject {
+    func likeButtonTapped(cell: CollectionNftCell ,for itemId: String)
+    func cartButtonTapped(cell: CollectionNftCell ,for itemId: String)
+}
+
 final class CollectionNftCell: UICollectionViewCell {
     
     static let reuseIdentifier = "CollectionNftCell"
+    weak var delegate: CollectionNftCellDelegate?
     
+    private let service = CollectionService.shared
+    var nft: Nft?
     private var itemId: String = ""
     private var isInCart: Bool = false
     private var isLiked: Bool = false
@@ -147,11 +155,15 @@ final class CollectionNftCell: UICollectionViewCell {
     }
     
     @objc private func likeTapped() {
-        print("TODO in Module3")
+        guard let nft = self.nft else { return }
+        service.nft = nft
+        delegate?.likeButtonTapped(cell: self, for: nft.id)
     }
     
     @objc private func cartTapped() {
-        print("TODO in Module3")
+        guard let nft = self.nft else { return }
+        service.nft = nft
+        delegate?.cartButtonTapped(cell: self, for: nft.id)
     }
     
     private func setupConfigure() {
@@ -176,11 +188,11 @@ final class CollectionNftCell: UICollectionViewCell {
         setCartButtonState(isAdded: data.isAddedToCart)
     }
     
-    private func setLikeButtonState(isLiked: Bool) {
+    func setLikeButtonState(isLiked: Bool) {
         likeButton.tintColor = isLiked ? .ypRedUniversal : UIColor.white
     }
     
-    private func setCartButtonState(isAdded: Bool) {
+    func setCartButtonState(isAdded: Bool) {
         let imageName = isAdded ? "cartDelete" : "cartEmpty"
         cartButton.setImage(UIImage(named: imageName)?.withTintColor(.label), for: .normal)
     }

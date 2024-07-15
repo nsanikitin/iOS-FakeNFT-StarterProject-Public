@@ -86,7 +86,36 @@ final class CatalogViewController: UIViewController {
     
     @objc
     private func tapFiltersButton() {
-        print("TODO in Module3")
+        let action = UIAlertController(
+            title: "Сортировка",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        
+        action.addAction(UIAlertAction(
+            title: "По названию",
+            style: .default,
+            handler: { [weak self] _ in
+                self?.catalogItems = self?.presenter.sortCatalog(by: 1) ?? []
+                self?.catalogTableView.reloadData()
+            }
+        ))
+        
+        action.addAction(UIAlertAction(
+            title: "По количеству NFT",
+            style: .default,
+            handler: { [weak self] _ in
+                self?.catalogItems = self?.presenter.sortCatalog(by: 2) ?? []
+                self?.catalogTableView.reloadData()
+            }
+        ))
+        
+        action.addAction(UIAlertAction(
+            title: "Закрыть",
+            style: .cancel
+        ))
+        
+        self.present(action, animated: true)
     }
     
     @objc private func refreshCatalog() {
@@ -122,7 +151,8 @@ extension CatalogViewController: UITableViewDelegate {
         let collectionDetailsVC = CollectionDetailsViewController(
             presenter: CollectionPresenter(
                 nftModel: catalogItems[indexPath.row],
-                nftService: nftService
+                nftService: nftService,
+                collectionService: CollectionService.shared
             )
         )
         
