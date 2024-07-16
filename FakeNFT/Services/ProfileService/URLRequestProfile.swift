@@ -7,19 +7,19 @@
 
 import Foundation
 
-extension URLRequest {
-    static func makeHTTPRequest(
-        path: String,
-        httpMethod: String,
-        baseURL: URL?
-    ) -> URLRequest? {
-        guard
-            let baseURL = baseURL,
-            let url = URL(string: path, relativeTo: baseURL)
-        else { return nil }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = httpMethod
-        return request
-    }
-}
+//extension URLRequest {
+//    static func makeHTTPRequest(
+//        path: String,
+//        httpMethod: String,
+//        baseURL: URL?
+//    ) -> URLRequest? {
+//        guard
+//            let baseURL = baseURL,
+//            let url = URL(string: path, relativeTo: baseURL)
+//        else { return nil }
+//        
+//        var request = URLRequest(url: url)
+//        request.httpMethod = httpMethod
+//        return request
+//    }
+//}
