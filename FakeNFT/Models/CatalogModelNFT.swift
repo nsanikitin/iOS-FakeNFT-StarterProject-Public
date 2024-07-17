@@ -1,5 +1,5 @@
 //
-//  ProfileModelNFT.swift
+//  CatalogModelNFT.swift
 //  FakeNFT
 //
 //  Created by Anna on 18.06.2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct ProfileModelNFT: Codable {
+struct CatalogModelNFT: Codable {
     let name: String
     let avatar: String?
     let description: String?
