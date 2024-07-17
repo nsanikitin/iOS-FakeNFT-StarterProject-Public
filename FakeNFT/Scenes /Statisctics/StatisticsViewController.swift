@@ -52,15 +52,15 @@ final class StatisticsViewController: UIViewController {
     
     func showErrorAlert() {
         let alert = UIAlertController(
-            title: NSLocalizedString("Error.data", 
+            title: NSLocalizedString("Error.data",
                                      comment: "Не удалось получить данные"),
             message: nil,
             preferredStyle: .alert
         )
         
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Error.cancel", comment: "Отмена"), 
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Error.cancel", comment: "Отмена"),
                                          style: .default)
-        let action = UIAlertAction(title: NSLocalizedString("Error.repeat", comment: "Повторить"), 
+        let action = UIAlertAction(title: NSLocalizedString("Error.repeat", comment: "Повторить"),
                                    style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.presenter.viewDidLoad()
