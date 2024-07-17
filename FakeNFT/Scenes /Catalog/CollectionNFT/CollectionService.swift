@@ -16,7 +16,7 @@ final class CollectionService {
     var visibleNFT: [Nft] = []
     var nft: Nft?
     
-    func changeLike(newLikes: [String], profile: CatalogModelNFT, completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeLike(newLikes: [String], profile: ProfileModel, completion: @escaping (Result<Void, Error>) -> Void) {
         
         guard let nft = self.nft else { return }
         let likesString = newLikes.joined(separator: ",")
@@ -73,7 +73,7 @@ final class CollectionService {
         task.resume()
     }
     
-    func getProfile(completion: @escaping (Result<CatalogModelNFT, Error>) -> Void) {
+    func getProfile(completion: @escaping (Result<ProfileModel, Error>) -> Void) {
         let headers = [
             "Accept": "application/json",
             "X-Practicum-Mobile-Token": "61d3c8db-a147-4ae1-87cc-74329c18ff32"
@@ -95,7 +95,7 @@ final class CollectionService {
             }
             
             do {
-                let object = try JSONDecoder().decode(CatalogModelNFT.self, from: data)
+                let object = try JSONDecoder().decode(ProfileModel.self, from: data)
                 completion(.success(object))
             } catch {
                 completion(.failure(error))
