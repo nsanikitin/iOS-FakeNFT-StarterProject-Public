@@ -2,7 +2,7 @@ import UIKit
 
 extension UIColor {
     static let viewBackgroundColor = UIColor.systemBackground
-    static let ypBlack = UIColor(named: "ypBlack")
+    static let ypBlack = UIColor(named: "ypBlack") ?? .black
     static let ypLightGrey = UIColor(named: "ypLightGrey")
     static let ypWhite = UIColor(named: "ypWhite")
     
