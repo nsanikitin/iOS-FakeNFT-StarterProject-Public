@@ -1,11 +1,11 @@
 //
-//  ProfileModel.swift
+//  CatalogModelNFT.swift
 //  FakeNFT
 //
-//  Created by Anna on 18.06.2024.
+//  Created by Тася Галкина on 18.07.2024.
 //
 
-import UIKit
+import Foundation
 
 struct ProfileModel: Decodable {
     let name: String
