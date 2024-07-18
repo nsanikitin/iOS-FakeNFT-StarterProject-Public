@@ -56,6 +56,8 @@
 		4FC470832C37FFC8007C7FC2 /* StatisticsUserNFTCollectionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC470822C37FFC8007C7FC2 /* StatisticsUserNFTCollectionPresenter.swift */; };
 		4FC470882C3C827F007C7FC2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4FC470872C3C827F007C7FC2 /* Localizable.strings */; };
 		4FFB52622C486B63009C868E /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFB52612C486B63009C868E /* StatisticsViewController.swift */; };
+		75100FFA2C4921BC000B69A6 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100FF92C4921BC000B69A6 /* CartViewController.swift */; };
+		75100FFC2C49241E000B69A6 /* RequestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75100FFB2C49241E000B69A6 /* RequestConstants.swift */; };
 		7562E68C2C24905D00970667 /* CartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7562E68B2C24905D00970667 /* CartCell.swift */; };
 		7562E68E2C24CA1A00970667 /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7562E68D2C24CA1A00970667 /* CartView.swift */; };
 		7562E6912C24CABA00970667 /* CartPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7562E6902C24CABA00970667 /* CartPresenter.swift */; };
@@ -175,6 +177,8 @@
 		4FC470862C3C827F007C7FC2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4FC470892C3C8284007C7FC2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4FFB52612C486B63009C868E /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		75100FF92C4921BC000B69A6 /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		75100FFB2C49241E000B69A6 /* RequestConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestConstants.swift; sourceTree = "<group>"; };
 		7562E68B2C24905D00970667 /* CartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCell.swift; sourceTree = "<group>"; };
 		7562E68D2C24CA1A00970667 /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
 		7562E6902C24CABA00970667 /* CartPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartPresenter.swift; sourceTree = "<group>"; };
@@ -405,6 +409,7 @@
 			children = (
 				3F6806D829CC979D00B4F915 /* Network */,
 				95C812C62C21A8C200FE7B1B /* ProfileModel.swift */,
+				75100FFB2C49241E000B69A6 /* RequestConstants.swift */,
 				956FDFB42C343EF20048582C /* ProfileUpdate.swift */,
 				956FDFB62C354A350048582C /* ProfileNFT.swift */,
 				9507D87F2C3D898B000D99C4 /* LikeRequest.swift */,
@@ -518,6 +523,7 @@
 			isa = PBXGroup;
 			children = (
 				7562E6902C24CABA00970667 /* CartPresenter.swift */,
+				75100FF92C4921BC000B69A6 /* CartViewController.swift */,
 				75DE52C62C2CB988006C54C8 /* PaymentOptionCell.swift */,
 				75DE52C42C2CB945006C54C8 /* PaymentOptionsPresenter.swift */,
 				75DE52BD2C283E7B006C54C8 /* PaymentOptionsViewController.swift */,
@@ -860,6 +866,7 @@
 				3F68069929CBBAF100B4F915 /* SceneDelegate.swift in Sources */,
 				75DE52C52C2CB945006C54C8 /* PaymentOptionsPresenter.swift in Sources */,
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
+				75100FFA2C4921BC000B69A6 /* CartViewController.swift in Sources */,
 				4F5188A92C33420B00BF056D /* StatisticsUserDefaults.swift in Sources */,
 				75DE52C32C2CB895006C54C8 /* CurrencyModel.swift in Sources */,
 				75DE52BE2C283E7B006C54C8 /* PaymentOptionsViewController.swift in Sources */,
@@ -884,6 +891,7 @@
 				4FC470832C37FFC8007C7FC2 /* StatisticsUserNFTCollectionPresenter.swift in Sources */,
 				4FC4707D2C34A6D7007C7FC2 /* StatisticsCollectionViewCell.swift in Sources */,
 				4FC4707F2C35BA1D007C7FC2 /* StatisticsUserWebViewController.swift in Sources */,
+				75100FFC2C49241E000B69A6 /* RequestConstants.swift in Sources */,
 				956FDF962C25AF960048582C /* MockDataProfile.swift in Sources */,
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				956FDFB32C34369D0048582C /* UIBlockingProgressHUD.swift in Sources */,
