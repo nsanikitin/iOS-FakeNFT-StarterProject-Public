@@ -20,7 +20,7 @@ final class StatisticsService {
             return
         }
         
-        URLSession.shared.objectTask(for: request) { [weak self] (response: Result<[UsersResult], Error>) in
+        URLSession.shared.objectTaskStatistics(for: request) { [weak self] (response: Result<[UsersResult], Error>) in
             guard let self = self else { return }
             
             switch response {
@@ -42,7 +42,7 @@ final class StatisticsService {
         )
         
         request?.setValue("application/json", forHTTPHeaderField: "Accept")
-        request?.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        request?.setValue(TokenKeys.practicumMobile, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         
         return request
     }
@@ -71,7 +71,7 @@ final class StatisticsService {
             return
         }
         
-        URLSession.shared.objectTask(for: request) { [weak self] (response: Result<[NFTResult], Error>) in
+        URLSession.shared.objectTaskStatistics(for: request) { [weak self] (response: Result<[NFTResult], Error>) in
             guard let self = self else { return }
             
             switch response {
@@ -93,7 +93,7 @@ final class StatisticsService {
         )
         
         request?.setValue("application/json", forHTTPHeaderField: "Accept")
-        request?.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        request?.setValue(TokenKeys.practicumMobile, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         
         return request
     }

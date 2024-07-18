@@ -9,7 +9,7 @@ enum NetworkError: Error {
 
 extension URLSession {
     
-    func objectTask<T: Decodable>(
+    func objectTaskStatistics<T: Decodable>(
         for request: URLRequest,
         completion: @escaping (Result<T, Error>) -> Void
     ) {
