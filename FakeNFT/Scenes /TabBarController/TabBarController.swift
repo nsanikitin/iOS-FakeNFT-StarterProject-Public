@@ -37,7 +37,7 @@ final class TabBarController: UITabBarController {
         let profileViewController = UINavigationController(rootViewController: ProfileViewController())
         profileViewController.tabBarItem = profileTabBarItem
         
-        let catalogViewController = CatalogViewController()
+        let catalogViewController = UINavigationController(rootViewController: CatalogViewController())
         catalogViewController.tabBarItem = catalogTabBarItem
         
         let cartViewController = UINavigationController(rootViewController: CartViewController())
@@ -46,7 +46,7 @@ final class TabBarController: UITabBarController {
         let statsViewController = UINavigationController(rootViewController: StatisticsViewController())
         statsViewController.tabBarItem = statisticsTabBarItem
         
-        viewControllers = [cartViewController, statsViewController]
+        viewControllers = [profileViewController, catalogViewController, cartViewController, statsViewController]
         
         let tabBarAppearance = tabBar.standardAppearance
         tabBarAppearance.configureWithDefaultBackground()

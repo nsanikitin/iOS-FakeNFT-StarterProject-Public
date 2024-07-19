@@ -149,7 +149,7 @@ final class CollectionPresenter {
         }
     }
     
-    private func handleLikeChange(nftID: String, profile: ProfileModelNFT, completion: @escaping (Result<Bool, Error>) -> Void) {
+    private func handleLikeChange(nftID: String, profile: ProfileModel, completion: @escaping (Result<Bool, Error>) -> Void) {
         var likes = profile.likes
         let isAdded: Bool
         

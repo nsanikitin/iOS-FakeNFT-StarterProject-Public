@@ -47,7 +47,7 @@ final class StatisticsUserViewController: UIViewController {
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.ypBlack?.cgColor
+        button.layer.borderColor = UIColor.ypBlack.cgColor
         return button
     }()
     
