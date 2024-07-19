@@ -8,6 +8,12 @@
 
 Демонстрация Статистики - видео https://drive.google.com/file/d/1a4UMf079c369fvAB2pSQ2AmH7n_jF4SK/view?usp=sharing
 
+# Видео эпика
+
+Корзина
+https://github.com/user-attachments/assets/b899f1b8-fb08-4842-b82c-d227e8d0ee79
+
+
 # Назначение и цели приложения
 
 Приложение помогает пользователям просматривать и покупать NFT (Non-Fungible Token). Функционал покупки иммитируется с помощью мокового сервера.
