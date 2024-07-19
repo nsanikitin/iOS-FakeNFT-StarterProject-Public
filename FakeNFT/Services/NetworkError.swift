@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NetworkErrorProfile: Error {
+enum NetworkError: Error {
     case invalidRequest
     case decodingError(Error)
     case httpStatusCode(Int)

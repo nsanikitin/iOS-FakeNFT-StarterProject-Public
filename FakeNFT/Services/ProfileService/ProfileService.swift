@@ -19,7 +19,7 @@ final class ProfileService {
     func fetchProfile(completion: @escaping (Result<ProfileModel, Error>) -> Void) {
         guard let request = makeProfileGetRequest() else {
             assertionFailure("Invalid request")
-            completion(.failure(NetworkErrorProfile.invalidRequest))
+            completion(.failure(NetworkError.invalidRequest))
             return
         }
         
@@ -43,7 +43,7 @@ final class ProfileService {
     func updateProfile(with profileUpdate: ProfileUpdate, completion: @escaping (Result<ProfileModel, Error>) -> Void) {
         guard let request = makeProfilePutRequest(profile: profileUpdate) else {
             assertionFailure("Invalid request")
-            completion(.failure(NetworkErrorProfile.invalidRequest))
+            completion(.failure(NetworkError.invalidRequest))
             return
         }
         
@@ -73,7 +73,7 @@ final class ProfileService {
     func updateLikes(_ likeRequest: LikeRequest, completion: @escaping (Result<ProfileModel, Error>) -> Void) {
         guard let url = RequestConstants.profileURL else {
             assertionFailure("Invalid URL")
-            completion(.failure(NetworkErrorProfile.invalidRequest))
+            completion(.failure(NetworkError.invalidRequest))
             return
         }
         var request = URLRequest(url: url)
@@ -105,7 +105,7 @@ final class ProfileService {
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     guard let data = data else {
-                        completion(.failure(NetworkErrorProfile.noData))
+                        completion(.failure(NetworkError.noData))
                         return
                     }
                     
@@ -117,7 +117,7 @@ final class ProfileService {
                     }
                 } else {
                     print("HTTP error: statusCode = \(httpResponse.statusCode)")
-                    completion(.failure(NetworkErrorProfile.invalidResponse))
+                    completion(.failure(NetworkError.invalidResponse))
                 }
             }
         }
@@ -130,7 +130,7 @@ extension ProfileService {
         let idsString = ids.joined(separator: ",")
         guard let url = URL(string: "\(RequestConstants.baseURL)/api/v1/nft?ids=\(idsString)") else {
             assertionFailure("Invalid URL")
-            completion(.failure(NetworkErrorProfile.invalidRequest))
+            completion(.failure(NetworkError.invalidRequest))
             return
         }
         var request = URLRequest(url: url)
@@ -144,7 +144,7 @@ extension ProfileService {
                 return
             }
             guard let data = data else {
-                completion(.failure(NetworkErrorProfile.noData))
+                completion(.failure(NetworkError.noData))
                 return
             }
             do {

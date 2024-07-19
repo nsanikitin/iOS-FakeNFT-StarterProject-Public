@@ -5,6 +5,7 @@ final class StatisticsService {
     // MARK: - Properties
     
     static let shared = StatisticsService()
+    private let tokenKey = TokenKeys.practicumMobile
     
     // MARK: - Init
     
@@ -20,7 +21,7 @@ final class StatisticsService {
             return
         }
         
-        URLSession.shared.objectTask(for: request) { [weak self] (response: Result<[UsersResult], Error>) in
+        URLSession.shared.objectTaskStatistic(for: request) { [weak self] (response: Result<[UsersResult], Error>) in
             guard let self = self else { return }
             
             switch response {
@@ -42,7 +43,7 @@ final class StatisticsService {
         )
         
         request?.setValue("application/json", forHTTPHeaderField: "Accept")
-        request?.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        request?.setValue(tokenKey, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         
         return request
     }
@@ -71,7 +72,7 @@ final class StatisticsService {
             return
         }
         
-        URLSession.shared.objectTask(for: request) { [weak self] (response: Result<[NFTResult], Error>) in
+        URLSession.shared.objectTaskStatistic(for: request) { [weak self] (response: Result<[NFTResult], Error>) in
             guard let self = self else { return }
             
             switch response {
@@ -93,7 +94,7 @@ final class StatisticsService {
         )
         
         request?.setValue("application/json", forHTTPHeaderField: "Accept")
-        request?.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        request?.setValue(tokenKey, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         
         return request
     }

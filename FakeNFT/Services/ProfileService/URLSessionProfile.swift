@@ -30,15 +30,15 @@ extension URLSession {
                         let result = try decoder.decode(T.self, from: data)
                         fulfillCompletion(.success(result))
                     } catch {
-                        fulfillCompletion(.failure(NetworkErrorProfile.decodingError(error)))
+                        fulfillCompletion(.failure(NetworkError.decodingError(error)))
                     }
                 } else {
-                    fulfillCompletion(.failure(NetworkErrorProfile.httpStatusCode(statusCode)))
+                    fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
                 }
             } else if let error = error {
-                fulfillCompletion(.failure(NetworkErrorProfile.urlRequestError(error)))
+                fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
             } else {
-                fulfillCompletion(.failure(NetworkErrorProfile.urlSessionError))
+                fulfillCompletion(.failure(NetworkError.urlSessionError))
             }
         }
         task.resume()
