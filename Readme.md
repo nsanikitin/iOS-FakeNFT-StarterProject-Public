@@ -11,6 +11,8 @@
 
 Демонстрация Корзины - видео https://github.com/user-attachments/assets/b899f1b8-fb08-4842-b82c-d227e8d0ee79
 
+Демонстрация Каталог - видео https://disk.yandex.ru/i/NGNCKiHjl6-Rwg
+
 
 # Назначение и цели приложения
 
