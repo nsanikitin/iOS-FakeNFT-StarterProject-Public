@@ -5,6 +5,7 @@
 [Дизайн Figma](https://www.figma.com/file/k1LcgXHGTHIeiCv4XuPbND/FakeNFT-(YP)?node-id=96-5542&t=YdNbOI8EcqdYmDeg-0)
 
 Демонстрация Профиля - видео https://disk.yandex.ru/i/gp8SMb8K5LBs1w
+Демонстрация Статистики - видео https://drive.google.com/file/d/1a4UMf079c369fvAB2pSQ2AmH7n_jF4SK/view?usp=sharing
 
 # Назначение и цели приложения
 
