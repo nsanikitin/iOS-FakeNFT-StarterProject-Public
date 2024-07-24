@@ -5,10 +5,13 @@
 [Дизайн Figma](https://www.figma.com/file/k1LcgXHGTHIeiCv4XuPbND/FakeNFT-(YP)?node-id=96-5542&t=YdNbOI8EcqdYmDeg-0)
 
 # Видео эпика
+Демонстрация Профиля - видео https://disk.yandex.ru/i/gp8SMb8K5LBs1w
 
-Корзина
-https://github.com/user-attachments/assets/b899f1b8-fb08-4842-b82c-d227e8d0ee79
+Демонстрация Статистики - видео https://drive.google.com/file/d/1a4UMf079c369fvAB2pSQ2AmH7n_jF4SK/view?usp=sharing
 
+Демонстрация Корзины - видео https://github.com/user-attachments/assets/b899f1b8-fb08-4842-b82c-d227e8d0ee79
+
+Демонстрация Каталог - видео https://disk.yandex.ru/i/NGNCKiHjl6-Rwg
 
 
 # Назначение и цели приложения
